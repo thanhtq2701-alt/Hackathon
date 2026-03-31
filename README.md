@@ -1,4 +1,3 @@
-
 # 🚀 THE OVAL: A Space Governance Simulator
 **An Interactive Survival dApp built for the EVE Frontier SUI Hackathon.**
 
