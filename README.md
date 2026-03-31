@@ -57,9 +57,9 @@ When your energy hits zero, the **Lazarus Protocol** activates—a last-ditch su
 ---
 
 ## 👤 About the Author
-Created by **Thanh**, an 11th-grade student from Vietnam, passionate about the intersection of Space Lore and Blockchain technology.
+Created by Auraa, an 11th-grade group of students from Vietnam, passionate about the intersection of Space Lore and Blockchain technology.
 
 ---
 
 ## 📺 Demo Video
-> **Watch the gameplay here:** [Your YouTube/Loom Link Here]
+> **Watch the gameplay here:** https://www.youtube.com/watch?v=1O_4v6ecZNU
