@@ -1,0 +1,314 @@
+THE OVAL — THÔNG TIN CẦN THANH/GROUP AURAA XÁC NHẬN
+
+Mục đích: giúp chốt yêu cầu trước khi hoàn thiện The Oval, playtest và phát hành.
+Đây là biểu mẫu quyết định sản phẩm, không phải xác nhận rằng các tính năng đã có.
+
+CÁCH ĐIỀN
+- Ghi câu trả lời sau mỗi dòng "Trả lời:"; có thể điền trực tiếp vào bản sao.
+- Nếu chưa biết, ghi "Chưa biết" hoặc chọn phương án "Đề xuất để thử".
+- Có thể ghi "Không áp dụng" nếu giải thích ngắn.
+- Mục [BẮT BUỘC] cần quyết định trước khi tính năng liên quan được phát hành.
+- Mục [SAU] có thể để sau khi đã thử nghiệm nguyên mẫu.
+- Không điền mật khẩu, API key, recovery phrase, dữ liệu cá nhân nhạy cảm hoặc thông tin đăng nhập.
+- Những thông số số học chưa được xác nhận trong tài liệu bàn giao chỉ là giả thuyết, không phải quyết định đã chốt.
+
+======================================================================
+1. MỤC TIÊU VÀ PHẠM VI SẢN PHẨM
+======================================================================
+
+1.1 [BẮT BUỘC] Tên sản phẩm cuối cùng hiển thị trong game là gì?
+Trả lời:
+
+1.2 [BẮT BUỘC] Trong một câu, người chơi làm gì và vì sao họ muốn chơi?
+Trả lời:
+
+1.3 [BẮT BUỘC] Bản đầu tiên cần hoàn thành để đạt mục tiêu nào?
+Ví dụ: prototype chơi đơn hoàn chỉnh; bản chơi nhóm tại lớp; beta công khai.
+Trả lời:
+
+1.4 [BẮT BUỘC] Những nền tảng cần hỗ trợ lúc ra mắt?
+[ ] Máy tính, trình duyệt web
+[ ] Điện thoại, trình duyệt web
+[ ] Máy tính bảng
+[ ] Khác:
+Trả lời thêm:
+
+1.5 [BẮT BUỘC] Ai là người chơi chính, họ biết gì về game trước khi mở lần đầu?
+Tuổi/nhóm người chơi (không cần thông tin định danh), kinh nghiệm game, ngôn ngữ:
+Trả lời:
+
+1.6 [BẮT BUỘC] Điều gì phải có để gọi là "hoàn thành sản phẩm"?
+Liệt kê các kết quả có thể kiểm tra, không chỉ tên tính năng:
+Trả lời:
+
+1.7 [SAU] Điều gì tuyệt đối không thuộc phạm vi phiên bản đầu?
+Trả lời:
+
+======================================================================
+2. THƯƠNG HIỆU, BỐI CẢNH VÀ QUYỀN SỬ DỤNG
+======================================================================
+
+2.1 [BẮT BUỘC] Game dùng bối cảnh hoàn toàn nguyên gốc, hay có liên hệ được cho phép với thương hiệu/game bên ngoài?
+Trả lời:
+
+2.2 [BẮT BUỘC] Nếu dùng tên, logo, lore, hình ảnh, nhạc, phông chữ hoặc SDK của bên khác, ai xác nhận quyền sử dụng và nguồn/giấy phép ở đâu?
+Không ghi "được phép" nếu chưa có bằng chứng.
+Trả lời:
+
+2.3 [BẮT BUỘC] Vai trò người chơi là ai; họ quản trị tổ chức/quốc gia/trạm nào; mục tiêu trong bối cảnh là gì?
+Trả lời:
+
+2.4 [BẮT BUỘC] Tông nội dung mong muốn?
+[ ] Nghiêm túc/chính trị
+[ ] Phiêu lưu/khoa học viễn tưởng
+[ ] Hài hước
+[ ] Dành cho lớp học
+[ ] Khác:
+Trả lời thêm:
+
+2.5 [SAU] Ngôn ngữ phát hành ban đầu và người chịu trách nhiệm biên tập/kiểm tra bản dịch?
+Trả lời:
+
+2.6 [BẮT BUỘC] Có chủ đề hoặc cách thể hiện nào cần tránh để phù hợp độ tuổi, trường học hay cộng đồng mục tiêu?
+Trả lời:
+
+======================================================================
+3. VÒNG CHƠI VÀ LUẬT
+======================================================================
+
+3.1 [BẮT BUỘC] Chọn chế độ nào phải hoàn thiện trước?
+[ ] Hội đồng: cả nhóm cùng thảo luận và biểu quyết một quyết định
+[ ] Chơi đơn: một người đưa ra quyết định
+[ ] Khác:
+Trả lời:
+
+3.2 [BẮT BUỘC] Mỗi trận có bao nhiêu người tổng cộng, bao nhiêu người mỗi nhóm/quốc gia?
+Ghi mức tối thiểu, khuyến nghị và tối đa:
+Trả lời:
+
+3.3 [BẮT BUỘC] Một ván nên kéo dài bao lâu? Có bao nhiêu lượt? Hạn mỗi lượt?
+Nếu chưa thử, ghi "Đề xuất để playtest", không coi là số đã thống nhất.
+Trả lời:
+
+3.4 [BẮT BUỘC] Người chơi bắt đầu với trạng thái/tài nguyên nào? Có tài nguyên nào là chỉ số, tiêu hao, tích lũy hoặc điểm cá nhân?
+Trả lời:
+
+3.5 [BẮT BUỘC] Điều kiện thắng, thua, hòa và kết thúc theo thời gian là gì?
+Ghi rõ thứ tự ưu tiên nếu nhiều điều kiện xảy ra cùng lúc.
+Trả lời:
+
+3.6 [BẮT BUỘC] Trong Hội đồng: ai được bỏ phiếu, có được đổi phiếu không, xử lý hòa/thiếu phiếu/quorum thế nào?
+Trả lời:
+
+3.7 [BẮT BUỘC] Khi người chơi rời trận, mất mạng, vào trễ hoặc không hành động thì điều gì xảy ra?
+Trả lời:
+
+3.8 [BẮT BUỘC] Phương án/câu chuyện có được chọn ngẫu nhiên không? Người chơi cần biết phần nào là chắc chắn và phần nào là rủi ro?
+Trả lời:
+
+3.9 [BẮT BUỘC] Quy tắc chi phí, giới hạn chỉ số, hồi phục, cạn năng lượng và hậu quả cần chốt là gì?
+Trả lời:
+
+3.10 [SAU] Cần những hành động nào ngoài quyết định tình huống?
+[ ] Xây dựng
+[ ] Sản xuất/thu hoạch
+[ ] Ngoại giao/giao thương
+[ ] Chiến đấu
+[ ] Thành tích/xếp hạng
+[ ] Khác:
+Trả lời:
+
+3.11 [BẮT BUỘC] Nếu nhiều nhóm cùng yêu cầu một tài nguyên/mục tiêu, phân xử theo luật nào?
+Trả lời:
+
+3.12 [BẮT BUỘC] Các tính năng nào chỉ là mô phỏng/mock và cần gắn nhãn hoặc ẩn?
+Ví dụ: kết nối ví, NFT, blockchain, chia sẻ mạng xã hội.
+Trả lời:
+
+======================================================================
+4. CHẾ ĐỘ ONLINE, TÀI KHOẢN VÀ DỮ LIỆU
+======================================================================
+
+4.1 [BẮT BUỘC] Có cần chơi online nhiều thiết bị ở phiên bản đầu không?
+[ ] Không, chỉ chơi trên một thiết bị
+[ ] Có, cùng mạng/phòng trực tiếp
+[ ] Có, qua Internet
+Trả lời:
+
+4.2 [BẮT BUỘC] Cách người chơi vào trận?
+[ ] Mã phòng, không cần tài khoản
+[ ] Tài khoản đăng nhập
+[ ] Đăng nhập trường/tổ chức
+[ ] Khác:
+Trả lời:
+
+4.3 [BẮT BUỘC] Có cần tên hiển thị, chat, bạn bè, hồ sơ hoặc lưu tiến trình cá nhân không?
+Mỗi mục ghi cần/không cần và lý do:
+Trả lời:
+
+4.4 [BẮT BUỘC] Dữ liệu nào được lưu, trong bao lâu, ai có quyền xem/xóa?
+Gồm: phòng, lượt chơi, phiếu, tên hiển thị, log kỹ thuật, thành tích.
+Trả lời:
+
+4.5 [BẮT BUỘC] Có người dưới 18 tuổi hoặc môi trường trường học không? Yêu cầu về quyền riêng tư/đồng ý của người giám hộ là gì?
+Trả lời:
+
+4.6 [BẮT BUỘC] Có thu thập analytics/telemetry không? Mục đích, dữ liệu tối thiểu, thời hạn lưu?
+Trả lời:
+
+4.7 [SAU] Ai xử lý báo cáo, nội dung xấu, quấy rối hoặc yêu cầu xóa dữ liệu nếu game mở công khai?
+Trả lời:
+
+======================================================================
+5. GIAO DIỆN, KHẢ NĂNG TIẾP CẬN VÀ NỘI DUNG
+======================================================================
+
+5.1 [BẮT BUỘC] Thiết bị/trình duyệt tối thiểu phải hỗ trợ? Màn hình điện thoại nhỏ nhất?
+Trả lời:
+
+5.2 [BẮT BUỘC] Người chơi cần hiểu được thông tin nào trước khi quyết định?
+Ví dụ: chi phí chắc chắn, hậu quả dự kiến, rủi ro, giới hạn tài nguyên.
+Trả lời:
+
+5.3 [BẮT BUỘC] Có cần hỗ trợ bàn phím, trình đọc màn hình, giảm chuyển động, độ tương phản hoặc cỡ chữ lớn?
+Ghi yêu cầu cụ thể hoặc tiêu chí kiểm tra:
+Trả lời:
+
+5.4 [SAU] Phong cách hình ảnh/âm thanh cần giữ, thay đổi hoặc bỏ?
+Ghi rõ tài sản tự tạo và tài sản bên ngoài cần kiểm tra giấy phép.
+Trả lời:
+
+5.5 [BẮT BUỘC] Những thẻ/tuyến truyện nào là thiết yếu cho bản đầu? Ai duyệt tính chính xác, tính nhất quán và độ phù hợp?
+Trả lời:
+
+5.6 [SAU] Có cần hướng dẫn, tutorial, bản lưu mẫu, hoặc chế độ luyện tập?
+Trả lời:
+
+======================================================================
+6. KỸ THUẬT, HOSTING VÀ PHÁT HÀNH
+======================================================================
+
+6.1 [BẮT BUỘC] Website hiện tại trên Render là staging, demo hay production? Ai sở hữu/tài khoản quản trị?
+Không gửi mật khẩu hoặc token.
+Trả lời:
+
+6.2 [BẮT BUỘC] Địa chỉ website chính thức, tên miền và môi trường phát hành mong muốn?
+[ ] Local
+[ ] Staging/private test
+[ ] Public beta
+[ ] Production
+Trả lời:
+
+6.3 [BẮT BUỘC] Ai được phép bấm deploy/push và ai duyệt phát hành?
+Trả lời:
+
+6.4 [BẮT BUỘC] Có ngân sách/thời hạn/giới hạn hosting nào? Ghi mức tối đa và đơn vị tiền tệ; không giả định miễn phí vĩnh viễn.
+Trả lời:
+
+6.5 [BẮT BUỘC] Nếu có server/database: khu vực lưu trữ, backup, phục hồi, thời gian lưu và người vận hành?
+Trả lời:
+
+6.6 [BẮT BUỘC] Cần xử lý thế nào khi server/website lỗi hoặc mất kết nối? Mức mất dữ liệu/gián đoạn chấp nhận được?
+Trả lời:
+
+6.7 [SAU] Có tên miền, chứng chỉ, analytics, email hoặc dịch vụ bên thứ ba cần dùng không?
+Chỉ ghi tên dịch vụ và mục đích, không gửi thông tin bí mật.
+Trả lời:
+
+======================================================================
+7. KIỂM THỬ VÀ TIÊU CHÍ NGHIỆM THU
+======================================================================
+
+7.1 [BẮT BUỘC] Ai là người chơi thử? Có bao nhiêu người/nhóm và khi nào?
+Trả lời:
+
+7.2 [BẮT BUỘC] Ba đến năm nhiệm vụ người chơi phải tự hoàn thành để chứng minh game dùng được?
+Trả lời:
+
+7.3 [BẮT BUỘC] Điều gì là lỗi chặn phát hành (P0/P1)? Ai quyết định mức độ?
+Trả lời:
+
+7.4 [BẮT BUỘC] Kết quả nào cần đo?
+Ví dụ: hiểu mục tiêu, thời gian hoàn thành, quyết định có thảo luận, lỗi, quay lại chơi.
+Trả lời:
+
+7.5 [BẮT BUỘC] Có được ghi hình/ghi âm playtest không? Cần thông báo/đồng ý và lưu/xóa dữ liệu thế nào?
+Trả lời:
+
+7.6 [SAU] Ai đọc phản hồi và quyết định giữ, sửa hoặc bỏ tính năng?
+Trả lời:
+
+======================================================================
+8. NHÓM, THỜI GIAN VÀ NGUỒN LỰC
+======================================================================
+
+8.1 [BẮT BUỘC] Ai đang tham gia dự án và trách nhiệm từng người?
+Chỉ cần tên/vai trò mà nhóm đồng ý chia sẻ.
+Trả lời:
+
+8.2 [BẮT BUỘC] Ai có quyền quyết định cuối cùng về sản phẩm, nội dung, kỹ thuật và phát hành?
+Trả lời:
+
+8.3 [BẮT BUỘC] Thời hạn mong muốn, số giờ/tuần và các mốc bắt buộc?
+Trả lời:
+
+8.4 [BẮT BUỘC] Ngân sách tối đa cho hosting, domain, hình ảnh, âm thanh, công cụ hoặc dịch vụ?
+Ghi loại tiền tệ và những khoản không được chi.
+Trả lời:
+
+8.5 [SAU] Việc nào nhóm tự làm, việc nào cần người cố vấn/nhà cung cấp?
+Trả lời:
+
+======================================================================
+9. HỒ SƠ DỰ ÁN VÀ BẰNG CHỨNG ĐÓNG GÓP
+======================================================================
+
+9.1 [BẮT BUỘC] Dự án được giới thiệu trong hồ sơ/portfolio cho đối tượng nào?
+Trả lời:
+
+9.2 [BẮT BUỘC] Mỗi thành viên muốn ghi nhận đóng góp gì? Có bằng chứng kiểm tra được nào?
+Ví dụ: commit, thiết kế, playtest, tài liệu, video demo.
+Không ghi nhận thay phần việc của người khác.
+Trả lời:
+
+9.3 [BẮT BUỘC] Điều gì được phép công khai? Có dữ liệu/hình ảnh/nội dung nào phải ẩn?
+Trả lời:
+
+9.4 [BẮT BUỘC] Mô tả nào là sự thật đã kiểm chứng, điều gì chỉ là kế hoạch/mock/giả thuyết?
+Trả lời:
+
+9.5 [SAU] Cần README, video demo, changelog, kiến trúc, giấy phép hay báo cáo playtest nào?
+Trả lời:
+
+======================================================================
+10. ƯU TIÊN VÀ QUYẾT ĐỊNH CẦN CHỐT TRƯỚC KHI XÂY TIẾP
+======================================================================
+
+10.1 Xếp thứ tự 5 ưu tiên cao nhất:
+[ ] Game chạy ổn định
+[ ] Luật và số liệu đáng tin
+[ ] Nội dung/bối cảnh thống nhất
+[ ] Chơi nhóm online
+[ ] Mobile/khả năng tiếp cận
+[ ] Đồ họa/âm thanh
+[ ] Chiến đấu/kinh tế/ngoại giao
+[ ] Hồ sơ và thành tích
+[ ] Khác:
+Thứ tự:
+
+10.2 Chọn cách xử lý các giả thuyết chưa chốt:
+[ ] Thanh quyết định ngay
+[ ] Dùng cấu hình tạm và playtest trước
+[ ] Hoãn tính năng cần quyết định đó
+Trả lời:
+
+10.3 Ai sẽ điền biểu mẫu, và ai xác nhận câu trả lời cuối cùng của nhóm?
+Trả lời:
+
+10.4 Ngày/phiên bản biểu mẫu đã điền:
+Trả lời:
+
+GHI CHÚ CUỐI
+- Không cần chốt toàn bộ sản phẩm trước khi tiếp tục: có thể chốt phần cần cho mốc kế tiếp và để phần sau là giả thuyết.
+- Những quyết định về luật chơi, quyền riêng tư, thương hiệu, chi phí và phát hành cần được xác nhận trước khi đưa tính năng liên quan ra người chơi.
+- Không gửi thông tin bí mật qua biểu mẫu này.

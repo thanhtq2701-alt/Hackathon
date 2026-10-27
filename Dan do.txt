@@ -1,0 +1,1 @@
+Đọc file bàn giao này, kiểm tra trạng thái thật của repository, rồi thực hiện một mốc tiếp theo theo quy trình trong PHẦN A. Báo rõ bằng chứng kiểm tra.

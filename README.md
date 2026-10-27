@@ -49,10 +49,24 @@ When your energy hits zero, the **Lazarus Protocol** activates—a last-ditch su
 ---
 
 ## 🏃 How to Play
-1. Clone the repository.
-2. Open `2.html` in any modern web browser.
-3. Connect your (Mock) Sui Wallet.
-4. Make your first choice and survive the frontier.
+1. Clone the repository and open its folder in a terminal.
+2. Start a local HTTP server from the repository root with `python -m http.server 8000`.
+3. Open `http://localhost:8000/` in a modern browser.
+4. Choose Normal Mode and make decisions. Wallet and NFT actions are mock demonstrations, not real Sui transactions.
+
+Stop the server with `Ctrl+C`.
+
+## 🧩 Project Structure
+
+* `index.html` — page structure and the ordered classic-script entry points.
+* `styles.css` — presentation.
+* `content.js` — card, story-arc, and ending data, including dynamic callbacks.
+* `audio.js` — generated soundtrack and sound effects.
+* `game-core.js` — DOM-independent initial state, choice effects, and reusable rules.
+* `app.js` — browser UI, rendering, and game flow.
+* `tests/game-core.test.js` — focused checks for the extracted game core.
+
+Run the core checks with `node tests/game-core.test.js`. The browser assets are intentionally loaded as classic scripts for now so existing inline event handlers keep working; the `window.TheOvalContent`, `window.TheOvalAudio`, and `window.TheOvalCore` objects are their explicit boundaries.
 
 ---
 
