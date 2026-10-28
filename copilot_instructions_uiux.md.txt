@@ -1,0 +1,55 @@
+# GITHUB COPILOT MASTER DESIGN SYSTEM & UI/UX INSTRUCTIONS
+# COMBINED & EXTRACTED FROM 12 ELITE DESIGN & CODE REPOSITORIES
+
+## 1. DESIGN TOKENS, COLOR & TYPOGRAPHY SYSTEM (Awesome DESIGN.md, Google DESIGN.md)
+- **Color Scale & Surface Depth:**
+  - Never use pure black (`#000000`), pure white (`#ffffff`), or raw unscaled colors. Always use professional multi-tier tonal scales (e.g., Slate, Zinc, Neutral palettes).
+  - Enforce layered surface architecture for dark modes: deep background (`#09090b`), elevated card surfaces (`#18181b`), interactive hover states (`#27272a`).
+  - Restrict primary accent colors strictly to high-priority Call-to-Action (CTA) elements (max 10% visual weight per view).
+- **Hairline Borders & Rings:**
+  - Avoid thick 2px/3px borders or stark contrast lines. 
+  - Mandate ultra-clean 1px semi-transparent borders (`border-white/10` for dark, `border-black/10` for light) and inner glow rings (`ring-1 ring-white/5`).
+- **Typography Hierarchy & Tracking:**
+  - Font Stacks: Geometric, high-readability sans-serifs (`Geist`, `Inter`, `SF Pro Display`, system sans).
+  - Tracking Rules: Apply tight letter-spacing (`tracking-tight` or `-0.02em`) for large headings (>24px) and wide tracking (`tracking-widest`) for small uppercase micro-labels (<12px).
+  - Weight Jumps: Drive hierarchy through weight shifts (`font-semibold`/`font-bold` vs `font-normal`) rather than relying solely on font-size scaling.
+
+## 2. ANTI-AI PATTERNS & LAYOUT RIGOR (UI/UX Pro Max, Impeccable, Hallmark)
+- **Forbidden AI Visual Cliches (DO NOT GENERATE):**
+  - NO generic, flat gray cards wrapped in basic 1px borders.
+  - NO random, cliché purple/pink/cyan radial gradient background glows.
+  - NO centered text alignment for multi-line body copy (strictly left-align readable text).
+  - NO repetitive, unstyled native HTML form controls or drop-downs.
+- **Spatial Rhythm & Layout Rules:**
+  - Grid Systems: Strictly adhere to a 4px/8px spatial rhythm (`gap-2`, `gap-4`, `gap-8`, `p-4`, `p-6`).
+  - Proportional Padding: Inner card padding must scale 1.5x to 2x larger than internal content gaps.
+  - Line Length Constraints: Restrict text container widths to 65–75 characters max (`max-w-prose` / `max-w-2xl`) for optimal readability.
+
+## 3. COMPONENT ARCHITECTURE & TAILWIND BEST PRACTICES (Open Design, Canvas UI)
+- **Interactive Buttons:**
+  - Primary CTAs: Solid background fill with a top inset highlight border (`shadow-[inset_0px_1px_0px_0px_rgba(255,255,255,0.2)]`) and smooth hover brightness shift.
+  - Secondary / Ghost Buttons: Transparent base with subtle border and background fill transition on hover.
+  - Icon Buttons: Explicit square box models (`h-9 w-9`, `p-0`), centered SVG icons with mandatory `aria-label`.
+- **Containers & Structure:**
+  - Enforce semantic HTML layout elements (`<article>`, `<section>`, `<aside>`, `<header>`, `<footer>`) instead of endless nested `<div>` wrappers.
+  - Border Radius Consistency: Strict project-wide rounding scale (`rounded-xl` for cards, `rounded-lg` for buttons, `rounded-md` for inputs/badges).
+- **Form Controls & States:**
+  - Inputs require distinct `:focus-visible` ring indicators (`ring-2 ring-primary/50`).
+  - Inline error messages must be accompanied by explicit ARIA attributes (`aria-invalid="true"`).
+
+## 4. MICRO-INTERACTION & MOTION ENGINE (React Bits, GSAP, Emil Kowalski Skills)
+- **Timing & Easing Physics:**
+  - Micro-interactions (hover, focus, toggles): `duration-150` to `duration-200` with `ease-out`.
+  - Macro-interactions (modals, drawers, page reveals): `duration-300` to `duration-400` with cubic-bezier curves (`cubic-bezier(0.16, 1, 0.3, 1)`).
+  - Avoid bouncy, springy, or heavy elastic easings unless explicitly requested for game or playful UI contexts.
+- **Interactive Feedback Dynamics:**
+  - Micro-press Feedback: Subtle scale contraction on click (`active:scale-[0.98]`).
+  - Surface Elevation: Subtle lift on card hover (`hover:-translate-y-0.5 hover:shadow-lg`).
+  - Staggered Entrances: Stagger child container fades (`staggerChildren: 0.05` via Motion/GSAP) for fluid list loads.
+
+## 5. QUALITY AUDIT & SYSTEM STATES (Taste Skill, Design Systems)
+- **Accessibility & Compliance (WCAG AA):**
+  - Text-to-background contrast ratio must meet or exceed 4.5:1 for standard body text and 3:1 for large headings.
+  - Full keyboard navigability (`Tab`, `Shift+Tab`, `Enter`, `Escape`) required for all interactive widget trees.
+- **The 5-State Component Rule:**
+  - Every generated UI component MUST defensively account for 5 distinct operational states by default: **1. Default, 2. Hover, 3. Active/Focus, 4. Loading (Skeleton / Spinner), 5. Empty / Error.**
