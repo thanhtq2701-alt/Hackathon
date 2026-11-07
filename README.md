@@ -49,8 +49,8 @@ When your energy hits zero, the **Lazarus Protocol** activates—a last-ditch su
 ---
 
 ## 🏃 How to Play
-1. Clone the repository and open its folder in a terminal.
-2. Start a local HTTP server from the repository root with `python -m http.server 8000`.
+1. Clone the repository and open its folder in PowerShell or Command Prompt.
+2. Run `.\tools\start-local.cmd`.
 3. Open `http://localhost:8000/` in a modern browser.
 4. Choose Normal Mode and make decisions. Wallet and NFT actions are mock demonstrations, not real Sui transactions.
 
@@ -58,15 +58,33 @@ Stop the server with `Ctrl+C`.
 
 ## 🧩 Project Structure
 
-* `index.html` — page structure and the ordered classic-script entry points.
-* `styles.css` — presentation.
-* `content.js` — card, story-arc, and ending data, including dynamic callbacks.
-* `audio.js` — generated soundtrack and sound effects.
-* `game-core.js` — DOM-independent initial state, choice effects, and reusable rules.
-* `app.js` — browser UI, rendering, and game flow.
-* `tests/game-core.test.js` — focused checks for the extracted game core.
+```text
+Hackathon/
+├── app/                 # Browser UI, game rules, and audio
+├── data/                # Cards, story arcs, and ending content
+├── deliverables/        # Original hackathon presentation files
+├── docs/                # Handover, assessment, and planning documents
+├── tests/               # Focused automated checks
+├── tools/               # Local run and validation scripts
+├── web/                 # Stylesheets and browser presentation assets
+├── index.html           # Static-host entry point (kept at repository root)
+└── README.md
+```
 
-Run the core checks with `node tests/game-core.test.js`. The browser assets are intentionally loaded as classic scripts for now so existing inline event handlers keep working; the `window.TheOvalContent`, `window.TheOvalAudio`, and `window.TheOvalCore` objects are their explicit boundaries.
+| Location | Responsibility |
+| --- | --- |
+| `index.html` | Stable entry point for static hosting; loads the browser assets in order. |
+| `app/client.js` | Browser UI, rendering, and game flow. |
+| `app/game-core.js` | DOM-independent initial state and choice rules. |
+| `app/audio.js` | Generated soundtrack and sound effects. |
+| `data/content.js` | Card, story-arc, and ending data, including dynamic callbacks. |
+| `web/styles.css` | Game presentation. |
+| `docs/` | Project handover, assessment, and planning documents. |
+| `deliverables/` | Original presentation files. |
+| `tests/` | Focused checks for game rules and content. |
+| `tools/` | Repeatable local run and validation commands. |
+
+Run checks with `.\tools\run-checks.cmd`. You can pass another port to the local server, for example `.\tools\start-local.cmd 8765`. The browser assets remain classic scripts so existing inline event handlers keep working; `window.TheOvalContent`, `window.TheOvalAudio`, and `window.TheOvalCore` are their explicit boundaries. Folders such as `online-preview/` and `var/` are intentionally omitted until the project has preview-only files or generated local data to put there.
 
 ---
 

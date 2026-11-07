@@ -1,6 +1,8 @@
 const assert = require('assert');
-const core = require('../game-core.js');
-const content = require('../content.js');
+const fs = require('fs');
+const path = require('path');
+const core = require('../app/game-core.js');
+const content = require('../data/content.js');
 
 function test(name, run) {
   run();
@@ -69,21 +71,35 @@ test('hidden behavior counters change only for non-arc choices', function () {
     corrupt: 1
   });
 
-  test('extracted game content retains the expected cards, story arcs, and endings', function () {
-    const cardCount = Object.keys(content.CARDS).reduce((total, topic) => total + content.CARDS[topic].length, 0);
-    const actCount = content.ARCS.reduce((total, arc) => total + arc.acts.length, 0);
-
-    assert.equal(cardCount, 100);
-    assert.equal(content.ARCS.length, 4);
-    assert.equal(actCount, 70);
-    assert.equal(content.ENDINGS.length, 9);
-  });
-
   core.trackHiddenBehaviors(state, choice, 'environment', true);
   assert.deepEqual(state.hiddenStats.behaviors, {
     environmentHarming: 1,
     compassionate: 1,
     authoritarian: 1,
     corrupt: 1
+  });
+});
+
+test('extracted game content retains the expected cards, story arcs, and endings', function () {
+  const cardCount = Object.keys(content.CARDS).reduce((total, topic) => total + content.CARDS[topic].length, 0);
+  const actCount = content.ARCS.reduce((total, arc) => total + arc.acts.length, 0);
+
+  assert.equal(cardCount, 100);
+  assert.equal(content.ARCS.length, 4);
+  assert.equal(actCount, 70);
+  assert.equal(content.ENDINGS.length, 9);
+});
+
+test('root web entry point references existing organized assets', function () {
+  const repositoryRoot = path.resolve(__dirname, '..');
+  const html = fs.readFileSync(path.join(repositoryRoot, 'index.html'), 'utf8');
+  const references = html.match(/(?:src|href)="([^"]+)"/g) || [];
+  const localAssets = references
+    .map(function (reference) { return reference.match(/="([^"]+)"/)[1]; })
+    .filter(function (reference) { return /\.(?:js|css)$/.test(reference); });
+
+  assert.equal(localAssets.length, 5);
+  localAssets.forEach(function (asset) {
+    assert.ok(fs.existsSync(path.join(repositoryRoot, asset)), 'Missing web asset: ' + asset);
   });
 });

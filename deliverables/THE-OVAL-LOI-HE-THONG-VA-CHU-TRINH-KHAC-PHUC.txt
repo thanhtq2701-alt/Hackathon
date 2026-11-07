@@ -1,0 +1,444 @@
+THE OVAL
+DANH SACH LOI HE THONG VA CHU TRINH KHAC PHUC
+
+Ngay doi chieu ma nguon: 27/10/2026
+Repository: thanhtq2701-alt/Hackathon
+Commit dang doi chieu: a9da37a (feat: Update 27-10 V1)
+Pham vi: ma nguon local trong repository va cac loi da duoc ghi nhan trong tai
+lieu ban giao. Day la danh sach co bang chung hien co, khong phai loi hua rang
+da tim thay moi loi co the ton tai.
+
+======================================================================
+DOC VA XU LY TAI LIEU NAY THE NAO
+======================================================================
+
+- Moi loi ben duoi la mot chu trinh rieng: hien tuong -> tai hien -> sua ->
+  kiem tra -> dieu kien dong loi. Lam va xac nhan xong chu trinh nay moi
+  chuyen sang chu trinh tiep theo.
+- Khong sua nhieu loi trong mot commit neu viec do lam kho biet thay doi nao
+  lam loi hoac lam loi bien mat.
+- Luu ket qua truoc/sau, commit va bang chung test cho tung chu trinh.
+- Khong deploy len website cong khai de thu mot loi neu chua co dong y.
+- Cac duong dan trong file nay tinh tu thu muc goc repository.
+- "Da xac nhan trong ma" nghia la co the thay hanh vi trong source hien tai.
+  "Da tai hien truoc day" la bang chung cu, can chay lai tren ban hien tai
+  truoc khi ket luan da het hay van con.
+- Cac lua chon ve luat chua duoc Thanh/group Auraa chot phai duoc hoi/xac
+  nhan truoc khi thay doi gameplay.
+
+UU TIEN DE XUAT
+
+P1 - Sua truoc playtest tiep: loi dang co the lam sai trang thai, sai ket
+     qua hoac sai so lieu ma nguoi choi dung de quyet dinh.
+P2 - Sua truoc khi gioi thieu ban cong khai: ket thuc sai, loi giao dien,
+     noi dung mau thuan, tinh nang mock de nguoi choi hieu nham.
+P3 - Can chot thiet ke: hanh vi da ro trong code nhung chua ro co trai voi
+     luat mong muon hay khong.
+
+TOM TAT CAC CHU TRINH
+
+01. Loi tiem an trong fallback tao loi giai thich; chua thay content hien
+    tai kich hoat nhanh nay.
+02. Delta hien thi co the khac delta thuc; tai lieu cu da tai hien va cong
+    thuc trong source van con.
+03. Energy ve 0 co the duoc hoi +1 truoc khi kiem tra that bai.
+04. Nhanh Peacemaker co the dung cau outcome lam title ending.
+05. Lua chon tu chuc dong arc nhung run van tiep tuc.
+06. Quy tac khung hoang trong Revolution chua ro va khong duoc thuc thi dong
+    nhat o moi duong ket thuc arc.
+07. Noi dung the co the bi cat tren man hinh hep; can tai hien lai.
+08. Lease to Allies noi Economy giam trong khi delta tang.
+09. Wallet/NFT mock hien thong bao giong nhu giao dich that.
+10. Bo test chua bao ve day du cac regression da biet.
+
+CAC LOI KHONG CON DUOC TINH LA LOI DANG MO
+
+- Tran Energy vuot 100: app/game-core.js hien clamp energy ve 0..100; test
+  hien tai da bao phu truong hop vuot tran. Chay lai regression test khi sua
+  cac loi khac, khong sua lai rieng neu test van pass.
+- Loi khoa ca bo 4 lua chon do bat ca 4 the: tai lieu cu noi ve ban local
+  khac. Ban repository hien tai khoa toi da 2 trong 4 the, nen loi "khong
+  con the nao bam duoc" cu khong duoc xem la loi da xac nhan tren ban nay.
+- Loi cuoi cung neu gan doi bao gom thua so truyen vao UI: tai lieu ban giao
+  cu ghi nhan, nhung danh sach nay uu tien cac van de co the doi chieu lai
+  trong source hien tai.
+
+======================================================================
+CHU TRINH 01 — LOI GIAI THICH FALLBACK PHAI LA HAM DOC-ONLY
+======================================================================
+
+Uu tien: P3 | Tinh trang: BUG TIEM AN TRONG NHANH DU PHONG; CHUA TIM THAY
+LUA CHON CONTENT HIEN TAI KICH HOAT NHANH NAY
+
+Hien tuong:
+Neu lua chon khong co truong outcome, getChoiceOutcomeText() duoc goi de tao
+cau giai thich. Nhanh fallback hien sua gs.bars[k] voi ten rut gon
+approval/tension/eco/unrest/party, trong khi state that dung
+publicApproval/internationalTension/economicState/stateAuthority/partyLoyalty.
+Ham con cong energy truoc khi applyDeltas() chay, nen neu nhanh nay duoc goi
+thi Energy bi tinh them lan nua. positives/negatives hien cung khong duoc cap
+nhat trong vong lap nen text fallback khong mo ta delta.
+
+Gioi han bang chung:
+Kiem tra content cards va story arcs tai commit nay khong tim thay lua chon
+nao thieu truong outcome; hai gift card dong trong app/client.js cung gan
+outcome cho cac lua chon. Vi vay day la loi trong nhanh du phong, chua co bang
+chung rang nguoi choi co the kich hoat no voi content hien tai. Giu muc uu
+tien thap hon cac loi dang xay ra; khong bao cao no nhu loi da tai hien.
+
+Vi tri doi chieu:
+- app/client.js, getChoiceOutcomeText(), khoang dong 340-365.
+- Ham duoc goi truoc applyDeltas() trong luong xac nhan lua chon.
+
+Chu trinh:
+1. Tai hien:
+   - Goi getChoiceOutcomeText() voi mot lua chon tong hop khong co outcome,
+     co energy khac 0 va it nhat mot delta stat.
+   - Ghi lai JSON gs.bars va gs.energy truoc khi xac nhan.
+   - Goi getChoiceOutcomeText() va ghi lai state ngay sau ham, truoc
+     applyDeltas().
+   - Xac nhan rang viec chi render noi dung khong lam thay doi state. Neu
+     khong co content game kich hoat nhanh nay thi ghi ro day la test don vi,
+     khong phai loi gameplay da tai hien.
+2. Sua:
+   - Bien getChoiceOutcomeText() thanh ham doc-only: chi nhan du lieu va
+     tra ve text, khong sua gs.
+   - Dung cung mot ham tinh Resolution/hau qua cho UI va game core; khong tu
+     tinh delta trong ham render.
+   - Neu lua chon thieu outcome, tao mo ta tu Resolution that. Cap nhat dung
+     ten stat va khong cong energy o buoc hien thi.
+3. Kiem tra:
+   - Them regression test goi ham tao mo ta nhieu lan va xac nhan state
+     khong doi.
+   - Xac nhan energy va tung stat chi doi mot lan sau khi chot lua chon.
+   - Kiem tra lua chon co outcome va khong co outcome.
+4. Dong loi khi:
+   - Ham render khong co side effect.
+   - Content validation bao dam moi lua chon co outcome hoac co fallback da
+     duoc test.
+   - Moi hau qua chi duoc ap dung mot lan va test bao phu ca state truoc/sau.
+
+======================================================================
+CHU TRINH 02 — SO LIEU HAU QUA HIEN THI PHAI KHOP VOI SO LIEU THUC
+======================================================================
+
+Uu tien: P1 | Tinh trang: LOI CU DA DUOC XAC MINH, CODE HIEN TAI VAN CO
+DUONG DI GAY SAI LECH
+
+Hien tuong:
+outcomeLines() hien delta tu effectiveChoice, con game core co the nhan he
+so Convergence 2.5 va gioi han delta -9..9 cho stat thuong. scaleChoice()
+lam tron mot so delta nhung khong tinh he so/cap theo state. Khi stat sat 0
+hoac 100, delta thuc te con co the bi gioi han them. Nguoi choi vi vay co
+the thay mot con so khac ket qua sau khi chot.
+
+Bang chung cu:
+- Reject Defiantly trong Convergence: hien Approval +15 nhung tu muc 50 tang
+  +37.5 o ca kiem tra cu.
+- Humble Servant trong The Permanent Record: hien +18 nhung chi tang +9 do
+  cap delta.
+- Chi tiet nam trong docs/Danh-gia-bo-sung-The-Oval.md.
+
+Vi tri doi chieu:
+- app/client.js, outcomeLines() va noi dung hau qua.
+- app/client.js, applyDeltas().
+- app/game-core.js, applyDeltas() va scaleChoice().
+
+Chu trinh:
+1. Tai hien voi state co dinh, bao gom:
+   - Convergence act co he so 2.5.
+   - Lua chon stat thuong co delta lon hon 9.
+   - Stat bat dau gan 0/100 de cham bien.
+   Ghi ca delta hien thi va delta state thay doi thuc.
+2. Sua:
+   - Tao ket qua Resolution duy nhat, bao gom gia tri truoc, delta duoc
+     yeu cau, delta sau khi ap dung multiplier/cap, gia tri sau va ly do bi
+     gioi han neu co.
+   - UI hien delta thuc trong mot don vi thong nhat; neu can, hien rieng
+     "de xuat" va "thuc te do cham gioi han".
+   - Game core ap dung chinh Resolution do, khong tinh lai lan thu hai.
+3. Kiem tra:
+   - Test cac ca khong co cap, co multiplier, bi cap -9/+9 va cham bien 0/100.
+   - Assert gia tri delta tren giao dien bang gia tri thay doi trong state.
+4. Dong loi khi:
+   - Tat ca ca test cho ket qua hien thi trung voi Resolution duoc commit.
+
+======================================================================
+CHU TRINH 03 — ENERGY VE 0 PHAI XU LY THAT BAI TRUOC KHI HOI PHUC
+======================================================================
+
+Uu tien: P1 | Tinh trang: DA XAC NHAN TRONG MA HIEN TAI
+
+Hien tuong:
+advanceTurn() cong passive energy +1 truoc khi kiem tra energy <= 0. Neu
+lua chon vua lam Energy tu 2 xuong 0, khi bam Continue Energy thanh 1 truoc
+khi kiem tra; ending Lazarus khong xay ra. README va thong diep ending lai
+noi Energy can thi game ket thuc.
+
+Vi tri doi chieu:
+- app/client.js, advanceTurn(), khoang dong 804-815.
+- README.md, mo ta Lazarus Protocol.
+
+Chu trinh:
+1. Tai hien: dat Energy = 2, chot lua chon co energy -5, sau do bam Continue.
+   Ghi lai gia tri Energy va man hinh ket qua.
+2. Chot luat: xac nhan voi Thanh/group Auraa rang Energy = 0 sau khi ap
+   dung lua chon la thua ngay; neu muon hoi phuc truoc kiem tra thi phai sua
+   README va thong diep cho dung luat.
+3. Sua theo luat da chot:
+   - Kiem tra dieu kien that bai sau khi Resolution cua lua chon cap nhat
+     state va truoc passive regeneration.
+   - Chi hoi phuc Energy cho vong moi neu nguoi choi van con song.
+4. Kiem tra: test Energy 0, 1, 2 truoc lua chon; -5 dua ve 0; gia tri am
+   bi clamp; Energy 1 sau delta am van song neu luat cho phep.
+5. Dong loi khi: ca Energy = 0 dung o ending; khong co duong di tiep hoac
+   UI bao sai.
+
+======================================================================
+CHU TRINH 04 — ENDING PEACEMAKER PHAI CO DUNG TEN VA NOI DUNG
+======================================================================
+
+Uu tien: P2 | Tinh trang: LOI CU DA DUOC XAC MINH, NHANH CODE VAN CON
+
+Hien tuong:
+Khi Tension < 50, The Final Ultimatum tra ve lua chon "The Peacemaker Ending."
+co outcome. showEndScreen() uu tien nhanh choiceOverride.outcome va rut cau
+dau outcome lam rawTitle. Nhanh rieng kiem tra text Peacemaker nam o else-if
+phia sau nen khong duoc chay. Tieu de ket thuc co the tro thanh cau van
+"You have successfully cooled the fires of global war".
+
+Vi tri doi chieu:
+- data/content.js, The Final Ultimatum, khoang dong 5750-5756.
+- app/client.js, showEndScreen(), khoang dong 1035-1060.
+
+Chu trinh:
+1. Tai hien: dat state vao Revolution act cuoi voi Tension = 49; chon
+   Peacemaker; kiem tra ending title, tagline va narrative.
+2. Sua: xu ly ending theo ID/loai ending co dinh hoac callback co kieu ro
+   rang truoc nhanh parse outcome tong quat. Khong dung text hien thi lam
+   khoa nhan dien ket qua.
+3. Kiem tra: test Tension 49, 50, 51; kiem tra ca WAGE WAR/STAY PEACEFUL va
+   Peacemaker path duoi nguong; assert dung title, profile, narrative.
+4. Dong loi khi: moi nhanh ket thuc hien ten ending duoc dinh nghia, khong
+   lay mot cau van trong outcome lam title.
+
+======================================================================
+CHU TRINH 05 — LUA CHON TU CHUC KHONG DUOC AM THAM TIEP TUC CAM QUYEN
+======================================================================
+
+Uu tien: P2 | Tinh trang: DA TAI HIEN TRUOC DAY; SOURCE HIEN TAI VAN THE
+HIEN CUNG LUONG
+
+Hien tuong:
+Trong Revolution, "Resign in the fallout" mo ta nguoi choi roi chuc vu va
+dat nextAct: 999. advanceArc() chi xu ly ending rieng cho convergence_route;
+arc khac bi dong va sau do goi advanceTurn(). Vong choi tiep tuc nhu cu, nen
+noi dung va vai tro nguoi choi mau thuan.
+
+Vi tri doi chieu:
+- data/content.js, "Resign in the fallout", khoang dong 6496.
+- app/client.js, advanceArc(), khoang dong 717-744.
+- Hanh vi nay da duoc tai hien trong docs/Danh-gia-bo-sung-The-Oval.md.
+
+Chu trinh:
+1. Tai hien: vao Revolution act III, chon Resign; ghi turn, activeArc,
+   arcsCompleted, ending screen va the tiep theo.
+2. Chot luat truoc sua:
+   - Lua chon nay ket thuc ca run; hay
+   - nhan vat roi vai tro nhung quoc gia/run tiep tuc voi vai tro moi; hay
+   - doi noi dung lua chon thanh khong tu chuc.
+   Khong tu chon thay Thanh/group Auraa.
+3. Sua: bieu dien resignation/end run/end arc thanh trang thai ro rang,
+   khong dung nextAct = 999 lam nhieu nghia.
+4. Kiem tra: test dung nhanh tu chuc va cac lua chon khac cung dong arc;
+   xac nhan khong co the quan tri tiep neu run da ket thuc.
+5. Dong loi khi: van dong bo giua narrative, vai tro, turn va man hinh.
+
+======================================================================
+CHU TRINH 06 — QUY TAC KHOANG HOANG TRONG REVOLUTION CAN DUOC THUC THI
+======================================================================
+
+Uu tien: P3 | Tinh trang: DUONG DI CODE DA DUOC XAC MINH; MUC TIEU THIET
+KE CHUA DUOC CHOT
+
+Hien tuong:
+checkFailSafes() co nhanh neu activeArc la revolution thi danh dau impeached
+va showEndScreen(). Tuy nhien luong advanceArc() ket thuc arc dat activeArc
+= null truoc khi goi advanceTurn(), noi checkFailSafes() duoc chay. Ca kiem
+tra truoc day voi Approval = 0 o cuoi arc cho ket qua crisis reset thay vi
+impeachment.
+
+Vi tri doi chieu:
+- app/client.js, checkFailSafes(), khoang dong 764-797.
+- app/client.js, advanceArc() va advanceTurn(), khoang dong 717-829.
+- Tai lieu cu: docs/Danh-gia-bo-sung-The-Oval.md.
+
+Chu trinh:
+1. Chot y do: khi nao Approval/Economy khung hoang trong Revolution thi
+   impeachment xay ra? Moi act, chi luc cuoi arc, hay khong bao gio?
+2. Tai hien dung state va act da thong nhat; ghi activeArc, chi so, ket qua.
+3. Sua: goi mot ham resolution khung hoang tai diem duoc chot; dam bao
+   activeArc/arc ID con du de ap dung dung luat; khong goi ending hai lan.
+4. Kiem tra: khung hoang o giua arc, act cuoi, luc khong trong arc, va truong
+   hop khong cham nguong. Kiem tra ending/impeached va cac state lien quan.
+5. Dong loi khi: co quy tac duoc phe duyet bang van ban va cac ca test phan
+   biet duoc Revolution voi ngoai Revolution.
+
+======================================================================
+CHU TRINH 07 — LOI GIAI THICH HAU QUA KHONG DUOC CAT MAT TREN MAN HINH HEP
+======================================================================
+
+Uu tien: P2 | Tinh trang: DA DUOC GHI NHAN TREN KHUNG HEP TRUOC DAY; CAN
+TAI KIEM TRA TREN BUILD HIEN TAI
+
+Hien tuong:
+CSS cua .card-back va .card-outcome-face dat height: 100% va overflow: hidden.
+Tai lieu cu ghi nhan text hau qua bi cat tren khung trinh duyet hep. CSS hien
+tai van con overflow hidden; chua co bang chung moi rang da het loi.
+
+Vi tri doi chieu:
+- web/styles.css, .card-back va .card-outcome-face, khoang dong 1423-1459.
+- web/styles.css, breakpoint mobile max-width 760px, khoang dong 1864 tro di.
+
+Chu trinh:
+1. Tai hien lai o viewport desktop nho va dien thoai hep; dung the co text
+   lua chon/outcome dai nhat. Kiem tra text co the cuon/nhin het va nut
+   Continue co bam duoc khong.
+2. Sua layout de noi dung dai co the cuon trong mat the hoac mo rong chieu
+   cao theo man hinh; dam bao khong lam vo animation/overlay.
+3. Kiem tra desktop, dien thoai doc/ngang, phong to chu trinh duyet va
+   keyboard focus; khong chi dua vao screenshot.
+4. Dong loi khi: khong co text hay control bi cat/che tren viewport muc tieu.
+
+======================================================================
+CHU TRINH 08 — NOI DUNG LEASE TO ALLIES PHAI KHOP VOI HIEU UNG
+======================================================================
+
+Uu tien: P2 | Tinh trang: DA XAC NHAN TRONG DU LIEU
+
+Hien tuong:
+The "Arctic Drill" co lua chon "Lease to Allies". Mo ta noi Economy drops,
+nhung du lieu dat eco: 6. Neu 6 la delta duong thi so lieu tang Economy.
+
+Vi tri doi chieu:
+- data/content.js, khoang dong 33-43.
+
+Chu trinh:
+1. Tai hien: dung Archives hoac vao card va doi chieu outcome voi delta
+   du lieu; xem so Economy truoc/sau.
+2. Xac nhan y do noi dung voi nguoi viet/thiet ke: Economy tang hay giam?
+3. Sua dung phan sai (outcome hoac delta), khong doi ca hai theo phong doan.
+4. Kiem tra schema/content test de so sanh dau delta voi phan mo ta; doc lai
+   card trong game va Archives.
+5. Dong loi khi: cau chu, delta, va con so UI cung mo ta mot ket qua.
+
+======================================================================
+CHU TRINH 09 — CAC TINH NANG MOCK KHONG DUOC BAO LA GIAO DICH THAT
+======================================================================
+
+Uu tien: P2 | Tinh trang: DA XAC NHAN TRONG MA HIEN TAI
+
+Hien tuong:
+README co noi wallet/NFT la mock, nhung UI sau khi bam connect hien dia chi
+vi mau va thong bao "Wallet Connected to Sui Testnet!". Nut mint hien SUCCESS,
+noi NFT da ghi vinh vien on-chain va transaction ID mau. Nguoi choi co the
+hieu nham la giao dich that da dien ra.
+
+Vi tri doi chieu:
+- app/client.js, mockConnect() va mockMintNFT(), khoang dong 1295-1321.
+- app/client.js, cac nut mock va nhan dien ending.
+- README.md, muc Web3 Integration.
+
+Chu trinh:
+1. Tai hien: bam Connect va Mint trong local; ghi lai thong diep, dia chi va
+   transaction ID duoc hien thi.
+2. Chon mot trong hai huong:
+   - giu mock: hien nhan "MO PHONG - khong ket noi vi, khong tao giao dich";
+     bo dia chi/transaction ID gia va khong dung chu "successfully minted";
+   - tich hop that: chi lam khi co yeu cau, tai khoan/testnet duoc chap thuan,
+     va co kiem tra giao dich that.
+3. Sua nhat quan UI, README, demo va portfolio; khong bao cao giao dich that
+   neu chi la mock.
+4. Kiem tra ca thanh cong va that bai (neu co integration that); kiem tra
+   notification va dialog dung trang thai.
+5. Dong loi khi: nguoi xem phan biet ro mock voi giao dich da xac nhan.
+
+======================================================================
+CHU TRINH 10 — TEST REGRESSION PHAI NAM O CAP RIENG VA CHAY LAI DUOC
+======================================================================
+
+Uu tien: P2 | Tinh trang: DA SUA MOT PHAN; CAN BO SUNG KHI SUA CAC LOI TREN
+
+Hien tuong:
+Nhung test hien co tap trung game core va dem content; chua co regression
+test tu dong cho energy 0 -> 1, ending peacemaker, resignation, Crisis trong
+Revolution, delta UI-vs-state hay fallback outcome co side effect. Cac loi
+da biet co the quay lai ma bo test van xanh.
+
+Vi tri doi chieu:
+- tests/game-core.test.js.
+- tools/run-checks.cmd.
+- Mot so van de can browser/DOM integration test, khong the duoc chung minh
+  bang test game-core don le.
+
+Chu trinh:
+1. Moi khi bat dau sua mot loi, viet test tai hien loi truoc khi sua code.
+2. Sua nho nhat de test chuyen tu fail sang pass.
+3. Dat test vao lop phu hop:
+   - game core cho state/delta/energy;
+   - logic ending/arc cho chuyen trang thai;
+   - browser smoke cho text, overlay, viewport va thao tac.
+4. Chay .\tools\run-checks.cmd; voi thay doi UI, chay them ca browser da ghi.
+5. Dong loi khi co test that bai truoc sua, pass sau sua, va khong chi test
+   bang snapshot/hinh chup.
+
+======================================================================
+NHUNG VAN DE CAN THEO DOI, KHONG TU DONG GOI LA BUG
+======================================================================
+
+1. Multiplayer/server-authoritative:
+   Repository hien la web app chay tren browser, khong co server game, phong
+   online, xac thuc nguoi choi, dong bo multiplayer hay luu run qua restart.
+   Day la tinh nang chua xay, khong phai loi cua tinh nang dang hoat dong.
+   Neu muc tieu ban dau can choi nhieu nguoi online, can lap chu trinh thiet
+   ke va xay rieng sau khi chot product requirements.
+
+2. Randomness:
+   Game dung Math.random() cho thu tu topic, gift va khoa lua chon. Game core
+   co tham so random inject duoc cho topic queue, nhung chua co seed/replay
+   xuyen suot run. Neu can tai hien loi va cong bang multiplayer, lap chu
+   trinh rieng ve seed va luu event; chua nen doi neu chi can prototype.
+
+3. Khoa 2 trong 4 lua chon:
+   Ma hien tai co the vo hieu pointer events cho 2 lua chon khi Loyalty thap,
+   con 2 lua chon khac van bam duoc. Loi "tat ca lua chon bi khoa" thuoc ban
+   local khac theo tai lieu cu, chua xac nhan tren ban hien tai. Neu muon giu
+   co che nay, can test xa hoi/keyboard va dam bao nguoi choi biet ly do; day
+   co the la quyet dinh gameplay thay vi loi he thong.
+
+4. Can bang game va chat luong noi dung:
+   Chua co du lieu playtest nhom de ket luan game can bang hay de hieu. Can
+   thu thap quan sat co dong y; khong the ket luan chi tu viec JavaScript
+   khong bao loi.
+
+======================================================================
+TRINH TU THUC HIEN DE XUAT
+======================================================================
+
+1. Chu trinh 01 — ngam chan state bi sua khi render.
+2. Chu trinh 02 — tao Resolution thong nhat de hien va ap dung hau qua.
+3. Chu trinh 03 — chot va sua dieu kien Energy = 0.
+4. Chu trinh 04 — sua ending Peacemaker.
+5. Chu trinh 05 — chot y nghia tu chuc roi moi sua.
+6. Chu trinh 06 — chot quy tac Revolution crisis roi moi sua.
+7. Chu trinh 07 — tai hien loi giao dien tren viewport hep.
+8. Chu trinh 08 — sua noi dung Lease to Allies.
+9. Chu trinh 09 — minh bach mock wallet/NFT.
+10. Chu trinh 10 — bo sung regression tests de bao ve cac chu trinh.
+
+TRANG THAI HIEN TAI
+
+- File nay chi la danh sach va quy trinh; chua sua cac loi san pham o tren.
+- Khong co loi nao trong danh sach duoc coi la da fix chi vi co file ke hoach.
+- Truoc khi dong tung chu trinh, cap nhat ket qua test, commit/branch va neu
+  co deploy thi ghi URL/moi truong/commit da kiem tra.
