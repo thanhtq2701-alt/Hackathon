@@ -115,6 +115,7 @@
         habitat: { level: 0, storage: 0 }
       },
       pendingBuild: null,
+      buildPlan: null,
       poll: null,
       votes: {},
       raid: null,
@@ -230,6 +231,7 @@
       world.poll = { situationId: situation.id, vetoed: [] };
       world.votes = {};
       world.raid = null;
+      world.buildPlan = null;
       world.flags = { overclock: false, shieldMatrix: false };
     });
   }
@@ -326,25 +328,70 @@
       let lockReason = null;
       if (level >= def.maxLevel) lockReason = 'Max level';
       else if (id !== 'core' && target > world.buildings.core.level) lockReason = `Needs Command Core Lv${target}`;
-      else if (world.pendingBuild) lockReason = 'One build per turn';
+      else if (world.buildPlan || world.pendingBuild) lockReason = 'One build per turn';
       else if (world.gold < cost.gold || world.ore < cost.ore) lockReason = 'Not enough resources';
       return { id, level, target, cost, lockReason };
     });
   }
 
-  function startBuild(match, playerId, buildingId) {
+  // Spending shared resources on construction is a crew decision, decided like a raid:
+  // the plan passes at the end of the vote if yes > no and at least half the crew says yes.
+  function proposeBuild(match, playerId, buildingId) {
     const player = getPlayer(match, playerId);
     const world = match.worlds[player.worldId];
     const option = buildOptions(world).find(o => o.id === buildingId);
     if (!option) fail('Unknown building.');
     if (option.lockReason) fail(option.lockReason + '.');
+    world.buildPlan = { id: buildingId, target: option.target, by: player.id, votes: { [player.id]: true } };
+    log(match, `${player.name} proposed ${BUILDINGS[buildingId].name} Lv${option.target}.`, world.id);
+    return option;
+  }
+
+  function voteBuild(match, playerId, yes) {
+    const player = getPlayer(match, playerId);
+    const world = match.worlds[player.worldId];
+    if (!world.buildPlan) fail('There is no build plan.');
+    world.buildPlan.votes[playerId] = !!yes;
+  }
+
+  function cancelBuild(match, playerId) {
+    const player = getPlayer(match, playerId);
+    const world = match.worlds[player.worldId];
+    if (!world.buildPlan) fail('There is no build plan.');
+    if (world.buildPlan.by !== playerId) fail('Only the proposer can cancel.');
+    world.buildPlan = null;
+  }
+
+  function buildPasses(match, world) {
+    return !!world.buildPlan && crewApproves(match, world, world.buildPlan.votes);
+  }
+
+  // Runs at the end of the vote. Costs are checked again because the poll may have spent resources.
+  function settleBuildPlan(match, world, report) {
+    const plan = world.buildPlan;
+    world.buildPlan = null;
+    if (!plan) return;
+    const name = `${BUILDINGS[plan.id].name} Lv${plan.target}`;
+    const votes = Object.values(plan.votes);
+    const tally = `${votes.filter(Boolean).length} yes, ${votes.filter(v => !v).length} no`;
+    if (!crewApproves(match, world, plan.votes)) {
+      report.notes.push(`The ${name} plan was voted down (${tally}).`);
+      return;
+    }
+    const option = buildOptions(world).find(o => o.id === plan.id);
+    if (option.lockReason || option.target !== plan.target) {
+      report.notes.push(`The ${name} plan was approved (${tally}) but could not start: ${(option.lockReason || 'level changed').toLowerCase()}.`);
+      return;
+    }
     world.gold -= option.cost.gold;
     world.ore -= option.cost.ore;
-    world.pendingBuild = { id: buildingId, target: option.target, by: player.name };
-    player.exp += EXP.build;
-    player.record.builds++;
-    log(match, `${player.name} started ${BUILDINGS[buildingId].name} Lv${option.target}.`, world.id);
-    return option;
+    world.pendingBuild = { id: plan.id, target: plan.target };
+    const proposer = match.players[plan.by];
+    if (proposer) {
+      proposer.exp += EXP.build;
+      proposer.record.builds++;
+    }
+    report.notes.push(`Crew approved ${name} (${tally}): −${option.cost.gold} gold, −${option.cost.ore} ore.`);
   }
 
   function buildShip(match, playerId) {
@@ -472,13 +519,17 @@
     world.raid = null;
   }
 
-  function raidPasses(match, world) {
-    if (!world.raid) return false;
+  // Crew decisions (raids, construction): more yes than no, and at least half the crew says yes.
+  function crewApproves(match, world, votesById) {
     const members = membersOf(match, world.id).length;
-    const votes = Object.values(world.raid.votes);
+    const votes = Object.values(votesById);
     const yes = votes.filter(Boolean).length;
     const no = votes.length - yes;
     return yes > no && yes * 2 >= members;
+  }
+
+  function raidPasses(match, world) {
+    return !!world.raid && crewApproves(match, world, world.raid.votes);
   }
 
   function attackStrength(world) {
@@ -605,7 +656,10 @@
       log(match, battle.text);
     });
 
-    // 3. Production, upkeep and passive effects.
+    // 3. Construction plans the crew voted on.
+    match.worldOrder.forEach(id => settleBuildPlan(match, match.worlds[id], reports[id]));
+
+    // 4. Production, upkeep and passive effects.
     match.worldOrder.forEach(id => {
       const world = match.worlds[id];
       const report = reports[id];
@@ -636,7 +690,7 @@
         report.notes.push('Riots! 20% of gold and half of all storage were lost.');
       }
 
-      // 4. Construction finishes at the end of the turn, active from the next one.
+      // 5. Approved construction finishes at the end of the turn, active from the next one.
       if (world.pendingBuild) {
         world.buildings[world.pendingBuild.id].level = world.pendingBuild.target;
         report.notes.push(`${BUILDINGS[world.pendingBuild.id].name} reached Lv${world.pendingBuild.target}.`);
@@ -681,10 +735,10 @@
 
   const api = {
     EXP, MAX_MEMBERS, INVENTORY_CAP, RAID_ENERGY_COST, START_VALUE, STAT_KEYS, GameError,
-    addPlayer, applyEffects, buildCost, buildOptions, buildShip, cancelRaid, castVote, clamp,
-    createMatch, fleetCap, harvest, membersOf, optionLockReason, optionValue, playCard,
-    playerLevel, playerRanking, pollOptions, proposeRaid, raidLockReason, raidPasses, random,
-    resolveTurn, sendAid, standings, startBuild, startTurn, storageCap, tallyPoll, voteRaid, worldPower
+    addPlayer, applyEffects, buildCost, buildOptions, buildPasses, buildShip, cancelBuild, cancelRaid,
+    castVote, clamp, createMatch, fleetCap, harvest, membersOf, optionLockReason, optionValue, playCard,
+    playerLevel, playerRanking, pollOptions, proposeBuild, proposeRaid, raidLockReason, raidPasses, random,
+    resolveTurn, sendAid, standings, startTurn, storageCap, tallyPoll, voteBuild, voteRaid, worldPower
   };
 
   root.FleetCouncilCore = api;

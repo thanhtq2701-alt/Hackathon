@@ -578,14 +578,18 @@
         <div class="storage"><div class="bar"><span style="width:${Math.round(100 * b.storage / Math.max(1, b.cap))}%"></span></div>
           <span>${b.storage}/${b.cap}</span></div>
         <button class="btn tiny harvest" data-act="harvest" data-id="${id}" ${b.storage > 0 ? '' : 'disabled'}>${b.storage > 0 ? `Harvest +${b.storage} ${def.produces}` : 'Nothing yet'}</button>` : '';
-      const upgrade = isPending
-        ? `<span class="building-now">Building Lv${pending.target}… (${esc(pending.by)})</span>`
-        : opt.lockReason === 'Max level'
-          ? '<span class="note">Max level</span>'
-          : `<button class="btn tiny" data-act="build" data-id="${id}" ${opt.lockReason ? 'disabled' : ''} title="${esc(opt.lockReason || '')}">
-              ${b.level ? 'Upgrade' : 'Build'} Lv${opt.target} · ${cost(opt.cost)}</button>
-             ${opt.lockReason && opt.lockReason !== 'One build per turn' ? `<span class="lock">${esc(opt.lockReason)}</span>` : ''}`;
-      return `<div class="bld ${b.level ? '' : 'unbuilt'} ${isPending ? 'pending' : ''}">
+      const planned = w.buildPlan && w.buildPlan.id === id;
+      const voting = s.phase === 'vote';
+      const upgrade = planned
+        ? `<span class="building-now">Proposed Lv${w.buildPlan.target} · crew is voting</span>`
+        : isPending
+          ? `<span class="building-now">Building Lv${pending.target}…</span>`
+          : opt.lockReason === 'Max level'
+            ? '<span class="note">Max level</span>'
+            : `<button class="btn tiny" data-act="build" data-id="${id}" ${opt.lockReason || !voting ? 'disabled' : ''} title="${esc(opt.lockReason || (voting ? 'Ask your crew to approve this construction' : 'Propose during the council vote'))}">
+                Propose ${b.level ? 'upgrade' : 'build'} Lv${opt.target} · ${cost(opt.cost)}</button>
+               ${opt.lockReason && opt.lockReason !== 'One build per turn' ? `<span class="lock">${esc(opt.lockReason)}</span>` : ''}`;
+      return `<div class="bld ${b.level ? '' : 'unbuilt'} ${isPending || planned ? 'pending' : ''}">
         <div class="bld-head">${Art.buildingIcon(id, b.level)}<div><b>${def.name}</b><span class="lv">${b.level ? 'Lv' + b.level : 'Not built'}</span></div></div>
         <p class="bld-desc">${def.describe(Math.max(1, b.level))}</p>${storage}<div class="bld-actions">${upgrade}</div></div>`;
     }).join('');
@@ -603,7 +607,7 @@
         <button class="btn tiny" data-act="ship" ${canShip ? '' : 'disabled'} title="${canShip ? '' : shipReason}">Build ship · ${cost(shipCost)}</button>
       </div>
       ${w.flags && (w.flags.overclock || w.flags.shieldMatrix) ? `<p class="flags">${w.flags.overclock ? '⚡ Overclock active ' : ''}${w.flags.shieldMatrix ? '🛡 Shield Matrix active' : ''}</p>` : ''}
-      <h3 class="section-title">Your planet <span class="note">One construction per turn · finishes at the end of the turn</span></h3>
+      <h3 class="section-title">Your planet <span class="note">Construction needs crew approval · one per turn · decided when the vote ends</span></h3>
       <div class="buildings">${tiles}</div>`);
   }
 
@@ -704,11 +708,29 @@
     else if (app.tab === 'ranking') body = rankingHtml(s);
     else body = logHtml(s);
     setRegion('g-side', `
+      ${buildPlanHtml(s, w)}
       ${raidHtml(s, w)}
       <div class="panel side-panel">
         <div class="tabs" role="tablist">${tabs.map(([id, label]) => `<button role="tab" aria-selected="${app.tab === id}" class="${app.tab === id ? 'on' : ''}" data-act="tab" data-tab="${id}">${label}</button>`).join('')}</div>
         <div class="tab-body">${body}</div>
       </div>`);
+  }
+
+  function buildPlanHtml(s, w) {
+    const p = w.buildPlan;
+    if (!p || s.phase !== 'vote') return '';
+    const name = C.BUILDINGS[p.id].name;
+    return `<div class="panel build-plan">
+      <span class="eyebrow">🏗 Build plan</span>
+      <h3>${esc(name)} Lv${p.target}?</h3>
+      <p class="note">Proposed by ${esc(p.by)}. Costs ${cost(p.cost)} from the shared treasury. Decided when the vote ends: more yes than no, and at least half the crew says yes. Staying silent counts as not objecting.</p>
+      <p>Yes: ${p.yes.map(esc).join(', ') || '—'}<br>No: ${p.no.map(esc).join(', ') || '—'}</p>
+      <p class="${p.passing ? 'ok' : 'warn'}">${p.passing ? 'Will be built' : 'Not enough support yet'}</p>
+      <div class="row">
+        <button class="btn small ${p.myVote === true ? 'primary' : ''}" data-act="buildVote" data-yes="1">Yes, build</button>
+        <button class="btn small ${p.myVote === false ? 'primary' : ''}" data-act="buildVote" data-yes="0">No</button>
+        ${p.byMe ? '<button class="btn small ghost" data-act="cancelBuild">Cancel plan</button>' : ''}</div>
+    </div>`;
   }
 
   function raidHtml(s, w) {
@@ -847,9 +869,11 @@
       }
       case 'build': {
         const r = await send('build', { buildingId: d.id });
-        if (r) toast(`Construction started: ${C.BUILDINGS[d.id].name} Lv${r.target}`);
+        if (r) toast(`Proposed ${C.BUILDINGS[d.id].name} Lv${r.target}. Your crew votes until the vote ends.`);
         break;
       }
+      case 'buildVote': await send('buildVote', { yes: d.yes === '1' }); break;
+      case 'cancelBuild': await send('cancelBuild'); break;
       case 'ship': if (await send('buildShip') !== null) toast('A new ship joins the fleet.'); break;
       case 'raid': await send('proposeRaid', { targetId: d.id }); break;
       case 'raidVote': await send('raidVote', { yes: d.yes === '1' }); break;
