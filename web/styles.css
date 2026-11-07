@@ -22,7 +22,6 @@
     }
     .bar-fill { transition: width 0.8s ease; }
 
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=JetBrains+Mono&display=swap');
     
     * {
       box-sizing: border-box;
@@ -2510,3 +2509,149 @@
       font-size: 2.2rem;
     }
   
+    /* ══════════════════════════════════════════════════════════
+       POLISH PASS (v1.5) — overrides kept together on purpose
+       ══════════════════════════════════════════════════════════ */
+
+    /* The story card and choice row live outside #game-screen; hide them on the title screen. */
+    body:not(.in-game) #card-wrap,
+    body:not(.in-game) #choices,
+    body:not(.in-game) #result-flash {
+      display: none !important;
+    }
+
+    /* The outcome face only appears after the second tap (it used to show "Outcome:" on reveal). */
+    .card.choice-card:not(.confirmed) .card-outcome-face {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    /* Revealed answer: the nested paddings left ~100px for text and split words mid-way. */
+    .card-back {
+      padding: .9rem .6rem;
+    }
+
+    .choice-answer-content {
+      padding: .5rem .25rem 1.6rem;
+    }
+
+    .choice-label {
+      padding: .4rem !important;
+      font-size: 1.02rem;
+      word-wrap: normal;
+      overflow-wrap: normal;
+      word-break: normal;
+      hyphens: manual;
+    }
+
+    /* One hint is enough: keep "Tap again to confirm". */
+    .choice-confirm-hint {
+      display: none;
+    }
+
+    /* Three mode cards on one row. */
+    .mode-cards {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      max-width: 760px;
+    }
+
+    .mode-card p {
+      line-height: 1.55;
+    }
+
+    #choices {
+      margin-top: 18px !important;
+    }
+
+    @media (max-width: 640px) {
+      #title-screen {
+        padding: 2.5rem .5rem;
+      }
+
+      h1.game-title {
+        font-size: 2.4rem;
+      }
+
+      .mode-cards {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+      }
+    }
+
+    /* Phones: a 2×2 grid of shorter cards instead of a tall scaled-down column. */
+    @media (max-width: 760px) {
+      #choices {
+        transform: none !important;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        min-height: 0;
+        margin-top: 14px !important;
+      }
+
+      .card.choice-card {
+        width: 100%;
+        height: clamp(220px, 64vw, 300px);
+      }
+
+      .choice-icon {
+        margin-top: .4rem;
+      }
+
+      .choice-icon svg {
+        width: 58%;
+        max-height: 110px;
+      }
+
+      .card-back {
+        padding: .75rem;
+      }
+
+      .choice-label {
+        font-size: .88rem;
+        padding: .6rem !important;
+      }
+
+      .card.choice-card.revealed .card-back.tarot-front-design .choice-answer-content::after,
+      .card.choice-card.floating:not(.confirmed) .card-back.tarot-front-design .choice-answer-content::after {
+        bottom: .4rem;
+      }
+
+      /* Outcome view: full width, readable sizes, scroll if long. */
+      #selected-overlay {
+        top: 12px;
+        width: calc(100vw - 24px);
+        height: min(68vh, 560px);
+        padding: 8px;
+      }
+
+      #continue-wrap,
+      #continue-wrap.selected-state {
+        top: calc(12px + min(68vh, 560px) + 14px);
+      }
+
+      .choice-outcome-content {
+        padding: 1rem .9rem;
+        gap: .45rem;
+        justify-content: flex-start;
+        overflow-y: auto;
+      }
+
+      .choice-outcome-content .outcome-choice-text {
+        font-size: 1rem;
+      }
+
+      .choice-outcome-content .outcome-description {
+        font-size: 1rem;
+      }
+
+      .choice-outcome-content .choice-back-line {
+        font-size: 1.05rem;
+        margin-bottom: .15rem;
+      }
+
+      #continue-btn {
+        padding: .75rem 1.8rem;
+        font-size: .95rem;
+      }
+    }

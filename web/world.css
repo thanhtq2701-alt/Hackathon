@@ -120,6 +120,7 @@ input {
   background: var(--surface-2); border: 1px solid var(--line-strong); border-radius: var(--radius-sm);
 }
 input::placeholder { color: var(--text-dim); }
+input:disabled { opacity: .45; cursor: not-allowed; }
 
 .tag {
   display: inline-block; padding: 1px 6px; margin-left: 4px;
