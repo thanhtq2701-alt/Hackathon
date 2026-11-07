@@ -17,29 +17,29 @@ CÁCH ĐIỀN
 ======================================================================
 
 1.1 [BẮT BUỘC] Tên sản phẩm cuối cùng hiển thị trong game là gì?
-Trả lời:
+Trả lời: Tôi vẫn muốn để là The Oval nhưng hiện tại việc mua tên miền hơi đắt và khó với tôi nên vẫn sẽ giữ code rồi deploy bằng vercel thôi, tên game vẫn sẽ giữ là The Oval
 
 1.2 [BẮT BUỘC] Trong một câu, người chơi làm gì và vì sao họ muốn chơi?
-Trả lời:
+Trả lời: Người chơi sẽ đóng vai làm những nhà du hành vũ trụ, đưa ra những quyết định liên quan đến sự sinh tồn của quốc gia của mình. Sẽ có nhiều phần, như kiểu làm trong một xã hội ngoài vũ trụ vậy. Ý tưởng ban đầu để test tâm lý từng người, xem là họ sẽ làm những hành động như nào, từ đó gán cho họ biệt danh như Người bảo vệ hay Nhà đầu tư tài ba... Họ sẽ muốn chơi vì họ được toàn quyền kiểm soát vận mệnh của quốc gia của mình, build lên theo những tiêu chí họ muốn như ngoài đời luôn.
 
 1.3 [BẮT BUỘC] Bản đầu tiên cần hoàn thành để đạt mục tiêu nào?
 Ví dụ: prototype chơi đơn hoàn chỉnh; bản chơi nhóm tại lớp; beta công khai.
-Trả lời:
+Trả lời: Prototype chơi đơn hoàn chỉnh, đồng thời tổ chức chơi online được để nhiều người lập thành 1 team chơi chung lên được vercel. Tôi muốn các tính năng tôi đã nêu ra đều chơi được hoàn chỉnh và okela, như những gì đã ghi từ trước trong @Dan do.txt
 
 1.4 [BẮT BUỘC] Những nền tảng cần hỗ trợ lúc ra mắt?
 [ ] Máy tính, trình duyệt web
 [ ] Điện thoại, trình duyệt web
 [ ] Máy tính bảng
 [ ] Khác:
-Trả lời thêm:
+Trả lời thêm: Máy tính, trình duyệt web và Điện thoại, trình duyệt web. Mới cần vậy thôi
 
 1.5 [BẮT BUỘC] Ai là người chơi chính, họ biết gì về game trước khi mở lần đầu?
 Tuổi/nhóm người chơi (không cần thông tin định danh), kinh nghiệm game, ngôn ngữ:
-Trả lời:
+Trả lời: User bạn bè của tôi, họ chưa biết gì về game nhưng sẽ có dòng giới thiệu ban đầu để họ dễ làm quen và hiểu game hơn. Họ đều là học sinh như tôi thôi, hiện tại đều là người Việt nhưng sẽ phổ biến song song cả Tiếng Việt và Tiếng Anh nữa. 
 
 1.6 [BẮT BUỘC] Điều gì phải có để gọi là "hoàn thành sản phẩm"?
 Liệt kê các kết quả có thể kiểm tra, không chỉ tên tính năng:
-Trả lời:
+Trả lời: Tất cả các tính năng đều chạy được, cũng như x
 
 1.7 [SAU] Điều gì tuyệt đối không thuộc phạm vi phiên bản đầu?
 Trả lời:

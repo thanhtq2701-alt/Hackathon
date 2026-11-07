@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fleet Council</title>
+  <meta name="description" content="Team strategy in space: every team is a world. Vote on crises, build your planet, harvest, raid rivals and climb the pilot ranking.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@500;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="web/world.css">
+</head>
+
+<body>
+  <header class="topbar">
+    <a class="brand" href="world.html">FLEET COUNCIL</a>
+    <nav class="topnav">
+      <span id="conn" class="conn" hidden></span>
+      <a href="index.html" class="link-muted">The Oval (solo story)</a>
+    </nav>
+  </header>
+
+  <main id="view" aria-live="polite"></main>
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <script src="data/world-content.js"></script>
+  <script src="app/world-core.js"></script>
+  <script src="app/world-room.js"></script>
+  <script src="app/world-art.js"></script>
+  <script src="app/world-client.js"></script>
+</body>
+
+</html>
