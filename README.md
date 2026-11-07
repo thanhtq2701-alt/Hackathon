@@ -30,7 +30,7 @@ When your energy hits zero, the **Lazarus Protocol** activates—a last-ditch su
 A second mode where **every team is a world** (1–4 pilots per world, 2–4 worlds per room):
 * **Council polls:** each turn your world draws a crisis with **3–4 option cards**. Every pilot has one vote; most votes wins, ties are settled by a fair draw. Options on a card are balanced so each one has a real cost and a real gain.
 * **Equal start:** every world begins with all stats at **50**, 50 gold, 50 ore and 3 ships.
-* **Build your planet:** a Command Core caps seven upgradeable buildings (Gold Mine, Ore Refinery, Reactor, Shipyard, Shield Array, Habitat Ring). One construction per world per turn.
+* **Build your planet:** a Command Core caps seven upgradeable buildings (Gold Mine, Ore Refinery, Reactor, Shipyard, Shield Array, Habitat Ring). Spending on construction is a crew decision: one build plan per turn, approved like a raid (more yes than no, and at least half the crew says yes).
 * **Harvest:** buildings fill their storage every turn. Harvesting moves it to the treasury and gives the pilot **EXP** and a chance at a **special card** (Overclock, Shield Matrix, Sabotage, Trade Convoy, Veto, Rally, Recruit Crew) for their personal inventory.
 * **Combat & diplomacy online:** propose a raid on a rival world — it launches only if your crew agrees — or send them supplies and quick signals.
 * **Illustrated:** the planet is drawn from its state (buildings, orbiting ships, shields, blackouts, smoke after a lost raid); every crisis and battle has its own illustration.

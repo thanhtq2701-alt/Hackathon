@@ -329,6 +329,8 @@ input:disabled { opacity: .45; cursor: not-allowed; }
 /* Side */
 .raid-plan { border-color: rgba(255, 92, 122, .5); background: linear-gradient(180deg, rgba(255, 92, 122, .1), transparent), var(--surface); }
 .raid-plan .eyebrow { color: var(--bad); }
+.build-plan { border-color: rgba(255, 209, 102, .5); background: linear-gradient(180deg, rgba(255, 209, 102, .1), transparent), var(--surface); }
+.build-plan .eyebrow { color: var(--gold); }
 .side-panel { padding: 0; overflow: hidden; }
 .tabs { display: flex; border-bottom: 1px solid var(--line); }
 .tabs button { flex: 1; min-height: 42px; background: none; border: 0; border-bottom: 2px solid transparent; color: var(--text-mid); font: 600 .8rem var(--body); cursor: pointer; }

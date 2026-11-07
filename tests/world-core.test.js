@@ -127,19 +127,50 @@ test('storage is capped at three turns of production', function () {
   assert.equal(mine.storage, core.storageCap('mine', mine.level));
 });
 
-test('construction costs resources, is limited to one per turn and respects the Command Core', function () {
+// A poll option without gold or ore effects, so treasury checks only see construction and upkeep.
+function neutralPoll(match, worldId) {
+  match.worlds[worldId].poll = { situationId: 'alien_signal', vetoed: [] };
+  core.membersOf(match, worldId).forEach(p => core.castVote(match, p.id, 1));
+}
+
+test('construction is a crew plan: nothing is spent until the vote ends and it is approved', function () {
   const match = twoWorldMatch();
   core.startTurn(match);
+  neutralPoll(match, 'aurora');
   const world = match.worlds.aurora;
-  assert.throws(() => core.startBuild(match, 'a1', 'mine'), /Needs Command Core Lv2/);
-  core.startBuild(match, 'a1', 'shipyard');
-  assert.equal(world.gold, 25);
-  assert.equal(world.ore, 30);
-  assert.throws(() => core.startBuild(match, 'a2', 'shield'), /One build per turn/);
-  assert.equal(world.buildings.shipyard.level, 0);
-  core.resolveTurn(match);
+  assert.throws(() => core.proposeBuild(match, 'a1', 'mine'), /Needs Command Core Lv2/);
+  core.proposeBuild(match, 'a1', 'shipyard');
+  assert.equal(world.gold, 50);
+  assert.throws(() => core.proposeBuild(match, 'a2', 'shield'), /One build per turn/);
+  assert.throws(() => core.cancelBuild(match, 'a2'), /Only the proposer/);
+  core.voteBuild(match, 'a2', true);
+  const report = core.resolveTurn(match).worlds.aurora;
   assert.equal(world.buildings.shipyard.level, 1);
+  assert.equal(world.gold, 50 - 25 - 3); // construction, then upkeep for 3 ships
+  assert.equal(world.ore, 30);
   assert.equal(core.fleetCap(world), 6);
+  assert.equal(match.players.a1.record.builds, 1);
+  assert.ok(report.notes.some(n => /Crew approved Shipyard Lv1 \(2 yes, 0 no\)/.test(n)));
+});
+
+test('a teammate can veto a build plan; silence does not block it; solo worlds decide alone', function () {
+  const match = twoWorldMatch();
+  core.startTurn(match);
+  neutralPoll(match, 'aurora');
+  core.proposeBuild(match, 'a1', 'shipyard');
+  core.voteBuild(match, 'a2', false);
+  core.proposeBuild(match, 'n1', 'shipyard');
+  let report = core.resolveTurn(match);
+  assert.equal(match.worlds.aurora.buildings.shipyard.level, 0);
+  assert.equal(match.worlds.aurora.gold, 50 - 3);
+  assert.ok(report.worlds.aurora.notes.some(n => /voted down \(1 yes, 1 no\)/.test(n)));
+  assert.equal(match.worlds.nova.buildings.shipyard.level, 1);
+
+  core.startTurn(match);
+  neutralPoll(match, 'aurora');
+  core.proposeBuild(match, 'a1', 'shipyard');
+  report = core.resolveTurn(match);
+  assert.equal(match.worlds.aurora.buildings.shipyard.level, 1);
 });
 
 test('a raid needs crew support and a winning raid moves loot and protects the loser', function () {
