@@ -339,23 +339,14 @@ const TheOvalCore = window.TheOvalCore;
 
     function getChoiceOutcomeText(originalChoice, effectiveChoice, topic) {
       if (originalChoice && originalChoice.outcome) return originalChoice.outcome;
+      // Describe only; state changes happen once, in applyDeltas.
+      // (This used to add the deltas to gs a second time, under the wrong bar keys.)
       const positives = [];
       const negatives = [];
-      ['approval', 'party', 'tension', 'eco', 'unrest'].forEach(k => {
-      let d = effectiveChoice[k] || 0;
-      if (d) {
-        gs.bars[k] += d;
-        if (gs.bars[k] > 100) gs.bars[k] = 100;
-        if (gs.bars[k] < 0) gs.bars[k] = 0;
-      }
-    });
-
-    let energyDelta = effectiveChoice.energy || 0;
-    if (energyDelta) {
-      gs.energy += energyDelta;
-      if (gs.energy > 100) gs.energy = 100; // Chốt trần không cho vượt 100%
-      if (gs.energy < 0) gs.energy = 0;     // Chốt đáy không cho rớt xuống số âm
-    }
+      outcomeLines(effectiveChoice).forEach((line, i) => {
+        const label = line.text.replace(/ [+-]?\d+(\.\d+)?$/, '');
+        (line.isGood ? positives : negatives).push(label);
+      });
 
       if (topic === 'environment' && negatives.includes('State Control')) return 'The policy stabilizes supply quickly, but environmental and community costs spark new backlash.';
       if (positives.length && negatives.length) return `Short-term gains for ${positives.join(', ')} come with pressure on ${negatives.join(', ')}.`;
@@ -564,15 +555,27 @@ const TheOvalCore = window.TheOvalCore;
       continueWrap.classList.add('selected-state', 'visible');
 
 
-      // Prepare outcome data before fade reveal
       const effectiveChoice = scaleChoice(choice);
 
-      // Populate outcome data
+      // Apply game state changes first, then show what actually changed.
+      // Delta caps, arc multipliers and the 0-100 limits mean the raw card numbers
+      // can differ from the real change, so the card shows the measured difference.
+      const before = Object.assign({}, gs.bars, { energy: gs.energy });
+      if (typeof choice.onSelect === 'function') choice.onSelect();
+      applyDeltas(effectiveChoice);
+      const applied = {};
+      const barKeyFor = { approval: 'publicApproval', tension: 'internationalTension', eco: 'economicState', unrest: 'stateAuthority', party: 'partyLoyalty', energy: 'energy' };
+      Object.entries(barKeyFor).forEach(([k, stateKey]) => {
+        const now = stateKey === 'energy' ? gs.energy : gs.bars[stateKey];
+        const d = Math.round((now - before[stateKey]) * 10) / 10;
+        if (d) applied[k] = d;
+      });
+
       const outcomeMsg = btn.querySelector('.choice-back-msg');
       const outcomeList = btn.querySelector('.choice-back-list');
-      if (outcomeMsg) outcomeMsg.textContent = getChoiceOutcomeText(choice, effectiveChoice, topic);
+      if (outcomeMsg) outcomeMsg.textContent = getChoiceOutcomeText(choice, applied, topic);
       if (outcomeList) {
-        const lines = outcomeLines(effectiveChoice);
+        const lines = outcomeLines(applied);
         outcomeList.innerHTML = lines.length
           ? lines.map(l => `<div class="choice-back-line ${l.isGood ? 'good' : 'bad'}">${l.text}</div>`).join('')
           : '<div class="choice-back-line">No immediate stat movement.</div>';
@@ -581,10 +584,6 @@ const TheOvalCore = window.TheOvalCore;
       // Trigger the scaleX flip to show outcome
       btn.classList.remove('floating', 'revealed');
       btn.classList.add('confirming');
-
-      // Apply game state changes
-      if (typeof choice.onSelect === 'function') choice.onSelect();
-      applyDeltas(effectiveChoice);
       trackHiddenBehaviors(choice, topic, isArc);
       applySacrificeIfNeeded();
       if (!isArc) gs.arcTriggerCounts[topic]++;
@@ -802,7 +801,7 @@ const TheOvalCore = window.TheOvalCore;
     }
 
     function advanceTurn() {
-      gs.energy += 1; // Add passive energy gain each turn
+      // Check depletion before the passive +1, otherwise an empty core was revived to 1.
       if (gs.energy <= 0) {
         gs.energy = 0;
         updateHUD(false); 
@@ -813,8 +812,9 @@ const TheOvalCore = window.TheOvalCore;
         });
         return; 
       }
+      gs.energy = Math.min(100, gs.energy + 1); // Passive energy gain each turn, capped at 100
       if (gs.turn >= 40 && !gs.activeArc) { showEndScreen(); return; }
-      
+
       if (gs.bars.economicState <= 5) { showEndScreen(); return; }
       gs.turn++;
       checkFailSafes();
@@ -1031,7 +1031,9 @@ const TheOvalCore = window.TheOvalCore;
       let ending = pickEnding();
 
       // Handle special Convergence narrative overrides
-      if (choiceOverride && choiceOverride.outcome) {
+      // The peace branch has its own ending card; without this check its outcome
+      // sentence was used as the ending title.
+      if (choiceOverride && choiceOverride.outcome && choiceOverride.text !== 'The Peacemaker Ending.') {
         const parts = choiceOverride.outcome.split('. ');
         const rawTitle = parts[0].replace('ENDING: ', '').trim();
         const scenarioLine = parts.slice(1).join('. ').trim();
