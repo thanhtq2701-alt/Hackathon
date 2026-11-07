@@ -371,9 +371,26 @@
     } catch (error) {
       app.serverOnline = false;
       const local = Object.values(store.get('fc.ranks', {})).sort((a, b) => b.exp - a.exp);
-      if (hall()) hall().innerHTML = hallTable(local, '(offline practice on this device)');
-      if (note()) note().innerHTML = 'Online rooms need the Fleet Council server: run <code>npm start</code> and open <code>http://localhost:8080/world.html</code>. Practice mode works anywhere.';
+      if (hall()) hall().innerHTML = hallTable(local, '(practice matches on this device)');
+      if (note()) note().innerHTML = '<b>Online rooms are off on this site</b> because it runs without the game server. Practice with bots works right now. To play online with friends, start the server with <code>npm start</code> (see the README).';
+      showOfflineActions();
     }
+  }
+
+  // Without a server, practice becomes the main action and online buttons are disabled up front,
+  // instead of failing only after a click.
+  function showOfflineActions() {
+    const actions = document.querySelector('.home-actions');
+    if (!actions) return;
+    const practice = actions.querySelector('[data-home="practice"]');
+    practice.className = 'btn primary';
+    actions.prepend(practice);
+    actions.querySelectorAll('[data-home="create"], [data-home="join"], #code').forEach(el => {
+      el.disabled = true;
+      el.title = 'Needs the Fleet Council server';
+    });
+    actions.querySelector('[data-home="create"]').className = 'btn';
+    actions.querySelector('[data-home="create"]').textContent = 'Create online room (server needed)';
   }
 
   async function homeAction(kind) {

@@ -1080,7 +1080,7 @@ const TheOvalCore = window.TheOvalCore;
     <div class="defining-wrap"><div class="section-label">Defining Decisions</div><div class="defining-list">${top5.map(d => `<div class="defining-item"><strong>${d.topic} · ${d.card}</strong><br>"${d.choice}"</div>`).join('')}</div></div>
     <div class="end-btns">
       <button class="end-btn" onclick="restartGame()">Play Again</button>
-      <button class="end-btn" style="border-color: #6fbcf0; color: #6fbcf0;" onclick="mockMintNFT()">💠 Mint Legacy NFT</button>
+      <button class="end-btn" style="border-color: #6fbcf0; color: #6fbcf0;" onclick="mockMintNFT()">💠 Mint Legacy NFT (demo)</button>
       <button class="end-btn" onclick="showGallery()">Gallery</button>
       <button class="end-btn" style="border-color: #1DA1F2; color: #1DA1F2;" onclick="shareToX()">🐦 Share on X</button>
     </div>`;
@@ -1263,10 +1263,9 @@ const TheOvalCore = window.TheOvalCore;
     // GAME FLOW
     // ═══════════════════════════════════════════════════════════
     function startGame(mode) {
-      console.log('Mode Selected:', mode);
       if (mode !== 'normal') return;
-      console.log('Starting Normal Game');
       initState();
+      document.body.classList.add('in-game');
       document.getElementById('title-screen').style.display = 'none';
       const gs_screen = document.getElementById('game-screen');
       gs_screen.style.display = 'block';
@@ -1282,6 +1281,8 @@ const TheOvalCore = window.TheOvalCore;
     }
 
     function restartGame() {
+      document.body.classList.remove('in-game');
+      document.getElementById('game-screen').style.display = 'none';
       document.getElementById('end-screen').style.display = 'none';
       document.getElementById('gallery').style.display = 'none';
       document.getElementById('app').style.display = 'block';
@@ -1302,22 +1303,22 @@ const TheOvalCore = window.TheOvalCore;
       btn.style.opacity = "0.7";
       
       setTimeout(() => {
-        btn.textContent = "0x7a2d...3f1e (SUI)"; 
-        btn.style.background = "#27AE60"; 
+        btn.textContent = "0x7a2d...3f1e · DEMO WALLET";
+        btn.style.background = "#27AE60";
         btn.style.opacity = "1";
         btn.style.boxShadow = "0 0 20px rgba(39, 174, 96, 0.6)";
-        showNotif("Wallet Connected to Sui Testnet!");
+        showNotif("Demo wallet connected. No real Sui connection is made.");
       }, 1500);
     }
 
     // MOCK NFT MINTING
     function mockMintNFT() {
-      showNotif("Initializing SUI Protocol...");
-      
+      showNotif("Preparing demo mint...");
+
       setTimeout(() => {
-        alert("🎉 SUCCESS!\n\nYour legacy has been permanently recorded on-chain.\nLegacy NFT 'Lazarus Fragment' minted successfully on Sui Network.\n\nTransaction ID: 0x55b1...f9a2");
-        showNotif("NFT Minted Successfully!");
-      }, 2000);
+        alert("🎉 Demo complete\n\nThis is a preview of how a Legacy NFT ('Lazarus Fragment') would be minted on Sui.\nNo transaction was sent and nothing was recorded on-chain.");
+        showNotif("Demo mint finished (no real transaction).");
+      }, 1200);
     }
 
     // SHARE TO X (TWITTER) LOGIC
