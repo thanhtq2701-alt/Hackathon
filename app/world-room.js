@@ -65,7 +65,8 @@
       }
     }
 
-    addPlayer(name, now, bot, worldId) {
+    // `account` is the server's key for a PIN-protected pilot name (null for guests and bots).
+    addPlayer(name, now, bot, worldId, account) {
       const target = worldId || this.smallestWorld();
       if (!target) throw new core.GameError('Every world is full (4 per world).');
       if (this.worldMembers(target).length >= core.MAX_MEMBERS) throw new core.GameError('That world is full.');
@@ -74,6 +75,7 @@
         name: this.uniqueName(cleanName(name)),
         token: bot ? null : this.makeToken(),
         bot: !!bot,
+        account: account || null,
         worldId: target,
         connections: 0,
         ready: false
@@ -88,13 +90,58 @@
       return player;
     }
 
-    join(name, now) {
-      return this.addPlayer(name, now, false);
+    join(name, now, account) {
+      return this.addPlayer(name, now, false, null, account);
     }
 
     playerByToken(token) {
       if (!token) return null;
       return [...this.players.values()].find(p => p.token === token) || null;
+    }
+
+    // Lets a registered pilot continue on another device without a second seat.
+    playerByAccount(account) {
+      if (!account) return null;
+      return [...this.players.values()].find(p => p.account === account && !p.left) || null;
+    }
+
+    // ── Saving and restoring ───────────────────────────────────────────────
+    // Times are stored relative to `now`, so a restored room resumes its timers
+    // where they stopped instead of expiring during the downtime.
+
+    toJSON(now) {
+      return {
+        format: 1,
+        code: this.code,
+        seed: this.seed,
+        settings: this.settings,
+        phase: this.phase,
+        deadlineLeft: this.deadline === null ? null : Math.max(0, this.deadline - now),
+        match: this.match,
+        version: this.version,
+        signals: this.signals,
+        nextId: this.nextId,
+        hostId: this.hostId,
+        botRng: this.botRng,
+        players: [...this.players.values()].map(p => Object.assign({}, p, { connections: 0 })),
+        botPlans: [...this.botPlans].map(([id, at]) => [id, Math.max(0, at - now)])
+      };
+    }
+
+    static fromJSON(data, options, now) {
+      const room = new Room(Object.assign({}, options, { code: data.code, seed: data.seed, now }));
+      room.settings = data.settings;
+      room.phase = data.phase;
+      room.deadline = data.deadlineLeft === null ? null : now + data.deadlineLeft;
+      room.match = data.match;
+      room.version = data.version;
+      room.signals = data.signals || [];
+      room.nextId = data.nextId;
+      room.hostId = data.hostId;
+      room.botRng = data.botRng;
+      room.players = new Map(data.players.map(p => [p.id, p]));
+      room.botPlans = new Map(data.botPlans.map(([id, left]) => [id, now + left]));
+      return room;
     }
 
     setConnected(playerId, delta, now) {
@@ -529,7 +576,7 @@
         settings: this.settings,
         hostId: this.hostId,
         signals: this.signals.slice(-12),
-        me: me ? { id: me.id, name: me.name, worldId: me.worldId, isHost: me.id === this.hostId, ready: me.ready } : null
+        me: me ? { id: me.id, name: me.name, worldId: me.worldId, isHost: me.id === this.hostId, ready: me.ready, registered: !!me.account } : null
       };
       if (!this.match || this.phase === 'lobby') {
         base.lobby = WORLD_TEMPLATES.slice(0, this.settings.worldCount).map(t => ({

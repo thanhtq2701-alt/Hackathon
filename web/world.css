@@ -161,6 +161,8 @@ input:disabled { opacity: .45; cursor: not-allowed; }
 .hero-art svg { width: 100%; height: auto; display: block; }
 .home-form { margin-top: 1.5rem; max-width: 460px; }
 .field { display: grid; gap: .35rem; font-size: .8rem; color: var(--text-mid); font-weight: 600; }
+.name-row { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: .6rem; }
+.pin-note { margin: .45rem 0 0; font-size: .78rem; }
 .home-actions { display: grid; gap: .6rem; margin: .9rem 0 .6rem; }
 .join-row { display: grid; grid-template-columns: 1fr auto; gap: .5rem; }
 .join-row input { text-transform: uppercase; letter-spacing: .3em; font-family: var(--mono); }

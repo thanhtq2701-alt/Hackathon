@@ -2,19 +2,56 @@ const assert = require('assert');
 const http = require('http');
 const content = require('../data/world-content.js');
 const core = require('../app/world-core.js');
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
 const { Room } = require('../app/world-room.js');
+const { fileStorage, upstashStorage } = require('../server/storage.js');
+const { createApp } = require('../server/server.js');
 
-const pending = [];
+function tempStorage() {
+  return fileStorage(fs.mkdtempSync(path.join(os.tmpdir(), 'fleet-council-test-')));
+}
+
+async function startApp(storage) {
+  const app = createApp({ storage });
+  const port = await app.start(0);
+  const base = `http://127.0.0.1:${port}`;
+  const post = (route, body) => fetch(base + route, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+    .then(async r => Object.assign({ status: r.status }, await r.json()));
+  return { app, base, post };
+}
+
+function firstSnapshot(base, code, token) {
+  return new Promise((done, fail) => {
+    const req = http.get(`${base}/api/events?code=${code}&token=${token}`, res => {
+      let buffer = '';
+      res.on('data', chunk => {
+        buffer += chunk;
+        const match = buffer.match(/data: (.*)\n\n/);
+        if (match) {
+          req.destroy();
+          done(JSON.parse(match[1]));
+        }
+      });
+    });
+    req.on('error', fail);
+  });
+}
+
+// Tests run one after another so the server tests never overlap.
+let chain = Promise.resolve();
 function test(name, run) {
-  const result = run();
-  if (result && typeof result.then === 'function') {
-    pending.push(result.then(() => console.log('PASS ' + name), error => {
+  chain = chain.then(async () => {
+    try {
+      await run();
+      console.log('PASS ' + name);
+    } catch (error) {
       console.error('FAIL ' + name);
-      throw error;
-    }));
-  } else {
-    console.log('PASS ' + name);
-  }
+      console.error(error);
+      process.exitCode = 1;
+    }
+  });
 }
 
 function twoWorldMatch(extraPlayers) {
@@ -257,57 +294,136 @@ test('snapshots hide rival polls, raid plans and inventories', function () {
   assert.ok(view.me.inventory.length === 1);
 });
 
-test('the online server creates rooms, accepts commands and streams snapshots', function () {
-  const { start } = require('../server/server.js');
-  const server = start(0);
-  return new Promise((resolve, reject) => {
-    server.on('listening', async () => {
-      const base = `http://127.0.0.1:${server.address().port}`;
-      const post = (path, body) => fetch(base + path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).then(r => r.json());
-      try {
-        const created = await post('/api/create', { name: '<b>Host</b>' });
-        assert.match(created.code, /^[A-Z]{4}$/);
-        const joined = await post('/api/join', { code: created.code, name: 'Guest' });
-        assert.notEqual(joined.token, created.token);
-        const bad = await post('/api/command', { code: created.code, token: joined.token, type: 'start' });
-        assert.equal(bad.ok, false);
-
-        const first = await new Promise((done, fail) => {
-          const req = http.get(`${base}/api/events?code=${created.code}&token=${created.token}`, res => {
-            let buffer = '';
-            res.on('data', chunk => {
-              buffer += chunk;
-              const match = buffer.match(/data: (.*)\n\n/);
-              if (match) {
-                req.destroy();
-                done(JSON.parse(match[1]));
-              }
-            });
-          });
-          req.on('error', fail);
-        });
-        assert.equal(first.phase, 'lobby');
-        assert.equal(first.me.name.includes('<'), false);
-        assert.equal(first.lobby.reduce((n, w) => n + w.members.length, 0), 2);
-
-        const started = await post('/api/command', { code: created.code, token: created.token, type: 'start' });
-        assert.equal(started.ok, true);
-        const page = await fetch(base + '/world.html');
-        assert.equal(page.status, 200);
-        const blocked = await fetch(base + '/server/server.js');
-        assert.equal(blocked.status, 404);
-        resolve();
-      } catch (error) {
-        reject(error);
-      } finally {
-        server.close();
-        server.closeAllConnections();
-      }
-    });
-  });
+test('file storage round-trips JSON values and treats missing keys as empty', async function () {
+  const storage = tempStorage();
+  assert.equal(await storage.get('rooms'), null);
+  await storage.set('room:ABCD', { a: 1, list: [1, 2] });
+  assert.deepEqual(await storage.get('room:ABCD'), { a: 1, list: [1, 2] });
+  await storage.del('room:ABCD');
+  await storage.del('room:ABCD');
+  assert.equal(await storage.get('room:ABCD'), null);
 });
 
-Promise.all(pending).catch(error => {
-  console.error(error);
-  process.exit(1);
+test('Upstash storage sends Redis commands over HTTPS with the token and a key prefix', async function () {
+  const calls = [];
+  const db = {};
+  const fakeFetch = async (url, init) => {
+    const command = JSON.parse(init.body);
+    calls.push({ url, auth: init.headers.Authorization, command });
+    let result = null;
+    if (command[0] === 'SET') { db[command[1]] = command[2]; result = 'OK'; }
+    if (command[0] === 'GET') result = command[1] in db ? db[command[1]] : null;
+    if (command[0] === 'DEL') { delete db[command[1]]; result = 1; }
+    return { ok: true, json: async () => ({ result }) };
+  };
+  const storage = upstashStorage('https://example.upstash.io', 'secret', fakeFetch);
+  await storage.set('leaderboard', { thanh: { exp: 5 } });
+  assert.deepEqual(await storage.get('leaderboard'), { thanh: { exp: 5 } });
+  assert.equal(await storage.get('missing'), null);
+  assert.deepEqual(calls[0], { url: 'https://example.upstash.io', auth: 'Bearer secret', command: ['SET', 'fc:leaderboard', '{"thanh":{"exp":5}}'] });
+  const failing = upstashStorage('https://example.upstash.io', 'bad', async () => ({ ok: false, status: 401, json: async () => ({ error: 'Unauthorized' }) }));
+  await assert.rejects(() => failing.get('x'), /Unauthorized/);
+});
+
+test('a saved room resumes mid-vote with its timer, seats and match intact', function () {
+  let now = 1000;
+  const room = new Room({ code: 'SAVE', seed: 5, now });
+  const host = room.join('Host', now, 'host');
+  room.setConnected(host.id, 1, now);
+  room.command(host.id, 'fillBots', {}, now);
+  room.command(host.id, 'start', {}, now);
+  now += 30000; // 45 of 75 seconds left
+  const saved = JSON.parse(JSON.stringify(room.toJSON(now)));
+
+  const later = now + 10 * 60 * 1000; // the server was down for ten minutes
+  const restored = Room.fromJSON(saved, {}, later);
+  assert.equal(restored.phase, 'vote');
+  assert.equal(restored.deadline, later + 45000);
+  assert.equal(restored.playerByToken(host.token).id, host.id);
+  assert.equal(restored.playerByAccount('host').id, host.id);
+  assert.equal(restored.players.get(host.id).connections, 0);
+  assert.equal(restored.match.turn, 1);
+
+  restored.setConnected(host.id, 1, later);
+  const world = restored.match.worlds[host.worldId];
+  const option = core.pollOptions(world).find(o => !o.lockReason).index;
+  assert.equal(restored.command(host.id, 'vote', { option }, later).ok, true);
+  for (let t = later; restored.phase === 'vote' && t < later + 60000; t += 500) restored.tick(t);
+  assert.equal(restored.phase, 'report');
+  assert.equal(restored.match.turn, 2);
+});
+
+test('PIN accounts protect a pilot name, lock after repeated wrong PINs and rank only registered pilots', async function () {
+  const { app, base, post } = await startApp(tempStorage());
+  try {
+    const health = await fetch(base + '/healthz');
+    assert.equal(health.status, 200);
+
+    const host = await post('/api/create', { name: 'Thanh', pin: '2701' });
+    assert.equal(host.status, 200);
+    assert.equal(host.registered, true);
+    assert.equal((await post('/api/create', { name: 'thanh' })).status, 403);
+    assert.equal((await post('/api/join', { code: host.code, name: 'THANH' })).status, 403);
+    assert.equal((await post('/api/join', { code: host.code, name: 'Thanh', pin: '12' })).status, 400);
+
+    // The right PIN on another device takes the same seat instead of a second one.
+    const sameSeat = await post('/api/join', { code: host.code, name: 'thanh', pin: '2701' });
+    assert.equal(sameSeat.playerId, host.playerId);
+
+    const guest = await post('/api/join', { code: host.code, name: 'Guest' });
+    assert.equal(guest.registered, false);
+
+    for (let i = 0; i < 5; i++) assert.equal((await post('/api/join', { code: host.code, name: 'Thanh', pin: '0000' })).status, 403);
+    assert.equal((await post('/api/join', { code: host.code, name: 'Thanh', pin: '2701' })).status, 429);
+
+    // Play a short match to the end: only the registered pilot is ranked.
+    const room = app.rooms.get(host.code);
+    assert.equal((await post('/api/command', { code: host.code, token: host.token, type: 'settings', payload: { maxTurns: 6 } })).ok, true);
+    assert.equal((await post('/api/command', { code: host.code, token: host.token, type: 'start' })).ok, true);
+    room.setConnected(host.playerId, 1, Date.now());
+    let t = Date.now();
+    while (room.phase !== 'ended') {
+      t += 1000;
+      if (room.phase === 'report') room.deadline = t;
+      if (room.phase === 'vote') room.deadline = t;
+      room.tick(t);
+    }
+    const ranking = await (await fetch(base + '/api/leaderboard')).json();
+    assert.deepEqual(ranking.players.map(p => p.name), ['Thanh']);
+    assert.equal(ranking.players[0].matches, 1);
+  } finally {
+    await app.stop();
+  }
+});
+
+test('the server keeps rooms, accounts and the ranking across a restart', async function () {
+  const storage = tempStorage();
+  const first = await startApp(storage);
+  const host = await first.post('/api/create', { name: 'Host', pin: '4321' });
+  const guest = await first.post('/api/join', { code: host.code, name: '<b>Guest</b>' });
+  assert.equal((await first.post('/api/command', { code: host.code, token: guest.token, type: 'start' })).ok, false);
+  const snapshot = await firstSnapshot(first.base, host.code, host.token);
+  assert.equal(JSON.stringify(snapshot.lobby).includes('<'), false);
+  assert.equal(snapshot.lobby.reduce((n, w) => n + w.members.length, 0), 2);
+  assert.equal((await first.post('/api/command', { code: host.code, token: host.token, type: 'start' })).ok, true);
+  assert.equal((await fetch(first.base + '/server/server.js')).status, 404);
+  await first.app.stop(); // what Render's SIGTERM triggers
+
+  const second = await startApp(storage);
+  try {
+    const rejoin = await second.post('/api/join', { code: host.code, token: guest.token });
+    assert.equal(rejoin.status, 200);
+    assert.equal(rejoin.playerId, guest.playerId);
+    const view = await firstSnapshot(second.base, host.code, host.token);
+    assert.equal(view.phase, 'vote');
+    assert.equal(view.match.turn, 1);
+    assert.equal((await second.post('/api/create', { name: 'host', pin: '1111' })).status, 403);
+    assert.equal((await second.post('/api/create', { name: 'host', pin: '4321' })).status, 200);
+  } finally {
+    await second.app.stop();
+  }
+});
+
+chain.then(() => {
+  if (process.exitCode) process.exit(process.exitCode);
 });
