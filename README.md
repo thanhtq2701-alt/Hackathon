@@ -59,20 +59,34 @@ A second mode where **every team is a world** (1–4 pilots per world, 2–4 wor
 
 ---
 
-## 🏃 How to Play
-1. Clone the repository and open its folder in PowerShell or Command Prompt.
-2. Run `.\tools\start-local.cmd`.
-3. Open `http://localhost:8000/` in a modern browser.
-4. Choose Normal Mode and make decisions. Wallet and NFT actions are mock demonstrations, not real Sui transactions.
+## 🌐 Live links
+| Link | What works |
+| --- | --- |
+| **https://fleet-council.onrender.com/** | Everything, including Fleet Council online rooms. Free tier: after 15 minutes without visitors the first load takes 30–60 seconds. |
+| https://hackathon-gu8x.onrender.com/ | Solo story and Fleet Council practice with bots (static hosting, no online rooms). |
 
-Stop the server with `Ctrl+C`.
+## 🏃 How to Play
+Requires [Node.js](https://nodejs.org/) 18 or newer. There are no packages to install.
+
+1. Clone the repository and open its folder in PowerShell or Command Prompt.
+2. Run `npm start` (or `.\tools\start-online.cmd`).
+3. Open `http://localhost:8080/` in a modern browser.
+4. **The Oval (solo):** choose Normal Mode and make decisions. Wallet and NFT actions are demonstrations, not real Sui transactions.
+5. **Fleet Council (team):** choose Fleet Council, enter a name and create a room. Friends join with the 4-letter code or the invite link. The host picks the world count, turns and vote time, adds bots if needed, and launches the match.
+
+Stop the server with `Ctrl+C`. The solo mode and Fleet Council practice also work from any static host (`.\tools\start-local.cmd` serves them on port 8000); online rooms need the Node server.
+
+### Deploying on Render
+- **Web Service** (online rooms): Language `Node`, Build Command `npm install`, Start Command `npm start`. Render provides `PORT`. The all-time ranking is stored in `var/leaderboard.json`; without a persistent disk (set `DATA_DIR` to its path) it resets on every restart or deploy.
+- **Static Site**: publish the repository root; online rooms are switched off and the page offers practice plus a link to the online server.
 
 ## 🧩 Project Structure
 
 ```text
 Hackathon/
-├── app/                 # Browser UI, game rules, and audio
-├── data/                # Cards, story arcs, and ending content
+├── app/                 # Browser UI, game rules, and audio (both modes)
+├── data/                # Cards, story arcs, endings, Fleet Council content
+├── server/              # Fleet Council online server (Node, no dependencies)
 ├── deliverables/        # Original hackathon presentation files
 ├── docs/                # Handover, assessment, and planning documents
 ├── tests/               # Focused automated checks
@@ -97,8 +111,8 @@ Hackathon/
 | `app/world-art.js` | Generated SVG illustrations (planet, buildings, crises, battles, cards). |
 | `app/world-client.js` | Fleet Council browser UI and online/offline transports. |
 | `server/server.js` | Static files, JSON API, Server-Sent Events and the all-time ranking. |
+| `web/styles.css` | The Oval presentation. |
 | `web/world.css` | Fleet Council presentation. |
-| `web/styles.css` | Game presentation. |
 | `docs/` | Project handover, assessment, and planning documents. |
 | `deliverables/` | Original presentation files. |
 | `tests/` | Focused checks for game rules and content. |

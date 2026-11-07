@@ -92,7 +92,7 @@ main { max-width: 1480px; margin: 0 auto; padding: 1.25rem 1.25rem 4rem; }
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: .4rem;
   min-height: 38px; padding: .5rem 1rem;
-  font: 600 .88rem var(--body); color: var(--text);
+  font: 600 .88rem var(--body); color: var(--text); text-decoration: none;
   background: var(--surface-2);
   border: 1px solid var(--line-strong); border-radius: var(--radius-sm);
   cursor: pointer;

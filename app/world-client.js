@@ -11,6 +11,8 @@
   const STAT_ORDER = ['morale', 'economy', 'energy', 'security'];
   const LABEL = { morale: 'Morale', economy: 'Economy', energy: 'Energy', security: 'Security', gold: 'Gold', ore: 'Ore', ships: 'Ships' };
   const PHASE_LABEL = { vote: 'Council vote', report: 'Turn report', lobby: 'Lobby', ended: 'Match over' };
+  // Where online rooms run. Static copies of the site link here instead of offering broken buttons.
+  const ONLINE_URL = 'https://fleet-council.onrender.com/world.html';
 
   const app = { transport: null, snap: null, clockOffset: 0, screen: null, cache: {}, tab: 'galaxy', busy: false };
 
@@ -372,7 +374,7 @@
       app.serverOnline = false;
       const local = Object.values(store.get('fc.ranks', {})).sort((a, b) => b.exp - a.exp);
       if (hall()) hall().innerHTML = hallTable(local, '(practice matches on this device)');
-      if (note()) note().innerHTML = '<b>Online rooms are off on this site</b> because it runs without the game server. Practice with bots works right now. To play online with friends, start the server with <code>npm start</code> (see the README).';
+      if (note()) note().innerHTML = '<b>Online rooms are off on this site</b> because it runs without the game server. Practice with bots works right now, or open the online server.';
       showOfflineActions();
     }
   }
@@ -391,6 +393,13 @@
     });
     actions.querySelector('[data-home="create"]').className = 'btn';
     actions.querySelector('[data-home="create"]').textContent = 'Create online room (server needed)';
+    if (location.origin !== new URL(ONLINE_URL).origin) {
+      const online = document.createElement('a');
+      online.className = 'btn';
+      online.href = ONLINE_URL + location.search;
+      online.textContent = 'Play online at fleet-council.onrender.com →';
+      practice.after(online);
+    }
   }
 
   async function homeAction(kind) {
