@@ -22,6 +22,11 @@ Browser scripts are classic scripts that attach to `window` (`TheOval*`, `FleetC
 - Static only (solo + Fleet Council practice): `.\tools\start-local.cmd` → port 8000.
 - Checks: `.\tools\run-checks.cmd` (syntax checks + `tests/game-core.test.js` + `tests/world-core.test.js`). Run before every commit.
 
+## Deployments (Render, auto-deploy from `main`)
+
+- `https://fleet-council.onrender.com` — Web Service (`npm start`), full game including online rooms. Free tier: sleeps after 15 minutes idle, no persistent disk.
+- `https://hackathon-gu8x.onrender.com` — Static Site, solo + practice only; links to the Web Service for online play (`ONLINE_URL` in `app/world-client.js`).
+
 ## Things to keep in mind
 
 - Fleet Council card options must stay balanced: the test requires every option on a card to be within 1 point of the others (`optionValue` in `app/world-core.js`) and to have both a gain and a cost.
