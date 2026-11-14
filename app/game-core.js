@@ -35,6 +35,7 @@
       activeArc: null, activeArcActIndex: 0,
       arcsCompleted: [], arcsTriggered: [],
       impeached: false,
+      resigned: false,
       definingChoices: [],
       cardHistory: { environment: [], war: [], economy: [], civilrights: [], scandal: [] },
       topicQueue: buildTopicQueue(random)
