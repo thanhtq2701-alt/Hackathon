@@ -408,9 +408,10 @@
         const bot = this.players.get(id);
         if (bot) { this.botAct(bot); acted = true; }
       }
-      // Bots answer plans proposed after they already acted.
+      // Bots answer plans proposed after they already acted, and vote again if a Veto struck their option.
       [...this.players.values()].filter(p => p.bot && !this.botPlans.has(p.id)).forEach(bot => {
         if (this.botVotePlans(bot)) acted = true;
+        if (this.match.worlds[bot.worldId].votes[bot.id] === undefined && this.botVotePoll(bot)) acted = true;
       });
       return acted;
     }
@@ -428,21 +429,41 @@
       return voted;
     }
 
-    // Bots back plans that leave the world a small reserve; raids only against weaker fleets.
+    // Bots back builds they can afford, ship orders that keep a small reserve,
+    // raids they expect to win, and aid that leaves the treasury healthy.
     botLikesPlan(world, kind, plan) {
-      if (kind === 'raid') return world.ships >= this.match.worlds[plan.targetId].ships;
+      const m = this.match;
+      if (kind === 'raid') {
+        const odds = core.raidOdds(m, world, m.worlds[plan.targetId]);
+        return odds.attack >= odds.defence * 0.95;
+      }
       if (kind === 'build') {
         const cost = core.buildCost(plan.id, plan.target);
-        return world.gold - cost.gold >= 10 && world.ore >= cost.ore;
+        return world.gold >= cost.gold && world.ore >= cost.ore;
       }
-      if (kind === 'ships') return world.gold - core.SHIP_COST.gold * plan.count >= 10 && world.ore >= core.SHIP_COST.ore * plan.count;
-      return world[plan.resource] - plan.amount >= 30;
+      if (kind === 'ships') return world.gold - core.SHIP_COST.gold * plan.count >= 8 && world.ore >= core.SHIP_COST.ore * plan.count;
+      return world[plan.resource] - plan.amount >= 15;
+    }
+
+    // Rivals whose expected attack beats this world's expected defence.
+    botThreats(world) {
+      const m = this.match;
+      return m.worldOrder.filter(id => id !== world.id).map(id => m.worlds[id])
+        .filter(r => r.ships >= 2 && !core.raidLockReason(m, r, world) && core.raidOdds(m, r, world).attack > core.raidOdds(m, r, world).defence);
+    }
+
+    // Score of a poll option for this world: its value, plus a push towards the weakest stat.
+    botScore(world, option) {
+      const weakest = core.STAT_KEYS.slice().sort((a, b) => world.stats[a] - world.stats[b])[0];
+      return option.value + (option.effects[weakest] || 0) * 0.5;
     }
 
     botAct(bot) {
       const m = this.match;
       const world = m.worlds[bot.worldId];
       const attempt = fn => { try { return fn(); } catch (e) { if (!(e instanceof core.GameError)) throw e; return null; } };
+      const rivals = m.worldOrder.filter(id => id !== world.id).map(id => m.worlds[id]);
+      const threats = this.botThreats(world);
 
       // Leave harvesting to human teammates unless the storage is about to overflow.
       const humansAboard = this.worldMembers(world.id).some(p => !p.bot && !p.left && p.connections > 0);
@@ -452,35 +473,83 @@
         if (b.storage > 0 && (!humansAboard || nearlyFull)) attempt(() => core.harvest(m, bot.id, id));
       });
 
-      const priorities = ['mine', 'refinery', 'shipyard', 'core', 'shield', 'habitat', 'reactor'];
+      this.botPlayCards(bot, world, rivals, threats, attempt);
+
+      // Build: the Command Core first (it unlocks everything else), then income, then defence.
+      const priorities = ['core', 'mine', 'refinery', 'shipyard', 'shield', 'habitat', 'reactor'];
+      if (threats.length) priorities.splice(1, 0, 'shield');
       if (world.stats.energy < 35) priorities.unshift('reactor');
       if (world.stats.morale < 35) priorities.unshift('habitat');
       const builds = core.buildOptions(world);
-      const choice = priorities.map(id => builds.find(b => b.id === id)).find(b => b && !b.lockReason);
-      if (choice && world.gold - choice.cost.gold >= 15) attempt(() => core.proposeBuild(m, bot.id, choice.id));
-      if (world.ships < 4) attempt(() => core.proposeShips(m, bot.id, 1));
+      // Save up for the Command Core when it is close to affordable instead of spending on smaller builds.
+      const coreNext = builds.find(b => b.id === 'core');
+      const saving = coreNext.lockReason === 'Not enough resources' && world.gold >= coreNext.cost.gold * 0.6 && world.ore >= coreNext.cost.ore * 0.6;
+      const choice = saving ? null : priorities.map(id => builds.find(b => b.id === id)).find(b => b && !b.lockReason);
+      if (choice) attempt(() => core.proposeBuild(m, bot.id, choice.id));
 
-      // Vote: favour whatever repairs the weakest stat, with a little noise.
-      const weakest = core.STAT_KEYS.slice().sort((a, b) => world.stats[a] - world.stats[b])[0];
-      const options = core.pollOptions(world).filter(o => !o.vetoed && !o.lockReason);
-      if (options.length) {
-        const scored = options.map(o => ({ o, score: o.value + (o.effects[weakest] || 0) * 0.5 + core.random(this.botRng) * 3 }));
-        scored.sort((a, b) => b.score - a.score);
-        attempt(() => core.castVote(m, bot.id, scored[0].o.index));
+      // Ships: a fleet that grows with the Core, larger when a rival could beat us.
+      const wanted = 3 + world.buildings.core.level + (threats.length ? 2 : 0);
+      const reserve = choice ? choice.cost.gold : saving ? coreNext.cost.gold : 8;
+      const affordable = Math.floor(Math.max(0, world.gold - reserve) / core.SHIP_COST.gold);
+      const count = Math.min(core.MAX_SHIP_ORDER, wanted - world.ships, affordable);
+      if (count > 0) attempt(() => core.proposeShips(m, bot.id, count));
+
+      this.botVotePoll(bot);
+
+      // Raid the rival with the best expected loot that we expect to beat; revenge first.
+      if (!world.raid && core.random(this.botRng) < 0.7) {
+        const targets = rivals
+          .filter(r => !core.raidLockReason(m, world, r))
+          .map(r => ({ r, odds: core.raidOdds(m, world, r) }))
+          .filter(t => t.odds.attack >= t.odds.defence * 1.15)
+          .map(t => ({ r: t.r, value: t.r.gold * 0.5 + t.r.ore * 0.4 + (world.revenge && world.revenge.targetId === t.r.id ? 100 : 0) + core.random(this.botRng) * 5 }))
+          .sort((a, b) => b.value - a.value);
+        if (targets.length) attempt(() => core.proposeRaid(m, bot.id, targets[0].r.id));
       }
 
-      if (!world.raid && core.random(this.botRng) < 0.35) {
-        const rivals = m.worldOrder.filter(id => id !== world.id).map(id => m.worlds[id])
-          .filter(r => !core.raidLockReason(m, world, r) && world.ships >= r.ships + 2);
-        if (rivals.length) attempt(() => core.proposeRaid(m, bot.id, rivals[0].id));
+      // Diplomacy: buy a peace pact with aid when a rival could beat our defence.
+      if (!world.aidPlan && threats.length && core.random(this.botRng) < 0.5) {
+        const resource = world.gold >= 40 ? 'gold' : world.ore >= 40 ? 'ore' : null;
+        const target = threats[Math.floor(core.random(this.botRng) * threats.length)];
+        if (resource) attempt(() => core.proposeAid(m, bot.id, target.id, resource));
       }
+
       this.botVotePlans(bot);
+    }
 
+    // Votes for the poll option that scores best for this world, with a little noise. Returns true if it voted.
+    botVotePoll(bot) {
+      const world = this.match.worlds[bot.worldId];
+      const options = core.pollOptions(world).filter(o => !o.vetoed && !o.lockReason);
+      if (!options.length) return false;
+      const scored = options.map(o => ({ o, score: this.botScore(world, o) + core.random(this.botRng) * 3 }));
+      scored.sort((a, b) => b.score - a.score);
+      core.castVote(this.match, bot.id, scored[0].o.index);
+      return true;
+    }
+
+    botPlayCards(bot, world, rivals, threats, attempt) {
+      const m = this.match;
       const player = m.players[bot.id];
-      if (player && player.inventory.length && player.cardPlayedTurn !== m.turn) {
-        const card = player.inventory.find(c => ['convoy', 'rally', 'overclock', 'shield_matrix'].includes(c.type));
-        if (card) attempt(() => core.playCard(m, bot.id, card.uid));
+      if (!player) return;
+      const play = (type, target) => {
+        if (core.cardsLeft(m, player) <= 0) return;
+        const card = player.inventory.find(c => c.type === type);
+        if (card) attempt(() => core.playCard(m, bot.id, card.uid, target));
+      };
+      // Veto the option that is worst for us, before voting.
+      const open = core.pollOptions(world).filter(o => !o.vetoed);
+      if (open.length >= 3) {
+        const worst = open.slice().sort((a, b) => this.botScore(world, a) - this.botScore(world, b))[0];
+        play('veto', worst.index);
       }
+      const leader = rivals.slice().sort((a, b) => core.worldPower(b) - core.worldPower(a) || core.random(this.botRng) - 0.5)[0];
+      if (leader && core.storageOf(leader, 'gold') + core.storageOf(leader, 'ore') >= 10) play('sabotage', leader.id);
+      if (threats.length) play('shield_matrix');
+      if (world.ships < core.fleetCap(world)) play('recruit');
+      play('overclock');
+      play('convoy');
+      if (world.stats.morale < 70) play('rally');
     }
 
     // ── Snapshots ──────────────────────────────────────────────────────────
@@ -499,6 +568,8 @@
         power: core.worldPower(world),
         protected: world.protectedUntilTurn >= this.match.turn,
         raidedLastTurn: world.raidedLastTurn,
+        underdog: !!world.underdog,
+        revenge: world.revenge && world.revenge.untilTurn >= this.match.turn ? world.revenge : null,
         members: this.worldMembers(world.id).map(p => this.memberView(p))
       };
     }
@@ -533,9 +604,11 @@
         pendingBuild: world.pendingBuild,
         flags: world.flags,
         poll: situation ? {
-          id: situation.id, title: situation.title, body: situation.body, art: situation.art,
+          id: situation.id, title: situation.title, body: situation.body, art: situation.art, crisis: !!situation.crisis,
           options: core.pollOptions(world), votes, myVote: world.votes[me.id]
         } : null,
+        pacts: world.pacts || {},
+        upkeep: core.shipUpkeep(world),
         raid: this.planView(world, 'raid', me, p => ({ targetId: p.targetId })),
         buildPlan: this.planView(world, 'build', me, p => ({ id: p.id, target: p.target, cost: core.buildCost(p.id, p.target) })),
         shipPlan: this.planView(world, 'ships', me, p => ({
@@ -593,14 +666,17 @@
         log: m.log.filter(entry => !entry.worldId || (me && entry.worldId === me.worldId)).slice(-25),
         lastReport: m.lastReport ? this.reportView(m.lastReport, me) : null,
         results: m.results,
-        raidReasons: me ? Object.fromEntries(m.worldOrder.filter(id => id !== me.worldId).map(id => [id, core.raidLockReason(m, m.worlds[me.worldId], m.worlds[id])])) : {}
+        raidReasons: me ? Object.fromEntries(m.worldOrder.filter(id => id !== me.worldId).map(id => [id, core.raidLockReason(m, m.worlds[me.worldId], m.worlds[id])])) : {},
+        // Expected strengths if my world raided each rival (before the ±15% battle roll).
+        raidOdds: me ? Object.fromEntries(m.worldOrder.filter(id => id !== me.worldId).map(id => [id, core.raidOdds(m, m.worlds[me.worldId], m.worlds[id])])) : {}
       };
       if (mine) {
         base.me.exp = mine.exp;
         base.me.level = core.playerLevel(mine.exp);
         base.me.nextLevelExp = 25 * Math.pow(core.playerLevel(mine.exp), 2);
         base.me.inventory = mine.inventory.map(c => Object.assign({ uid: c.uid, type: c.type }, SPECIAL_CARDS[c.type]));
-        base.me.cardPlayed = mine.cardPlayedTurn === m.turn;
+        base.me.cardsLeft = core.cardsLeft(m, mine);
+        base.me.cardAllowance = core.cardAllowance(m, mine.worldId);
         base.me.record = mine.record;
       }
       return base;

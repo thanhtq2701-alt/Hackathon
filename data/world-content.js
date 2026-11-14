@@ -30,36 +30,36 @@
   // Rise-of-Kingdoms style base: the Command Core level caps every other building.
   const BUILDINGS = {
     core: {
-      name: 'Command Core', maxLevel: 3, cost: { gold: 40, ore: 40 },
+      name: 'Command Core', maxLevel: 3, cost: { gold: 25, ore: 25 },
       describe: level => `Other buildings can reach level ${level}.`
     },
     mine: {
-      name: 'Gold Mine', maxLevel: 3, cost: { gold: 20, ore: 15 }, produces: 'gold', rate: 8,
-      describe: level => `Produces ${8 * level} gold per turn into storage.`
+      name: 'Gold Mine', maxLevel: 3, cost: { gold: 15, ore: 15 }, produces: 'gold', rate: 10,
+      describe: level => `Produces ${10 * level} gold per turn into storage.`
     },
     refinery: {
-      name: 'Ore Refinery', maxLevel: 3, cost: { gold: 15, ore: 20 }, produces: 'ore', rate: 7,
-      describe: level => `Produces ${7 * level} ore per turn into storage.`
+      name: 'Ore Refinery', maxLevel: 3, cost: { gold: 15, ore: 10 }, produces: 'ore', rate: 10,
+      describe: level => `Produces ${10 * level} ore per turn into storage.`
     },
     reactor: {
-      name: 'Reactor', maxLevel: 3, cost: { gold: 20, ore: 20 },
+      name: 'Reactor', maxLevel: 3, cost: { gold: 15, ore: 15 },
       describe: level => `+${3 * level} Energy per turn.`
     },
     shipyard: {
-      name: 'Shipyard', maxLevel: 3, cost: { gold: 25, ore: 20 },
+      name: 'Shipyard', maxLevel: 3, cost: { gold: 15, ore: 15 },
       describe: level => level ? `Build ships. Fleet cap ${3 + 3 * level}.` : 'Needed to build ships. Fleet cap 3.'
     },
     shield: {
-      name: 'Shield Array', maxLevel: 3, cost: { gold: 20, ore: 25 },
+      name: 'Shield Array', maxLevel: 3, cost: { gold: 15, ore: 20 },
       describe: level => `+${20 * level}% defence in battle.`
     },
     habitat: {
-      name: 'Habitat Ring', maxLevel: 3, cost: { gold: 25, ore: 15 },
+      name: 'Habitat Ring', maxLevel: 3, cost: { gold: 20, ore: 15 },
       describe: level => `+${2 * level} Morale per turn.`
     }
   };
 
-  const SHIP_COST = { gold: 12, ore: 8 };
+  const SHIP_COST = { gold: 8, ore: 8 };
 
   // Personal cards found while harvesting. Each player may play one per turn.
   const SPECIAL_CARDS = {
@@ -299,6 +299,70 @@
         o('Build a mining rig there.', { ore: 20, gold: -8 }, 'The rig starts hauling dense metals.'),
         o('Build a navigation beacon.', { security: 3, economy: 2, energy: -2 }, 'Safer lanes for everyone.'),
         o('Leave a research probe.', { energy: 4, ore: -4 }, 'The probe sends back efficient orbit data.')
+      ]
+    },
+    // ── Crises: every option costs about 3 points of value; the crew chooses the least bad. ──
+    {
+      id: 'meteor_shower', art: 'asteroid', crisis: true, title: 'Meteor Shower',
+      body: 'A swarm of meteors is on course for your habitat rings. There is no good way out.',
+      options: [
+        o('Raise every shield.', { energy: -6, security: 2, morale: 1 }, 'The shields hold, but the grid is drained.'),
+        o('Evacuate the outer rings.', { morale: -4, economy: -2, ore: 12 }, 'Everyone lives. The empty rings are stripped for ore.'),
+        o('Ride it out and salvage the debris.', { security: -5, morale: -2, gold: 16 }, 'The damage is real, but the wreckage sells.')
+      ]
+    },
+    {
+      id: 'reactor_breach', art: 'reactor', crisis: true, title: 'Reactor Breach',
+      body: 'A coolant line has ruptured. Radiation alarms are sounding on every deck.',
+      options: [
+        o('Seal the core and go dark.', { energy: -7, security: 3, morale: 1 }, 'The leak stops. So does half the grid.'),
+        o('Send in the repair crews.', { morale: -4, gold: -8, energy: 3 }, 'The crews fix it, at a cost to their health and your treasury.'),
+        o('Vent it into space.', { security: -4, economy: -2, energy: 3 }, 'The reactor survives. The neighbours noticed the plume.')
+      ]
+    },
+    {
+      id: 'market_crash', art: 'market', crisis: true, title: 'Market Crash',
+      body: 'Prices have collapsed across the sector overnight. Traders are panicking.',
+      options: [
+        o('Bail out the traders.', { gold: -16, economy: 2, morale: -1 }, 'The markets steady, paid for by the treasury.'),
+        o('Let the market fall.', { economy: -5, gold: 8 }, 'You sell before the bottom. Everyone else does not.'),
+        o('Stockpile cheap ore.', { ore: 12, gold: -12, economy: -3 }, 'Your warehouses fill while the economy stalls.')
+      ]
+    },
+    {
+      id: 'fleet_mutiny', art: 'fleet', crisis: true, title: 'Mutiny in the Fleet',
+      body: 'The crew of your flagship refuses orders until their grievances are heard.',
+      options: [
+        o('Meet their demands.', { gold: -12, morale: 3, security: -3 }, 'The crew returns to duty, richer and bolder.'),
+        o('Arrest the ringleaders.', { security: 2, morale: -5 }, 'Order is restored. Nobody on deck is smiling.'),
+        o('Let the ship go.', { ships: -1, morale: 2 }, 'The mutineers fly off. The rest of the fleet relaxes.')
+      ]
+    },
+    {
+      id: 'rust_plague', art: 'medical', crisis: true, title: 'Rust Plague',
+      body: 'A metal-eating microbe is spreading through your hull plating.',
+      options: [
+        o('Burn the infected sections.', { ore: -12, security: 1, morale: -1 }, 'The spread stops, along with a lot of good metal.'),
+        o('Quarantine the docks.', { economy: -4, security: 1 }, 'Trade slows to a crawl while the docks are scrubbed.'),
+        o('Research a cure.', { gold: -16, energy: 1 }, 'The cure works. The labs send a large bill.')
+      ]
+    },
+    {
+      id: 'pirate_ultimatum', art: 'pirates', crisis: true, title: 'Pirate Ultimatum',
+      body: 'A pirate armada demands tribute, or it will blockade your trade lanes.',
+      options: [
+        o('Pay the tribute.', { gold: -16, security: 1 }, 'The armada leaves, for now.'),
+        o('Fight them off.', { ships: -1, security: 3, morale: -1 }, 'One ship is lost, but the lanes stay open.'),
+        o('Accept the blockade.', { economy: -5, energy: 2 }, 'Trade stops. At least the engines rest.')
+      ]
+    },
+    {
+      id: 'dimming_star', art: 'storm', crisis: true, title: 'Dimming Star',
+      body: "Your star's output has dropped. Every system is running on less.",
+      options: [
+        o('Ration power.', { energy: 2, morale: -3, economy: -2 }, 'The lights stay on, barely.'),
+        o('Burn ore for heat.', { ore: -16, morale: 1 }, 'Furnaces roar. The ore stockpile shrinks.'),
+        o('Keep everything running.', { energy: -5, economy: 2 }, 'Factories keep working while the batteries drain.')
       ]
     }
   ];
