@@ -322,6 +322,33 @@ test('a veto never leaves a poll where no option can be voted', function () {
   core.castVote(match, 'a2', 0);
 });
 
+test('about a third of polls are crises, and smaller crews get a small production bonus', function () {
+  const match = crewMatch([1, 4]);
+  let crises = 0;
+  let polls = 0;
+  for (let t = 0; t < 200; t++) {
+    core.startTurn(match);
+    match.worldOrder.forEach(id => {
+      polls++;
+      if (content.SITUATIONS.find(s => s.id === match.worlds[id].poll.situationId).crisis) crises++;
+    });
+  }
+  assert.ok(crises / polls > 0.28 && crises / polls < 0.42, 'crisis share ' + crises / polls);
+  assert.equal(match.worlds.aurora.crewGap, 3);
+  assert.equal(match.worlds.nova.crewGap, 0);
+  // Same economy, same storage: the solo world's mine produces 6% more (2% per missing pilot).
+  match.worlds.aurora.buildings.mine.storage = 0;
+  match.worlds.nova.buildings.mine.storage = 0;
+  match.worlds.aurora.stats.economy = match.worlds.nova.stats.economy = 50;
+  match.worlds.aurora.underdog = match.worlds.nova.underdog = false;
+  match.worlds.aurora.poll = match.worlds.nova.poll = { situationId: 'alien_signal', vetoed: [] };
+  match.worlds.aurora.votes = { w0p0: 1 };
+  match.worlds.nova.votes = { w1p0: 1, w1p1: 1, w1p2: 1, w1p3: 1 };
+  core.resolveTurn(match);
+  assert.equal(match.worlds.nova.buildings.mine.storage, 10);
+  assert.equal(match.worlds.aurora.buildings.mine.storage, Math.round(10 * 1.06));
+});
+
 test('an exact tie averages the tied options; a clear majority decides alone', function () {
   const match = twoWorldMatch();
   core.startTurn(match);
@@ -499,13 +526,13 @@ test('a saved room resumes mid-vote with its timer, seats and match intact', fun
   room.setConnected(host.id, 1, now);
   room.command(host.id, 'fillBots', {}, now);
   room.command(host.id, 'start', {}, now);
-  now += 30000; // 45 of 75 seconds left
+  now += 30000; // 15 of the default 45 seconds left
   const saved = JSON.parse(JSON.stringify(room.toJSON(now)));
 
   const later = now + 10 * 60 * 1000; // the server was down for ten minutes
   const restored = Room.fromJSON(saved, {}, later);
   assert.equal(restored.phase, 'vote');
-  assert.equal(restored.deadline, later + 45000);
+  assert.equal(restored.deadline, later + 15000);
   assert.equal(restored.playerByToken(host.token).id, host.id);
   assert.equal(restored.playerByAccount('host').id, host.id);
   assert.equal(restored.players.get(host.id).connections, 0);

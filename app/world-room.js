@@ -7,12 +7,12 @@
   const core = isNode ? require('./world-core.js') : root.FleetCouncilCore;
   const { WORLD_TEMPLATES, SPECIAL_CARDS, SIGNALS, SITUATIONS, BUILDINGS } = content;
 
-  const REPORT_MS = 20000;
+  const REPORT_MS = 12000;
   const NAME_MAX = 16;
   const BOT_NAMES = ['Unit-7', 'Astra', 'Kepler', 'Halley', 'Nyx', 'Cosmo', 'Lumen', 'Vesta', 'Orbit', 'Quasar'];
 
-  const DEFAULT_SETTINGS = { worldCount: 2, maxTurns: 10, voteSeconds: 75 };
-  const ALLOWED = { worldCount: [2, 3, 4], maxTurns: [6, 10, 14], voteSeconds: [45, 75, 120] };
+  const DEFAULT_SETTINGS = { worldCount: 2, maxTurns: 10, voteSeconds: 45 };
+  const ALLOWED = { worldCount: [2, 3, 4], maxTurns: [6, 10, 14], voteSeconds: [30, 45, 75] };
 
   function cleanName(name) {
     const text = String(name || '').replace(/[\u0000-\u001f<>]/g, '').trim().slice(0, NAME_MAX);
@@ -435,7 +435,7 @@
       const m = this.match;
       if (kind === 'raid') {
         const odds = core.raidOdds(m, world, m.worlds[plan.targetId]);
-        return odds.attack >= odds.defence * 0.95;
+        return odds.attack >= odds.defence * 0.9;
       }
       if (kind === 'build') {
         const cost = core.buildCost(plan.id, plan.target);
@@ -497,11 +497,11 @@
       this.botVotePoll(bot);
 
       // Raid the rival with the best expected loot that we expect to beat; revenge first.
-      if (!world.raid && core.random(this.botRng) < 0.7) {
+      if (!world.raid && core.random(this.botRng) < 0.85) {
         const targets = rivals
           .filter(r => !core.raidLockReason(m, world, r))
           .map(r => ({ r, odds: core.raidOdds(m, world, r) }))
-          .filter(t => t.odds.attack >= t.odds.defence * 1.15)
+          .filter(t => t.odds.attack >= t.odds.defence * 1.0)
           .map(t => ({ r: t.r, value: t.r.gold * 0.5 + t.r.ore * 0.4 + (world.revenge && world.revenge.targetId === t.r.id ? 100 : 0) + core.random(this.botRng) * 5 }))
           .sort((a, b) => b.value - a.value);
         if (targets.length) attempt(() => core.proposeRaid(m, bot.id, targets[0].r.id));

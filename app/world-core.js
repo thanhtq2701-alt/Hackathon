@@ -14,6 +14,7 @@
   const MAX_MEMBERS = 4;
   const INVENTORY_CAP = 5;
   const CARD_DROP_CHANCE = 0.25;
+  const CRISIS_CHANCE = 0.35;     // share of polls drawn from the crisis cards
   const RAID_ENERGY_COST = 10;
   const MAX_SHIP_ORDER = 3;
   const AID_AMOUNT = 20;          // sent by the giver
@@ -27,6 +28,7 @@
   const UNDERDOG_DEFENCE = 1.25;
   const REVENGE_ATTACK = 1.3;
   const REVENGE_TURNS = 2;
+  const SMALL_CREW_BONUS = 0.02;  // extra production per pilot fewer than the largest crew
 
   const EXP = {
     vote: 5,
@@ -243,9 +245,14 @@
 
   // ── Polls ────────────────────────────────────────────────────────────────
 
+  // Two shuffled decks: about 35% of polls come from the crisis cards, the rest from the others.
   function drawSituation(match) {
-    if (!match.deck.length) match.deck = shuffle(match, SITUATIONS.map((_, i) => i));
-    return SITUATIONS[match.deck.pop()];
+    const crisis = random(match) < CRISIS_CHANCE;
+    const key = crisis ? 'crisisDeck' : 'deck';
+    if (!match[key] || !match[key].length) {
+      match[key] = shuffle(match, SITUATIONS.map((s, i) => i).filter(i => !!SITUATIONS[i].crisis === crisis));
+    }
+    return SITUATIONS[match[key].pop()];
   }
 
   function optionLockReason(world, effects) {
@@ -275,8 +282,10 @@
     // Catch-up: from turn 2, worlds below 90% of the leader's power get the underdog bonus this turn.
     const powers = match.worldOrder.map(id => worldPower(match.worlds[id]));
     const top = Math.max(...powers);
+    const largest = largestCrew(match);
     match.worldOrder.forEach((id, i) => {
       match.worlds[id].underdog = match.turn >= 2 && powers[i] < top * UNDERDOG_RATIO;
+      match.worlds[id].crewGap = largest - membersOf(match, id).length;
     });
     match.worldOrder.forEach(id => {
       const world = match.worlds[id];
@@ -536,7 +545,7 @@
     if (amount <= 0) fail('Storage is empty.');
     building.storage = 0;
     world[def.produces] += amount;
-    const exp = Math.max(1, Math.floor(amount / 4));
+    const exp = Math.max(1, Math.round(amount / 4 / cardAllowance(match, player.worldId)));
     player.exp += exp;
     player.record.harvested += amount;
     let card = null;
@@ -776,6 +785,7 @@
     let mult = 0.5 + world.stats.economy / 100;
     if (world.flags.overclock) mult *= 1.5;
     if (world.underdog) mult *= UNDERDOG_PRODUCTION;
+    mult *= 1 + SMALL_CREW_BONUS * (world.crewGap || 0);
     if (world.stats.energy <= 0) mult = 0;
     else if (world.stats.energy < 25) mult *= 0.5;
     if (world.stats.morale < 20) mult *= 0.75;

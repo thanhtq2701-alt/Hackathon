@@ -494,7 +494,7 @@
       <div class="settings">
         <div><span class="label">Worlds</span>${seg('worldCount', [2, 3, 4], '')}</div>
         <div><span class="label">Turns</span>${seg('maxTurns', [6, 10, 14], '')}</div>
-        <div><span class="label">Vote time</span>${seg('voteSeconds', [45, 75, 120], 's')}</div>
+        <div><span class="label">Vote time</span>${seg('voteSeconds', [30, 45, 75], 's')}</div>
       </div>`);
 
     setRegion('lobby-worlds', s.lobby.map(w => {
