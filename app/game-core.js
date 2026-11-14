@@ -25,7 +25,8 @@
       turn: 1,
       bars: { publicApproval: 50, internationalTension: 30, economicState: 70, stateAuthority: 50, partyLoyalty: 60 },
       energy: 100,
-      lowApprovalTurns: 0, lowEconomyTurns: 0, lowAuthorityTurns: 0, highTensionTurns: 0,
+      lowApprovalTurns: 0, lowEconomyTurns: 0, lowAuthorityTurns: 0, highTensionTurns: 0, lowLoyaltyTurns: 0,
+      approvalWarned: false, economyWarned: false,
       empathy: 0, integrity: 0, courage: 0, ideologyScore: 0,
       arcTriggerCounts: { environment: 0, war: 0, economy: 0, civilrights: 0, scandal: 0 },
       hiddenStats: {
