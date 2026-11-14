@@ -167,13 +167,13 @@
       this.offline = false;
     }
 
-    static async create(name) {
-      const data = await post('/api/create', { name });
+    static async create(name, pin) {
+      const data = await post('/api/create', { name, pin });
       return new NetTransport(data.code, data.token);
     }
 
-    static async join(code, name, token) {
-      const data = await post('/api/join', { code, name, token });
+    static async join(code, name, token, pin) {
+      const data = await post('/api/join', { code, name, token, pin });
       return new NetTransport(data.code, data.token);
     }
 
@@ -317,9 +317,15 @@
             <h1>Every team is a world.</h1>
             <p class="lead">Your crew votes on each crisis together. Between votes you build your planet, harvest what it produces, and choose whether to trade with rival worlds or raid them.</p>
             <form id="home-form" class="home-form" onsubmit="return false">
-              <label class="field">Pilot name
-                <input id="name" maxlength="16" value="${esc(name)}" placeholder="Your name" autocomplete="nickname">
-              </label>
+              <div class="name-row">
+                <label class="field">Pilot name
+                  <input id="name" maxlength="16" value="${esc(name)}" placeholder="Your name" autocomplete="nickname">
+                </label>
+                <label class="field">PIN
+                  <input id="pin" type="password" inputmode="numeric" maxlength="8" placeholder="Optional" autocomplete="off">
+                </label>
+              </div>
+              <p class="note pin-note">A PIN (4–8 digits) reserves your pilot name and keeps your EXP in the all-time ranking. Without one you play as a guest. The first PIN you use for a name becomes its PIN.</p>
               <div class="home-actions">
                 <button type="button" class="btn primary" data-home="create">Create online room</button>
                 <div class="join-row">
@@ -369,7 +375,7 @@
       if (!response.ok) throw new Error('offline');
       const data = await response.json();
       app.serverOnline = true;
-      if (hall()) hall().innerHTML = hallTable(data.players, '');
+      if (hall()) hall().innerHTML = hallTable(data.players, '(PIN-protected pilots only)');
     } catch (error) {
       app.serverOnline = false;
       const local = Object.values(store.get('fc.ranks', {})).sort((a, b) => b.exp - a.exp);
@@ -387,6 +393,11 @@
     const practice = actions.querySelector('[data-home="practice"]');
     practice.className = 'btn primary';
     actions.prepend(practice);
+    const pinInput = document.getElementById('pin');
+    if (pinInput) {
+      pinInput.disabled = true;
+      pinInput.placeholder = 'Online only';
+    }
     actions.querySelectorAll('[data-home="create"], [data-home="join"], #code').forEach(el => {
       el.disabled = true;
       el.title = 'Needs the Fleet Council server';
@@ -420,10 +431,15 @@
       toast('The online server is not running. Try practice mode.', 'warn');
       return;
     }
+    const pin = document.getElementById('pin').value.trim();
+    if (pin && !/^\d{4,8}$/.test(pin)) {
+      toast('The PIN must be 4 to 8 digits, or leave it empty to play as a guest.', 'warn');
+      return;
+    }
     app.busy = true;
     try {
       if (kind === 'create') {
-        enterRoom(await NetTransport.create(name));
+        enterRoom(await NetTransport.create(name, pin));
       } else {
         const code = document.getElementById('code').value.trim().toUpperCase();
         if (!/^[A-Z]{4}$/.test(code)) {
@@ -431,7 +447,7 @@
           return;
         }
         const session = tabStore.get('fc.session', null);
-        enterRoom(await NetTransport.join(code, name, session && session.code === code ? session.token : null));
+        enterRoom(await NetTransport.join(code, name, session && session.code === code ? session.token : null, pin));
       }
     } catch (error) {
       toast(error.message, 'warn');
@@ -836,7 +852,7 @@
           <table class="rank-table"><thead><tr><th>#</th><th>Pilot</th><th>Lv</th><th>EXP</th><th>Votes</th><th>Harvested</th><th>Raids won</th></tr></thead><tbody>
           ${results.players.map((p, i) => `<tr class="${p.id === s.me.id ? 'me' : ''}"><td>${i + 1}</td><td><span class="dot" style="--h:${hueOf(p.worldId)}"></span>${esc(p.name)}</td><td>${p.level}</td><td>${p.exp}</td><td>${p.record.votes}</td><td>${p.record.harvested}</td><td>${p.record.raidsWon}</td></tr>`).join('')}
           </tbody></table>
-          <p class="note">${app.transport && app.transport.offline ? 'Saved to this device\'s practice ranking.' : 'Human pilots\' EXP was added to the server ranking.'}</p>
+          <p class="note">${app.transport && app.transport.offline ? 'Saved to this device\'s practice ranking.' : (s.me.registered ? 'Your EXP was added to the all-time ranking.' : 'You played as a guest, so this match is not in the all-time ranking. Add a PIN next time to keep your EXP.')}</p>
         </article>
       </div>
       <div class="end-actions">
@@ -922,7 +938,7 @@
   view.addEventListener('keydown', event => {
     if (event.key !== 'Enter') return;
     if (event.target.id === 'code') homeAction('join');
-    else if (event.target.id === 'name') homeAction(document.getElementById('code').value.trim() ? 'join' : 'create');
+    else if (event.target.id === 'name' || event.target.id === 'pin') homeAction(document.getElementById('code').value.trim() ? 'join' : 'create');
   });
 
   // ── Boot ─────────────────────────────────────────────────────────────────

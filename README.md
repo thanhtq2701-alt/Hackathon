@@ -34,7 +34,8 @@ A second mode where **every team is a world** (1–4 pilots per world, 2–4 wor
 * **Harvest:** buildings fill their storage every turn. Harvesting moves it to the treasury and gives the pilot **EXP** and a chance at a **special card** (Overclock, Shield Matrix, Sabotage, Trade Convoy, Veto, Rally, Recruit Crew) for their personal inventory.
 * **Combat & diplomacy online:** propose a raid on a rival world — it launches only if your crew agrees — or send them supplies and quick signals.
 * **Illustrated:** the planet is drawn from its state (buildings, orbiting ships, shields, blackouts, smoke after a lost raid); every crisis and battle has its own illustration.
-* **Ranking:** a per-pilot EXP ranking in each match and an all-time pilot ranking on the server.
+* **Ranking:** a per-pilot EXP ranking in each match and an all-time pilot ranking on the server. An optional 4–8 digit **PIN** reserves a pilot name; only PIN-protected pilots enter the all-time ranking, and the PIN also lets you continue on another device.
+* **Survives restarts:** rooms, accounts and the ranking are saved, so a server restart or free-tier spin-down resumes matches where they stopped.
 * **Practice offline:** play against labelled bots without a server.
 
 ### 💠 Web3 Integration (Prototype Phase)
@@ -77,7 +78,8 @@ Requires [Node.js](https://nodejs.org/) 18 or newer. There are no packages to in
 Stop the server with `Ctrl+C`. The solo mode and Fleet Council practice also work from any static host (`.\tools\start-local.cmd` serves them on port 8000); online rooms need the Node server.
 
 ### Deploying on Render
-- **Web Service** (online rooms): Language `Node`, Build Command `npm install`, Start Command `npm start`. Render provides `PORT`. The all-time ranking is stored in `var/leaderboard.json`; without a persistent disk (set `DATA_DIR` to its path) it resets on every restart or deploy.
+- **Web Service** (online rooms): Language `Node`, Build Command `npm install`, Start Command `npm start`, Health Check Path `/healthz`. Render provides `PORT`.
+- **Storage:** set `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` (free Upstash Redis database, REST API section) so rooms, PIN accounts and the ranking survive restarts and deploys. Without them the server writes JSON files to `var/` (or `DATA_DIR`), which a free Render instance loses whenever it restarts. Changed rooms are saved every 15 seconds and on shutdown (SIGTERM).
 - **Static Site**: publish the repository root; online rooms are switched off and the page offers practice plus a link to the online server.
 
 ## 🧩 Project Structure
@@ -110,7 +112,8 @@ Hackathon/
 | `app/world-room.js` | Fleet Council room: lobby, phases, timers, bots, per-player snapshots. Runs on the server and in the browser. |
 | `app/world-art.js` | Generated SVG illustrations (planet, buildings, crises, battles, cards). |
 | `app/world-client.js` | Fleet Council browser UI and online/offline transports. |
-| `server/server.js` | Static files, JSON API, Server-Sent Events and the all-time ranking. |
+| `server/server.js` | Static files, JSON API, Server-Sent Events, PIN accounts, the all-time ranking and room saving. |
+| `server/storage.js` | Key-value storage: Upstash Redis over HTTPS, or JSON files. |
 | `web/styles.css` | The Oval presentation. |
 | `web/world.css` | Fleet Council presentation. |
 | `docs/` | Project handover, assessment, and planning documents. |

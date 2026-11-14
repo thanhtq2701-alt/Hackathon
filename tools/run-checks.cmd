@@ -11,6 +11,7 @@ node --check app\world-core.js || goto :failed
 node --check app\world-room.js || goto :failed
 node --check app\world-art.js || goto :failed
 node --check app\world-client.js || goto :failed
+node --check server\storage.js || goto :failed
 node --check server\server.js || goto :failed
 node --check tests\game-core.test.js || goto :failed
 node --check tests\world-core.test.js || goto :failed
