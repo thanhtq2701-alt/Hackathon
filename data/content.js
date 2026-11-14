@@ -5505,7 +5505,7 @@ const CARDS = {
 
     const ARCS = [
       {
-        id: 'convergence_route', name: 'Convergence Route', trigger: () => gs.highTensionTurns >= 2 || gs.bars.internationalTension >= 95, acts: [
+        id: 'convergence_route', name: 'Convergence Route', trigger: () => gs.turn >= 6 && (gs.highTensionTurns >= 3 || gs.bars.internationalTension >= 98), acts: [
           {
             tag: 'ACT I', title: 'The Ultimatum',
             body: 'A coalition of world powers has issued an ultimatum: Disarm your borders and allow foreign inspectors into your nuclear sites, or face a coordinated "intervention."',
@@ -6426,7 +6426,7 @@ const CARDS = {
         ]
       },
       {
-        id: 'revolution', name: 'The Revolution', trigger: () => ((gs.lowAuthorityTurns >= 2 || gs.bars.stateAuthority < 30) && gs.bars.publicApproval < 55) || gs.lowApprovalTurns >= 3, acts: [
+        id: 'revolution', name: 'The Revolution', trigger: () => ((gs.lowAuthorityTurns >= 3 || gs.bars.stateAuthority < 25) && gs.bars.publicApproval < 55) || (gs.turn > 10 && gs.lowApprovalTurns >= 3), acts: [
           {
             tag: 'ACT I', title: 'The Breach',
             body: 'Protesters have occupied the state media building and are broadcasting a list of demands, starting with your immediate resignation. The capital is at a standstill.',
