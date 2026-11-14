@@ -338,6 +338,7 @@ const TheOvalCore = window.TheOvalCore;
     }
 
     function getChoiceOutcomeText(originalChoice, effectiveChoice, topic) {
+      if (originalChoice && originalChoice.resignation) return gs.resigned ? originalChoice.outcomeAccepted : originalChoice.outcomeRefused;
       if (originalChoice && originalChoice.outcome) return originalChoice.outcome;
       // Describe only; state changes happen once, in applyDeltas.
       // (This used to add the deltas to gs a second time, under the wrong bar keys.)
@@ -563,6 +564,8 @@ const TheOvalCore = window.TheOvalCore;
       const before = Object.assign({}, gs.bars, { energy: gs.energy });
       if (typeof choice.onSelect === 'function') choice.onSelect();
       applyDeltas(effectiveChoice);
+      // Offering to resign: the people accept when Approval (after this choice) is below 50.
+      if (choice.resignation) gs.resigned = gs.bars.publicApproval < 50;
       const applied = {};
       const barKeyFor = { approval: 'publicApproval', tension: 'internationalTension', eco: 'economicState', unrest: 'stateAuthority', party: 'partyLoyalty', energy: 'energy' };
       Object.entries(barKeyFor).forEach(([k, stateKey]) => {
@@ -713,9 +716,35 @@ const TheOvalCore = window.TheOvalCore;
       }, 320);
     }
 
+    // Closes the active story arc without starting another turn (the run is ending).
+    function closeArcForEnding(arc) {
+      document.getElementById('hud').style.display = 'block';
+      gs.arcsCompleted.push(arc.id);
+      gs.activeArc = null;
+      gs.activeArcActIndex = 0;
+      document.getElementById('arc-banner').style.display = 'none';
+      Music.updateAtmosphere(false);
+    }
+
     function advanceArc(choice) {
       const arc = gs.activeArc;
       const nextActIdx = (choice && typeof choice.nextAct === 'number') ? choice.nextAct : gs.activeArcActIndex + 1;
+
+      // The people accepted your resignation: the term ends here.
+      if (gs.resigned) {
+        closeArcForEnding(arc);
+        showEndScreen();
+        return;
+      }
+
+      // During the Revolution a collapse of Approval or the Economy is not rescued: you are removed.
+      // (checkFailSafes only runs between turns, after the arc has already closed.)
+      if (arc && arc.id === 'revolution' && (gs.bars.publicApproval <= 0 || gs.bars.economicState <= 10)) {
+        gs.impeached = true;
+        closeArcForEnding(arc);
+        showEndScreen();
+        return;
+      }
 
       if (arc && arc.id === 'convergence_route' && (nextActIdx === 999 || nextActIdx >= arc.acts.length)) {
         document.getElementById('hud').style.display = 'block';

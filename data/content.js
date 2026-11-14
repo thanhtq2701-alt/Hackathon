@@ -31,7 +31,7 @@ const CARDS = {
             },
             {
               text: "Lease to Allies \u2014 Let a friendly nation drill for a fee.",
-              outcome: "Economy drops, but Tension rises with rivals.",
+              outcome: "The fees boost the Economy, but Tension rises with rivals.",
               eco: 6,
               tension: 3,
               party: 2,
@@ -6493,7 +6493,8 @@ const CARDS = {
             choices: [
               { text: "Pardon the Commander", outcome: "The immediate pressure is gone, but the ghost of your betrayed allies will haunt every shadow in the palace.", integrity: -10, party: 10, unrest: -8, nextAct: 999 },
               { text: "Counter-sue for defamation", outcome: "You win in the courts, but you have lost the courtroom of public opinion forever.", unrest: 8, integrity: -12, approval: -5, nextAct: 999 },
-              { text: "Resign in the fallout", outcome: "You leave the office with your life, but your legacy is a stack of broken promises and unfinished chapters.", approval: 12, unrest: -15, courage: 10, nextAct: 999 },
+              // The people decide: below 50 Approval (after this choice) they accept and the run ends.
+              { text: "Offer your resignation", outcome: "You put your office in the people's hands. If Approval is below 50 they accept and your term ends; otherwise they refuse and you stay.", outcomeAccepted: "The people accept. You leave the office with your life, but your legacy is a stack of broken promises and unfinished chapters.", outcomeRefused: "The crowd refuses to let you go. You stay in office, humbled, with a fragile new mandate.", resignation: true, approval: 12, unrest: -15, courage: 10, nextAct: 999 },
               { text: "Suppress the media leak", outcome: "The story is killed, but the truth remains a ticking bomb in the hearts of your staff.", unrest: 10, approval: -12, integrity: -10, nextAct: 999 }
             ]
           },
@@ -6683,7 +6684,13 @@ const CARDS = {
         id: 'impeached', title: 'The Impeached', emoji: '⚖️', check: () => gs.impeached, 
         tagline: 'Given the boot.', 
         narrative: 'Your term ended abruptly and in disgrace. The weight of your scandals finally collapsed the government\'s trust, leading to a historic removal from office. You leave behind a legacy of legal battles and a cautionary tale for all who follow.', 
-        profile: 'Disgraced' 
+        profile: 'Disgraced'
+      },
+      {
+        id: 'resigned', title: 'The Resignation', emoji: '🚪', check: () => gs.resigned,
+        tagline: 'You chose to walk away.',
+        narrative: 'With the city split by barricades, you offered your office to the people, and they took it. You leave with your life and your dignity, but the work you started will be finished, or undone, by someone else.',
+        profile: 'The One Who Stepped Aside'
       },
       { 
         id: 'warmonger', title: 'The Warmonger', emoji: '⚔️', check: () => gs.arcsCompleted.includes('convergence_route') && gs.bars.internationalTension > 50 && gs.bars.publicApproval >= 50, 

@@ -87,7 +87,7 @@ test('extracted game content retains the expected cards, story arcs, and endings
   assert.equal(cardCount, 100);
   assert.equal(content.ARCS.length, 4);
   assert.equal(actCount, 70);
-  assert.equal(content.ENDINGS.length, 9);
+  assert.equal(content.ENDINGS.length, 10);
 });
 
 test('root web entry point references existing organized assets', function () {
