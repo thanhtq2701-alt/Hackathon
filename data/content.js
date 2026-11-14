@@ -5505,7 +5505,7 @@ const CARDS = {
 
     const ARCS = [
       {
-        id: 'convergence_route', name: 'Convergence Route', trigger: () => gs.highTensionTurns >= 3 || gs.bars.internationalTension >= 100, acts: [
+        id: 'convergence_route', name: 'Convergence Route', trigger: () => gs.turn >= 6 && (gs.highTensionTurns >= 3 || gs.bars.internationalTension >= 98), acts: [
           {
             tag: 'ACT I', title: 'The Ultimatum',
             body: 'A coalition of world powers has issued an ultimatum: Disarm your borders and allow foreign inspectors into your nuclear sites, or face a coordinated "intervention."',
@@ -6426,7 +6426,7 @@ const CARDS = {
         ]
       },
       {
-        id: 'revolution', name: 'The Revolution', trigger: () => (gs.lowAuthorityTurns >= 3 || gs.bars.stateAuthority < 20) && gs.bars.publicApproval < 50, acts: [
+        id: 'revolution', name: 'The Revolution', trigger: () => ((gs.lowAuthorityTurns >= 3 || gs.bars.stateAuthority < 25) && gs.bars.publicApproval < 55) || (gs.turn > 10 && gs.lowApprovalTurns >= 3), acts: [
           {
             tag: 'ACT I', title: 'The Breach',
             body: 'Protesters have occupied the state media building and are broadcasting a list of demands, starting with your immediate resignation. The capital is at a standstill.',
@@ -6711,28 +6711,40 @@ const CARDS = {
         profile: 'The Humanitarian' 
       },
       { 
-        id: 'tyrant', title: 'The Tyrant', emoji: '👁️', check: () => gs.bars.stateAuthority > 70, 
+        id: 'tyrant', title: 'The Tyrant', emoji: '👁️', check: () => gs.bars.stateAuthority > 80, 
         tagline: 'Rule with an iron fist.', 
         narrative: 'You didn\'t lead the nation; you broke it to your will. By dismantling the legislature and silencing dissent, you secured absolute control. You leave behind a country that is orderly, terrified, and entirely yours, even after you\'ve stepped down.', 
         profile: 'The Autocrat' 
       },
       { 
-        id: 'martyr', title: 'The Martyr', emoji: '🔥', check: () => gs.bars.publicApproval > 75 && gs.bars.partyLoyalty < 20, 
+        id: 'martyr', title: 'The Martyr', emoji: '🔥', check: () => gs.bars.publicApproval > 70 && gs.bars.partyLoyalty < 25, 
         tagline: 'Sacrificed for the truth.', 
         narrative: 'You chose the people over the party and paid the ultimate political price. By exposing deep-seated corruption, you lost your allies and your wealth. You exit the presidency as a man without a country, but with the eternal gratitude of the public.', 
         profile: 'The Reformer' 
       },
       { 
-        id: 'populist', title: 'The Populist', emoji: '📣', check: () => gs.bars.publicApproval > 75 && gs.bars.economicState < 20, 
+        id: 'populist', title: 'The Populist', emoji: '📣', check: () => gs.bars.publicApproval > 70 && gs.bars.economicState < 30, 
         tagline: 'Voice of the forgotten.', 
         narrative: 'You rode a wave of public anger into the highest office and never let go of the megaphone. By attacking the elites and rewarding your base, you changed the face of politics. You leave behind a fractured establishment and a loyal army of followers.', 
         profile: 'The Agitator' 
       },
       { 
-        id: 'statesman', title: 'The Statesman', emoji: '🏛️', check: () => ['publicApproval', 'internationalTension', 'economicState', 'stateAuthority', 'partyLoyalty'].every(k => gs.bars[k] >= 40 && gs.bars[k] <= 70), 
+        id: 'statesman', title: 'The Statesman', emoji: '🏛️', check: () => ['publicApproval', 'internationalTension', 'economicState', 'stateAuthority', 'partyLoyalty'].every(k => gs.bars[k] >= 35 && gs.bars[k] <= 70), 
         tagline: 'Dignity in every decree.', 
         narrative: 'You governed with a level of prestige and intellectual honesty rarely seen in the modern era. By putting the institution of the Presidency above your own ego, you restored faith in the government. You retire as the gold standard of leadership for future generations.', 
         profile: 'The Idealist' 
+      },
+      {
+        id: 'technocrat', title: 'The Technocrat', emoji: '📊', check: () => gs.bars.economicState >= 60 && gs.bars.publicApproval < 45,
+        tagline: 'The numbers loved you. The people did not.',
+        narrative: 'You ran the nation like a well-tuned machine. Budgets balanced, markets steadied, and the treasury grew, but the people never felt you were on their side. You leave a stronger state and a colder country.',
+        profile: 'The Engineer of State'
+      },
+      {
+        id: 'survivor', title: 'The Survivor', emoji: '🪨', check: () => gs.bars.publicApproval < 30,
+        tagline: 'Still standing, barely.',
+        narrative: 'Every poll said you should have fallen, and every month you were still there. You traded popularity for survival, one hard decision at a time. History will argue about whether that was strength or stubbornness.',
+        profile: 'The Last One Standing'
       },
       { 
         id: 'neutral', title: 'The Neutral', emoji: '🤝', check: () => true, 

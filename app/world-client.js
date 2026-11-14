@@ -494,7 +494,7 @@
       <div class="settings">
         <div><span class="label">Worlds</span>${seg('worldCount', [2, 3, 4], '')}</div>
         <div><span class="label">Turns</span>${seg('maxTurns', [6, 10, 14], '')}</div>
-        <div><span class="label">Vote time</span>${seg('voteSeconds', [45, 75, 120], 's')}</div>
+        <div><span class="label">Vote time</span>${seg('voteSeconds', [30, 45, 75], 's')}</div>
       </div>`);
 
     setRegion('lobby-worlds', s.lobby.map(w => {
@@ -628,7 +628,15 @@
         <span class="ships">${Array.from({ length: Math.min(w.ships, 12) }, () => Art.shipIcon(w.hue)).join('')}</span>
         <div class="ship-order"><span class="label">Propose ships</span><div class="row">${shipButtons}</div></div>
       </div>
-      ${w.flags && (w.flags.overclock || w.flags.shieldMatrix) ? `<p class="flags">${w.flags.overclock ? '⚡ Overclock active ' : ''}${w.flags.shieldMatrix ? '🛡 Shield Matrix active' : ''}</p>` : ''}
+      ${(() => {
+        const flags = [];
+        if (w.flags && w.flags.overclock) flags.push('⚡ Overclock active');
+        if (w.flags && w.flags.shieldMatrix) flags.push('🛡 Shield Matrix active');
+        if (w.underdog) flags.push(`📈 Underdog: +${Math.round((Core.UNDERDOG_PRODUCTION - 1) * 100)}% production, +${Math.round((Core.UNDERDOG_DEFENCE - 1) * 100)}% defence this turn`);
+        if (w.revenge) flags.push(`🔥 Revenge on ${esc(worldName(w.revenge.targetId))}: +${Math.round((Core.REVENGE_ATTACK - 1) * 100)}% attack until turn ${w.revenge.untilTurn}`);
+        return flags.length ? `<p class="flags">${flags.join('<br>')}</p>` : '';
+      })()}
+      <p class="note">Upkeep: ${w.upkeep} gold per turn for ${w.ships} ships (1 gold per 2 ships).</p>
       <h3 class="section-title">Your planet <span class="note">Construction needs crew approval · one per turn · decided when the vote ends</span></h3>
       <div class="buildings">${tiles}</div>`);
   }
@@ -643,9 +651,10 @@
       <article class="situation panel">
         <div class="sit-art-wrap">${Art.situationArt(poll.art, w.hue)}</div>
         <div class="sit-body">
-          <span class="eyebrow">Council of ${esc(w.name)}</span>
+          <span class="eyebrow">Council of ${esc(w.name)}${poll.crisis ? ' <span class="tag red" title="Every option costs something: choose the least bad">CRISIS</span>' : ''}</span>
           <h2>${esc(poll.title)}</h2>
           <p>${esc(poll.body)}</p>
+          <p class="note">If the vote ends in an exact tie, the tied options' effects are averaged.</p>
         </div>
       </article>
       <div class="options count-${poll.options.length}">
@@ -707,7 +716,7 @@
         </div>
         ${situation ? `<div class="tally">${situation.options.map((o, i) => {
           const n = mine.counts[i] || 0;
-          return `<div class="tally-row ${i === mine.chosenIndex ? 'win' : ''}"><span>${i + 1}. ${esc(o.text)}</span>
+          return `<div class="tally-row ${(mine.chosenIndices || [mine.chosenIndex]).includes(i) ? 'win' : ''}"><span>${i + 1}. ${esc(o.text)}</span>
             <div class="bar"><span style="width:${total ? Math.round(100 * n / total) : 0}%"></span></div><b>${n}</b></div>`;
         }).join('')}</div>` : ''}
         <div class="delta-block"><span class="label">Decision effect</span><div class="chips">${chips(mine.pollDelta)}</div></div>
@@ -773,9 +782,16 @@
     const voting = s.phase === 'vote';
     return rivals.map(r => {
       const reason = s.match.raidReasons[r.id];
+      const odds = (s.match.raidOdds || {})[r.id];
+      const pact = (w.pacts || {})[r.id] >= s.match.turn;
+      const favoured = odds && odds.attack > odds.defence;
       return `<div class="rival" style="--h:${r.hue}">
         <div class="rival-head"><span class="dot"></span><b>${esc(r.name)}</b>
-          ${r.protected ? '<span class="tag">PROTECTED</span>' : ''}${r.raidedLastTurn ? '<span class="tag red">RAIDED</span>' : ''}</div>
+          ${r.protected ? '<span class="tag">PROTECTED</span>' : ''}${r.raidedLastTurn ? '<span class="tag red">RAIDED</span>' : ''}
+          ${r.underdog ? '<span class="tag" title="Behind the leader: production and defence bonus">UNDERDOG</span>' : ''}
+          ${pact ? '<span class="tag" title="They sent you aid: you cannot raid them for now">PACT</span>' : ''}
+          ${w.revenge && w.revenge.targetId === r.id ? '<span class="tag red" title="They raided you: +30% attack against them">REVENGE</span>' : ''}</div>
+        ${odds ? `<p class="odds ${favoured ? 'ok' : 'warn'}">Raid estimate: your attack ~${odds.attack} vs their defence ~${odds.defence} (±15% in battle)</p>` : ''}
         <div class="rival-stats">
           <span>Power <b>${r.power}</b></span><span>Ships <b>${r.ships}</b></span><span>Shield <b>Lv${r.buildings.shield.level}</b></span>
           <span>Gold <b>${r.gold}</b></span><span>Ore <b>${r.ore}</b></span>
@@ -786,22 +802,25 @@
           ${voting ? `<button class="btn tiny danger" data-act="raid" data-id="${r.id}" ${reason ? 'disabled' : ''} title="${esc(reason || 'Propose a raid to your crew')}">⚔ Propose raid</button>` : ''}
           ${voting ? ['gold', 'ore'].map(res => {
             const why = Core.aidLockReason(w, r, res);
-            return `<button class="btn tiny" data-act="aid" data-id="${r.id}" data-res="${res}" ${why ? 'disabled' : ''} title="${esc(why || 'Propose this shipment to your crew')}">Propose aid: ${Core.AID_AMOUNT} ${res}</button>`;
+            return `<button class="btn tiny" data-act="aid" data-id="${r.id}" data-res="${res}" ${why ? 'disabled' : ''} title="${esc(why || 'Propose this shipment to your crew')}">Propose aid: ${Core.AID_AMOUNT} ${res} (they get ${Core.AID_RECEIVED})</button>`;
           }).join('') : ''}
         </div>
         ${voting && reason ? `<p class="lock">${esc(reason)}</p>` : ''}
       </div>`;
-    }).join('') + `<p class="note">Raids and aid are crew plans: one of each per turn, approved by vote. Aid sends ${Core.AID_AMOUNT} from the shared treasury.</p>`;
+    }).join('') + `<p class="note">Raids and aid are crew plans: one of each per turn, approved by vote.
+      <b>Raid win:</b> half their gold, 40% of their ore, half their unharvested storage, plus ${Core.RAID_SPOILS.gold} gold and ${Core.RAID_SPOILS.ore} ore in spoils. Repelling a raid pays ${Core.DEFENCE_BOUNTY} gold.
+      <b>Aid:</b> you send ${Core.AID_AMOUNT}, they receive ${Core.AID_RECEIVED}; you gain +${Core.AID_GOODWILL.morale} Morale and +${Core.AID_GOODWILL.economy} Economy, and they cannot raid you for ${Core.PACT_TURNS} turns.</p>`;
   }
 
   function cardsHtml(s, w) {
     const inv = s.me.inventory;
-    if (!inv.length) return '<p class="note">No special cards. Harvesting has a 25% chance to find one (max 5).</p>';
+    if (!inv.length) return '<p class="note">No special cards. Harvesting has a 25% chance to find one.</p>';
     const voting = s.phase === 'vote';
-    const blocked = !voting ? 'Cards can be played during the council vote.' : s.me.cardPlayed ? 'You already played a card this turn.' : '';
+    const blocked = !voting ? 'Cards can be played during the council vote.' : s.me.cardsLeft <= 0 ? 'No card plays left this turn.' : '';
     const rivals = s.match.worlds.filter(x => x.id !== w.id);
     const openOptions = w.poll ? w.poll.options.filter(o => !o.vetoed) : [];
-    return `${blocked ? `<p class="note">${blocked}</p>` : ''}${inv.map(card => {
+    const allowance = `<p class="note">You can play ${s.me.cardAllowance} card${s.me.cardAllowance > 1 ? 's' : ''} per turn (smaller crews play more each, so every world plays about the same number). Left this turn: ${s.me.cardsLeft}.</p>`;
+    return `${allowance}${blocked ? `<p class="note">${blocked}</p>` : ''}${inv.map(card => {
       let buttons = '';
       if (card.target === 'world') {
         buttons = rivals.map(r => `<button class="btn tiny" data-act="card" data-uid="${card.uid}" data-target="${r.id}" ${blocked ? 'disabled' : ''}>On ${esc(r.name)}</button>`).join('');
@@ -823,7 +842,7 @@
       <table class="rank-table"><thead><tr><th>#</th><th>Pilot</th><th>Lv</th><th>EXP</th></tr></thead><tbody>
       ${s.match.players.map((p, i) => `<tr class="${p.id === s.me.id ? 'me' : ''}"><td>${i + 1}</td><td><span class="dot" style="--h:${hueOf(p.worldId)}"></span>${esc(p.name)}</td><td>${p.level}</td><td>${p.exp}</td></tr>`).join('')}
       </tbody></table>
-      <p class="note">EXP: vote +5, approved build (proposer) +4, harvest +1 per 4 units, special card +3, approved aid (proposer) +2, winning raid +12, repelling a raid +8, finishing +10, winning world +30.</p>`;
+      <p class="note">EXP: vote +5, approved build (proposer) +4, harvest +1 per 4 units, special card +3, approved aid (proposer) +5, winning raid +20, repelling a raid +8, finishing +10, winning world +30.</p>`;
   }
 
   function logHtml(s) {

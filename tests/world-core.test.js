@@ -94,7 +94,9 @@ test('all worlds start equal at 50', function () {
     assert.equal(world.ore, 50);
     assert.equal(world.ships, 3);
   });
-  Object.values(match.players).forEach(player => assert.equal(player.inventory.length, 1));
+  // Every world starts with as many cards as the largest crew (2), shared among its pilots.
+  assert.equal(match.players.a1.inventory.length + match.players.a2.inventory.length, 2);
+  assert.equal(match.players.n1.inventory.length, 2);
 });
 
 test('plurality vote wins and the report shows the change actually applied', function () {
@@ -132,7 +134,7 @@ test('veto strikes an option, clears its votes and keeps at least two options', 
   core.castVote(match, 'a2', 2);
   core.playCard(match, 'a1', 'v1', 2);
   assert.equal(world.votes.a2, undefined);
-  assert.throws(() => core.playCard(match, 'a1', 'v2', 1), /One special card per turn/);
+  assert.throws(() => core.playCard(match, 'a1', 'v2', 1), /No special card plays left this turn/);
   core.playCard(match, 'a2', 'v3', 3);
   assert.equal(core.pollOptions(world).filter(o => !o.vetoed).length, 2);
 });
@@ -183,8 +185,8 @@ test('construction is a crew plan: nothing is spent until the vote ends and it i
   core.voteBuild(match, 'a2', true);
   const report = core.resolveTurn(match).worlds.aurora;
   assert.equal(world.buildings.shipyard.level, 1);
-  assert.equal(world.gold, 50 - 25 - 3); // construction, then upkeep for 3 ships
-  assert.equal(world.ore, 30);
+  assert.equal(world.gold, 50 - 15 - 2); // Shipyard 15 gold, then upkeep: 1 gold per 2 ships, rounded up
+  assert.equal(world.ore, 50 - 15);
   assert.equal(core.fleetCap(world), 6);
   assert.equal(match.players.a1.record.builds, 1);
   assert.ok(report.notes.some(n => /Crew approved Shipyard Lv1 \(2 yes, 0 no\)/.test(n)));
@@ -199,7 +201,7 @@ test('a teammate can veto a build plan; silence does not block it; solo worlds d
   core.proposeBuild(match, 'n1', 'shipyard');
   let report = core.resolveTurn(match);
   assert.equal(match.worlds.aurora.buildings.shipyard.level, 0);
-  assert.equal(match.worlds.aurora.gold, 50 - 3);
+  assert.equal(match.worlds.aurora.gold, 50 - 2);
   assert.ok(report.worlds.aurora.notes.some(n => /voted down \(1 yes, 1 no\)/.test(n)));
   assert.equal(match.worlds.nova.buildings.shipyard.level, 1);
 
@@ -252,7 +254,7 @@ test('ship orders are crew plans: 1-3 ships, paid only when approved, limited by
   core.votePlan(match, 'a2', 'ships', true);
   let report = core.resolveTurn(match).worlds.aurora;
   assert.equal(world.ships, 5);
-  assert.equal(world.gold, 50 - 24 - 5); // two ships, then upkeep for five
+  assert.equal(world.gold, 50 - 16 - 3); // two ships at 8 gold, then upkeep for five ships
   assert.equal(world.ore, 50 - 16);
   assert.ok(report.notes.some(n => /Crew approved 2 ships \(2 yes, 0 no\): 2 launched/.test(n)));
 
@@ -261,7 +263,7 @@ test('ship orders are crew plans: 1-3 ships, paid only when approved, limited by
   neutralPoll(match, 'aurora');
   core.proposeShips(match, 'a1', 1);
   world.shipPlan.count = 3;
-  world.gold = 20;
+  world.gold = 10;
   report = core.resolveTurn(match).worlds.aurora;
   assert.equal(world.ships, 6);
   assert.ok(report.notes.some(n => /1 launched.*Only 1 could be paid for/.test(n)));
@@ -288,10 +290,146 @@ test('aid is a crew plan: a teammate can block it, an approved shipment moves 20
   core.proposeAid(match, 'a1', 'nova', 'ore');
   assert.throws(() => core.cancelPlan(match, 'a2', 'aid'), /Only the proposer/);
   reports = core.resolveTurn(match).worlds;
-  assert.equal(match.worlds.aurora.ore, 30);
-  assert.equal(match.worlds.nova.ore, 70);
-  assert.ok(reports.nova.notes.some(n => /Aurora Prime sent you 20 ore/.test(n)));
+  assert.equal(match.worlds.aurora.ore, 30); // sent 20
+  assert.equal(match.worlds.nova.ore, 80);   // received 30
+  assert.ok(reports.nova.notes.some(n => n.includes('Aurora Prime sent you aid: +30 ore')));
+  assert.equal(match.worlds.aurora.stats.morale, 50 - 2 - 2 + 4 - 1 - 1); // two neutral polls, goodwill, morale drift
+  assert.match(core.raidLockReason(match, match.worlds.nova, match.worlds.aurora) || '', /peace pact/);
   assert.equal(match.players.a1.exp - expBefore, core.EXP.aid + core.EXP.vote);
+});
+
+function crewMatch(sizes) {
+  const players = [];
+  sizes.forEach((size, w) => {
+    for (let i = 0; i < size; i++) players.push({ id: `w${w}p${i}`, name: `W${w}P${i}`, worldId: content.WORLD_TEMPLATES[w].id });
+  });
+  return core.createMatch({ seed: 11, maxTurns: 10, worlds: content.WORLD_TEMPLATES.slice(0, sizes.length), players });
+}
+
+test('a veto never leaves a poll where no option can be voted', function () {
+  const match = twoWorldMatch();
+  core.startTurn(match);
+  const world = match.worlds.aurora;
+  world.poll = { situationId: 'pirate_toll', vetoed: [] }; // pay 12 gold / lose a ship / pay 6 gold
+  world.gold = 7;
+  world.ships = 1;
+  assert.deepEqual(core.pollOptions(world).filter(o => !o.lockReason).map(o => o.index), [2]);
+  match.players.a1.inventory = [{ uid: 'v', type: 'veto' }];
+  core.playCard(match, 'a1', 'v', 2); // strikes the only affordable option
+  const open = core.pollOptions(world).filter(o => !o.vetoed);
+  assert.equal(open.length, 2);
+  assert.ok(open.every(o => !o.lockReason), 'remaining options must be votable');
+  core.castVote(match, 'a2', 0);
+});
+
+test('about a third of polls are crises, and smaller crews get a small production bonus', function () {
+  const match = crewMatch([1, 4]);
+  let crises = 0;
+  let polls = 0;
+  for (let t = 0; t < 200; t++) {
+    core.startTurn(match);
+    match.worldOrder.forEach(id => {
+      polls++;
+      if (content.SITUATIONS.find(s => s.id === match.worlds[id].poll.situationId).crisis) crises++;
+    });
+  }
+  assert.ok(crises / polls > 0.28 && crises / polls < 0.42, 'crisis share ' + crises / polls);
+  assert.equal(match.worlds.aurora.crewGap, 3);
+  assert.equal(match.worlds.nova.crewGap, 0);
+  // Same economy, same storage: the solo world's mine produces 6% more (2% per missing pilot).
+  match.worlds.aurora.buildings.mine.storage = 0;
+  match.worlds.nova.buildings.mine.storage = 0;
+  match.worlds.aurora.stats.economy = match.worlds.nova.stats.economy = 50;
+  match.worlds.aurora.underdog = match.worlds.nova.underdog = false;
+  match.worlds.aurora.poll = match.worlds.nova.poll = { situationId: 'alien_signal', vetoed: [] };
+  match.worlds.aurora.votes = { w0p0: 1 };
+  match.worlds.nova.votes = { w1p0: 1, w1p1: 1, w1p2: 1, w1p3: 1 };
+  core.resolveTurn(match);
+  assert.equal(match.worlds.nova.buildings.mine.storage, 10);
+  assert.equal(match.worlds.aurora.buildings.mine.storage, Math.round(10 * 1.06));
+});
+
+test('an exact tie averages the tied options; a clear majority decides alone', function () {
+  const match = twoWorldMatch();
+  core.startTurn(match);
+  match.worlds.aurora.poll = { situationId: 'solar_flare', vetoed: [] };
+  core.castVote(match, 'a1', 0); // security +6, energy -5, economy +2
+  core.castVote(match, 'a2', 1); // energy +9, security -4, morale -2
+  const report = core.resolveTurn(match).worlds.aurora;
+  assert.deepEqual(report.chosenIndices, [0, 1]);
+  assert.deepEqual(report.pollDelta, { security: 1, energy: 2, economy: 1, morale: -1 });
+  assert.match(report.reason, /average/);
+
+  const big = crewMatch([4, 1]);
+  core.startTurn(big);
+  big.worlds.aurora.poll = { situationId: 'solar_flare', vetoed: [] };
+  ['w0p0', 'w0p1', 'w0p2'].forEach(id => core.castVote(big, id, 0));
+  core.castVote(big, 'w0p3', 1);
+  const majority = core.resolveTurn(big).worlds.aurora;
+  assert.deepEqual(majority.chosenIndices, [0]);
+  assert.deepEqual(majority.pollDelta, { security: 6, energy: -5, economy: 2 });
+});
+
+test('a solo pilot against a crew of four holds and plays as many cards as the whole crew', function () {
+  const match = crewMatch([1, 4]);
+  core.startTurn(match);
+  assert.equal(match.players.w0p0.inventory.length, 4);
+  ['w1p0', 'w1p1', 'w1p2', 'w1p3'].forEach(id => assert.equal(match.players[id].inventory.length, 1));
+  assert.equal(core.cardAllowance(match, 'aurora'), 4);
+  assert.equal(core.cardAllowance(match, 'nova'), 1);
+  const solo = match.players.w0p0;
+  solo.inventory = [1, 2, 3, 4, 5].map(i => ({ uid: 'r' + i, type: 'rally' }));
+  for (let i = 1; i <= 4; i++) core.playCard(match, 'w0p0', 'r' + i);
+  assert.equal(core.cardsLeft(match, solo), 0);
+  assert.throws(() => core.playCard(match, 'w0p0', 'r5'), /No special card plays left/);
+});
+
+test('raids pay big spoils, give the loser revenge and the underdog bonus, and repelling pays a bounty', function () {
+  const match = twoWorldMatch();
+  core.startTurn(match);
+  core.resolveTurn(match);
+  core.startTurn(match);
+  neutralPoll(match, 'aurora');
+  neutralPoll(match, 'nova');
+  const attacker = match.worlds.aurora;
+  const defender = match.worlds.nova;
+  attacker.ships = 6;
+  attacker.buildings.shipyard.level = 1;
+  defender.ships = 1;
+  defender.gold = 40;
+  defender.ore = 50;
+  defender.buildings.mine.storage = 10;
+  defender.buildings.refinery.storage = 8;
+  core.proposeRaid(match, 'a1', 'nova');
+  const battle = core.resolveTurn(match).worlds.aurora.battles[0];
+  assert.equal(battle.winner, 'aurora');
+  assert.equal(battle.goldLoot, 20 + 5 + core.RAID_SPOILS.gold); // half the gold, half the gold storage, spoils
+  assert.equal(battle.oreLoot, 20 + 4 + core.RAID_SPOILS.ore);   // 40% of the ore, half the ore storage, spoils
+  assert.deepEqual(defender.revenge, { targetId: 'aurora', untilTurn: 4 });
+
+  core.startTurn(match);
+  assert.equal(defender.underdog, true);
+  assert.equal(attacker.underdog, false);
+  const plain = defender.ships * 10 * (0.75 + defender.stats.energy / 200);
+  assert.equal(core.raidOdds(match, defender, attacker).attack, Math.round(plain * core.REVENGE_ATTACK));
+
+  // A weak raid is repelled: the defender salvages a bounty.
+  const second = twoWorldMatch();
+  core.startTurn(second);
+  core.resolveTurn(second);
+  core.startTurn(second);
+  neutralPoll(second, 'aurora');
+  neutralPoll(second, 'nova');
+  second.worlds.aurora.ships = 2;
+  second.worlds.nova.ships = 6;
+  second.worlds.nova.buildings.shipyard.level = 1;
+  second.worlds.nova.buildings.shield.level = 2;
+  const goldBefore = second.worlds.nova.gold;
+  core.proposeRaid(second, 'a1', 'nova');
+  const repelled = core.resolveTurn(second).worlds.nova.battles[0];
+  assert.equal(repelled.winner, 'nova');
+  assert.equal(repelled.bounty, core.DEFENCE_BOUNTY);
+  assert.ok(second.worlds.nova.gold > goldBefore);
 });
 
 test('a full room with bots plays to the end and ranks every pilot', function () {
@@ -388,13 +526,13 @@ test('a saved room resumes mid-vote with its timer, seats and match intact', fun
   room.setConnected(host.id, 1, now);
   room.command(host.id, 'fillBots', {}, now);
   room.command(host.id, 'start', {}, now);
-  now += 30000; // 45 of 75 seconds left
+  now += 30000; // 15 of the default 45 seconds left
   const saved = JSON.parse(JSON.stringify(room.toJSON(now)));
 
   const later = now + 10 * 60 * 1000; // the server was down for ten minutes
   const restored = Room.fromJSON(saved, {}, later);
   assert.equal(restored.phase, 'vote');
-  assert.equal(restored.deadline, later + 45000);
+  assert.equal(restored.deadline, later + 15000);
   assert.equal(restored.playerByToken(host.token).id, host.id);
   assert.equal(restored.playerByAccount('host').id, host.id);
   assert.equal(restored.players.get(host.id).connections, 0);

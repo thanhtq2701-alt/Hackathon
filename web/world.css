@@ -263,7 +263,8 @@ input:disabled { opacity: .45; cursor: not-allowed; }
 .fleet-row .ships { display: flex; flex-wrap: wrap; gap: 2px; }
 .ship-order { display: grid; gap: .3rem; justify-items: end; }
 .ship-icon { width: 24px; height: 15px; }
-.flags { font-size: .82rem; color: var(--gold); }
+.flags { font-size: .82rem; color: var(--gold); line-height: 1.6; }
+.odds { font-size: .75rem; margin: 0; }
 .section-title { margin-top: 1rem; display: flex; flex-wrap: wrap; align-items: baseline; gap: .5rem; font-family: var(--display); font-size: .85rem; letter-spacing: .06em; }
 .section-title .note { font-family: var(--body); letter-spacing: 0; }
 .buildings { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }

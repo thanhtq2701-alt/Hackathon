@@ -14,16 +14,28 @@
   const MAX_MEMBERS = 4;
   const INVENTORY_CAP = 5;
   const CARD_DROP_CHANCE = 0.25;
+  const CRISIS_CHANCE = 0.35;     // share of polls drawn from the crisis cards
   const RAID_ENERGY_COST = 10;
   const MAX_SHIP_ORDER = 3;
-  const AID_AMOUNT = 20;
+  const AID_AMOUNT = 20;          // sent by the giver
+  const AID_RECEIVED = 30;        // received: trade makes aid worth more on arrival
+  const AID_GOODWILL = { morale: 4, economy: 2 };
+  const PACT_TURNS = 2;           // a world that receives aid cannot raid the giver for this long
+  const RAID_SPOILS = { gold: 30, ore: 30 };
+  const DEFENCE_BOUNTY = 15;      // gold for repelling a raid
+  const UNDERDOG_RATIO = 0.9;     // below 90% of the leader's power
+  const UNDERDOG_PRODUCTION = 1.3;
+  const UNDERDOG_DEFENCE = 1.25;
+  const REVENGE_ATTACK = 1.3;
+  const REVENGE_TURNS = 2;
+  const SMALL_CREW_BONUS = 0.02;  // extra production per pilot fewer than the largest crew
 
   const EXP = {
     vote: 5,
     build: 4,
     card: 3,
-    aid: 2,
-    raidWin: 12,
+    aid: 5,
+    raidWin: 20,
     defend: 8,
     finish: 10,
     victory: 30
@@ -79,6 +91,11 @@
     return 3 + 3 * world.buildings.shipyard.level;
   }
 
+  // Crews are paid every turn: 1 gold per 2 ships, rounded up.
+  function shipUpkeep(world) {
+    return Math.ceil(world.ships / 2);
+  }
+
   function storageCap(buildingId, level) {
     const def = BUILDINGS[buildingId];
     return def.produces ? def.rate * level * 3 : 0;
@@ -126,6 +143,9 @@
       flags: { overclock: false, shieldMatrix: false },
       protectedUntilTurn: 1,
       raidedLastTurn: false,
+      underdog: false,       // behind the leader: production and defence bonus this turn
+      revenge: null,         // { targetId, untilTurn }: attack bonus against the world that raided us
+      pacts: {},             // giverId -> last turn this world may not raid that giver
       history: []
     };
   }
@@ -138,7 +158,8 @@
       worldId: info.worldId,
       exp: 0,
       inventory: [],
-      cardPlayedTurn: 0,
+      cardTurn: 0,
+      cardsUsed: 0,
       record: { votes: 0, harvested: 0, raidsWon: 0, builds: 0, cards: 0 }
     };
   }
@@ -159,20 +180,44 @@
       results: null
     };
     options.worlds.forEach(template => { match.worlds[template.id] = createWorld(template); });
-    options.players.forEach(info => addPlayer(match, info));
+    options.players.forEach(info => addPlayer(match, info, false));
+    // Every world starts with as many special cards as the largest crew, shared among its pilots,
+    // so a solo pilot facing a crew of four holds four cards too.
+    const largest = largestCrew(match);
+    match.worldOrder.forEach(id => {
+      const crew = membersOf(match, id);
+      for (let k = 0; crew.length && k < largest; k++) giveCard(match, crew[k % crew.length], randomCardType(match));
+    });
     return match;
   }
 
-  function addPlayer(match, info) {
+  // Pilots who join a running match bring one card.
+  function addPlayer(match, info, starterCard) {
     if (!match.worlds[info.worldId]) fail('Unknown world.');
     const player = createPlayer(info);
     match.players[player.id] = player;
-    giveCard(match, player, randomCardType(match));
+    if (starterCard !== false) giveCard(match, player, randomCardType(match));
     return player;
   }
 
   function membersOf(match, worldId) {
     return Object.values(match.players).filter(p => p.worldId === worldId);
+  }
+
+  function largestCrew(match) {
+    return Math.max(1, ...match.worldOrder.map(id => membersOf(match, id).length));
+  }
+
+  // Special-card plays per pilot per turn. Smaller crews play more each, so every world
+  // can use about the same number of cards per turn (a solo pilot vs a crew of four plays 4).
+  function cardAllowance(match, worldId) {
+    const crew = Math.max(1, membersOf(match, worldId).length);
+    return Math.max(1, Math.round(largestCrew(match) / crew));
+  }
+
+  function cardsLeft(match, player) {
+    const used = player.cardTurn === match.turn ? player.cardsUsed : 0;
+    return Math.max(0, cardAllowance(match, player.worldId) - used);
   }
 
   function randomCardType(match) {
@@ -181,7 +226,7 @@
   }
 
   function giveCard(match, player, type) {
-    if (player.inventory.length >= INVENTORY_CAP) return null;
+    if (player.inventory.length >= INVENTORY_CAP * cardAllowance(match, player.worldId)) return null;
     const card = { uid: 'c' + (match.nextUid++), type };
     player.inventory.push(card);
     return card;
@@ -200,9 +245,14 @@
 
   // ── Polls ────────────────────────────────────────────────────────────────
 
+  // Two shuffled decks: about 35% of polls come from the crisis cards, the rest from the others.
   function drawSituation(match) {
-    if (!match.deck.length) match.deck = shuffle(match, SITUATIONS.map((_, i) => i));
-    return SITUATIONS[match.deck.pop()];
+    const crisis = random(match) < CRISIS_CHANCE;
+    const key = crisis ? 'crisisDeck' : 'deck';
+    if (!match[key] || !match[key].length) {
+      match[key] = shuffle(match, SITUATIONS.map((s, i) => i).filter(i => !!SITUATIONS[i].crisis === crisis));
+    }
+    return SITUATIONS[match[key].pop()];
   }
 
   function optionLockReason(world, effects) {
@@ -215,7 +265,8 @@
   function pollOptions(world) {
     if (!world.poll) return [];
     const situation = SITUATIONS.find(s => s.id === world.poll.situationId);
-    const anyOpen = situation.options.some(opt => !optionLockReason(world, opt.effects));
+    // Only options still on the table count: a Veto must not leave a poll where nothing can be chosen.
+    const anyOpen = situation.options.some((opt, i) => !world.poll.vetoed.includes(i) && !optionLockReason(world, opt.effects));
     return situation.options.map((opt, index) => ({
       index,
       text: opt.text,
@@ -228,6 +279,14 @@
   }
 
   function startTurn(match) {
+    // Catch-up: from turn 2, worlds below 90% of the leader's power get the underdog bonus this turn.
+    const powers = match.worldOrder.map(id => worldPower(match.worlds[id]));
+    const top = Math.max(...powers);
+    const largest = largestCrew(match);
+    match.worldOrder.forEach((id, i) => {
+      match.worlds[id].underdog = match.turn >= 2 && powers[i] < top * UNDERDOG_RATIO;
+      match.worlds[id].crewGap = largest - membersOf(match, id).length;
+    });
     match.worldOrder.forEach(id => {
       const world = match.worlds[id];
       const situation = drawSituation(match);
@@ -264,17 +323,26 @@
       if (option && !option.vetoed && !option.lockReason) counts[index]++;
     });
     const best = Math.max(...Object.values(counts));
-    let chosen;
-    let reason;
     if (best === 0) {
-      chosen = defaultOption(options);
-      reason = 'No votes: the default option was used.';
-    } else {
-      const tied = options.filter(o => counts[o.index] === best);
-      chosen = tied.length === 1 ? tied[0] : tied[randomInt(match, tied.length)];
-      reason = tied.length === 1 ? 'Most votes.' : `Tie between ${tied.length} options, broken by a fair draw.`;
+      return { option: defaultOption(options), tied: null, counts, reason: 'No votes: the default option was used.' };
     }
-    return { option: chosen, counts, reason };
+    // A clear majority (e.g. 3-1) decides. An exact tie takes the average of the tied options.
+    const tied = options.filter(o => counts[o.index] === best);
+    if (tied.length === 1) return { option: tied[0], tied: null, counts, reason: 'Most votes.' };
+    return { option: tied[0], tied, counts, reason: `Tie between ${tied.length} options: the council took the average of their effects.` };
+  }
+
+  // Average of several options' effects, rounded half away from zero.
+  function averageEffects(list) {
+    const sums = {};
+    list.forEach(effects => Object.entries(effects).forEach(([k, v]) => { sums[k] = (sums[k] || 0) + v; }));
+    const avg = {};
+    Object.entries(sums).forEach(([k, v]) => {
+      const a = v / list.length;
+      const rounded = Math.sign(a) * Math.round(Math.abs(a));
+      if (rounded) avg[k] = rounded;
+    });
+    return avg;
   }
 
   // ── Effects ──────────────────────────────────────────────────────────────
@@ -477,7 +545,7 @@
     if (amount <= 0) fail('Storage is empty.');
     building.storage = 0;
     world[def.produces] += amount;
-    const exp = Math.max(1, Math.floor(amount / 4));
+    const exp = Math.max(1, Math.round(amount / 4 / cardAllowance(match, player.worldId)));
     player.exp += exp;
     player.record.harvested += amount;
     let card = null;
@@ -518,13 +586,18 @@
       reports[world.id].notes.push(`Sending ${label} was approved (${tally}) but the treasury no longer had ${plan.amount} ${plan.resource}.`);
       return;
     }
+    // Aid helps both sides: the receiver gets more than was sent, the giver gains goodwill,
+    // and the receiver may not raid the giver for the next turns.
     world[plan.resource] -= plan.amount;
-    target[plan.resource] += plan.amount;
+    target[plan.resource] += AID_RECEIVED;
+    applyEffects(world, AID_GOODWILL);
+    target.pacts = target.pacts || {};
+    target.pacts[world.id] = match.turn + PACT_TURNS;
     const proposer = match.players[plan.by];
     if (proposer) proposer.exp += EXP.aid;
-    reports[world.id].notes.push(`Crew approved sending ${label} (${tally}).`);
-    reports[target.id].notes.push(`${world.name} sent you ${plan.amount} ${plan.resource}.`);
-    log(match, `${world.name} sent ${label}.`);
+    reports[world.id].notes.push(`Crew approved sending ${label} (${tally}). Goodwill: +${AID_GOODWILL.morale} Morale, +${AID_GOODWILL.economy} Economy. ${target.name} cannot raid you until the end of turn ${match.turn + PACT_TURNS}.`);
+    reports[target.id].notes.push(`${world.name} sent you aid: +${AID_RECEIVED} ${plan.resource}. Peace pact: you cannot raid them until the end of turn ${match.turn + PACT_TURNS}.`);
+    log(match, `${world.name} sent ${label} (${AID_RECEIVED} arrived) and signed a peace pact.`);
   }
 
   // ── Special cards ────────────────────────────────────────────────────────
@@ -534,7 +607,7 @@
     const world = match.worlds[player.worldId];
     const card = player.inventory.find(c => c.uid === uid);
     if (!card) fail('You do not hold that card.');
-    if (player.cardPlayedTurn === match.turn) fail('One special card per turn.');
+    if (cardsLeft(match, player) <= 0) fail('No special card plays left this turn.');
     const def = SPECIAL_CARDS[card.type];
     let detail = '';
 
@@ -563,8 +636,12 @@
     }
 
     player.inventory = player.inventory.filter(c => c.uid !== uid);
-    player.cardPlayedTurn = match.turn;
-    player.exp += EXP.card;
+    if (player.cardTurn !== match.turn) {
+      player.cardTurn = match.turn;
+      player.cardsUsed = 0;
+    }
+    player.cardsUsed += 1;
+    player.exp += Math.max(1, Math.round(EXP.card / cardAllowance(match, player.worldId)));
     player.record.cards++;
     const isPublic = card.type === 'sabotage';
     log(match, `${player.name} played ${def.name}${detail}.`, isPublic ? null : world.id);
@@ -580,6 +657,7 @@
     if (world.ships < 2) return 'Needs at least 2 ships.';
     if (world.stats.energy < RAID_ENERGY_COST) return `Needs ${RAID_ENERGY_COST} Energy.`;
     if (target.protectedUntilTurn >= match.turn) return `${target.name} is under protection this turn.`;
+    if ((world.pacts || {})[target.id] >= match.turn) return `${target.name} sent you aid: peace pact until the end of turn ${world.pacts[target.id]}.`;
     return null;
   }
 
@@ -608,13 +686,39 @@
     return planPasses(match, world, 'raid');
   }
 
-  function attackStrength(world) {
-    return world.ships * 10 * (0.75 + world.stats.energy / 200);
+  function hasRevenge(match, attacker, defender) {
+    return !!attacker.revenge && attacker.revenge.targetId === defender.id && attacker.revenge.untilTurn >= match.turn;
+  }
+
+  function attackStrength(match, attacker, defender) {
+    const base = attacker.ships * 10 * (0.75 + attacker.stats.energy / 200);
+    return hasRevenge(match, attacker, defender) ? base * REVENGE_ATTACK : base;
   }
 
   function defenceStrength(world) {
-    const base = world.ships * 10 * (1 + 0.2 * world.buildings.shield.level) * (0.75 + world.stats.security / 200) + 10;
-    return world.flags.shieldMatrix ? base * 2 : base;
+    let value = world.ships * 10 * (1 + 0.2 * world.buildings.shield.level) * (0.75 + world.stats.security / 200) + 10;
+    if (world.underdog) value *= UNDERDOG_DEFENCE;
+    return world.flags.shieldMatrix ? value * 2 : value;
+  }
+
+  // Expected strengths before the ±15% battle roll; shown to players and used by bots.
+  function raidOdds(match, attacker, defender) {
+    return { attack: Math.round(attackStrength(match, attacker, defender)), defence: Math.round(defenceStrength(defender)) };
+  }
+
+  function storageOf(world, resource) {
+    return Object.keys(BUILDINGS).filter(id => BUILDINGS[id].produces === resource).reduce((s, id) => s + world.buildings[id].storage, 0);
+  }
+
+  // Takes a share of a resource's uncollected storage out of the buildings.
+  function takeStorage(world, resource, share) {
+    let taken = 0;
+    Object.keys(BUILDINGS).filter(id => BUILDINGS[id].produces === resource).forEach(id => {
+      const amount = Math.floor(world.buildings[id].storage * share);
+      world.buildings[id].storage -= amount;
+      taken += amount;
+    });
+    return taken;
   }
 
   function resolveRaid(match, attacker, defender) {
@@ -626,19 +730,22 @@
       return { attackerId: attacker.id, defenderId: defender.id, aborted: true, text: `${defender.name} was already protected; the raid turned back.` };
     }
     addStat(attacker, 'energy', -RAID_ENERGY_COST);
-    const attack = Math.round(attackStrength(attacker) * (0.85 + random(match) * 0.3));
-    const defence = Math.round(defenceStrength(defender) * (0.85 + random(match) * 0.3));
+    const revenge = hasRevenge(match, attacker, defender);
+    const odds = raidOdds(match, attacker, defender);
+    const attack = Math.round(odds.attack * (0.85 + random(match) * 0.3));
+    const defence = Math.round(odds.defence * (0.85 + random(match) * 0.3));
     const result = {
-      attackerId: attacker.id, defenderId: defender.id, attack, defence,
+      attackerId: attacker.id, defenderId: defender.id, attack, defence, revenge, underdogDefence: !!defender.underdog,
       attackerShipsBefore: attacker.ships, defenderShipsBefore: defender.ships
     };
 
     if (attack > defence) {
-      const goldLoot = Math.min(Math.floor(defender.gold * 0.3), 40);
-      const oreLoot = Math.min(Math.floor(defender.ore * 0.2), 20);
+      // Loot: half the treasury gold, 40% of the ore, half of the uncollected storage, plus war spoils.
+      const goldLoot = Math.floor(defender.gold * 0.5) + takeStorage(defender, 'gold', 0.5) + RAID_SPOILS.gold;
+      const oreLoot = Math.floor(defender.ore * 0.4) + takeStorage(defender, 'ore', 0.5) + RAID_SPOILS.ore;
       const defenderLoss = Math.min(defender.ships, Math.ceil(defender.ships * 0.25));
-      defender.gold -= goldLoot;
-      defender.ore -= oreLoot;
+      defender.gold -= Math.floor(defender.gold * 0.5);
+      defender.ore -= Math.floor(defender.ore * 0.4);
       defender.ships -= defenderLoss;
       addStat(defender, 'morale', -5);
       attacker.gold += goldLoot;
@@ -646,24 +753,27 @@
       attacker.ships -= 1;
       defender.protectedUntilTurn = match.turn + 1;
       defender.raidedLastTurn = true;
+      defender.revenge = { targetId: attacker.id, untilTurn: match.turn + REVENGE_TURNS };
+      if (revenge) attacker.revenge = null;
       yesVoters.forEach(id => {
         const p = match.players[id];
         if (p) { p.exp += EXP.raidWin; p.record.raidsWon++; }
       });
       Object.assign(result, {
         winner: attacker.id, goldLoot, oreLoot, attackerLoss: 1, defenderLoss,
-        text: `${attacker.name} raided ${defender.name} (${attack} vs ${defence}) and took ${goldLoot} gold, ${oreLoot} ore.`
+        text: `${attacker.name} raided ${defender.name} (${attack} vs ${defence})${revenge ? ' in revenge' : ''} and took ${goldLoot} gold, ${oreLoot} ore. ${defender.name} may strike back with +30% attack for ${REVENGE_TURNS} turns.`
       });
     } else {
       const attackerLoss = Math.min(attacker.ships, Math.ceil(attacker.ships * 0.35));
       const defenderLoss = defender.ships > 0 ? 1 : 0;
       attacker.ships -= attackerLoss;
       defender.ships -= defenderLoss;
+      defender.gold += DEFENCE_BOUNTY;
       addStat(defender, 'security', 3);
       membersOf(match, defender.id).forEach(p => { p.exp += EXP.defend; });
       Object.assign(result, {
-        winner: defender.id, goldLoot: 0, oreLoot: 0, attackerLoss, defenderLoss,
-        text: `${defender.name} repelled ${attacker.name} (${defence} vs ${attack}).`
+        winner: defender.id, goldLoot: 0, oreLoot: 0, attackerLoss, defenderLoss, bounty: DEFENCE_BOUNTY,
+        text: `${defender.name} repelled ${attacker.name} (${defence} vs ${attack}) and salvaged ${DEFENCE_BOUNTY} gold from the wrecks.`
       });
     }
     return result;
@@ -674,6 +784,8 @@
   function productionMultiplier(world) {
     let mult = 0.5 + world.stats.economy / 100;
     if (world.flags.overclock) mult *= 1.5;
+    if (world.underdog) mult *= UNDERDOG_PRODUCTION;
+    mult *= 1 + SMALL_CREW_BONUS * (world.crewGap || 0);
     if (world.stats.energy <= 0) mult = 0;
     else if (world.stats.energy < 25) mult *= 0.5;
     if (world.stats.morale < 20) mult *= 0.75;
@@ -692,7 +804,14 @@
       before[id] = snapshotWorld(world);
       const situation = SITUATIONS.find(s => s.id === world.poll.situationId);
       const tally = tallyPoll(match, world);
-      const chosen = situation.options[tally.option.index];
+      const tiedOptions = tally.tied ? tally.tied.map(o => situation.options[o.index]) : null;
+      const chosen = tiedOptions
+        ? {
+          text: tiedOptions.map(o => o.text).join(' + '),
+          outcome: 'The crew was split evenly, so the council took a middle path between the tied options.',
+          effects: averageEffects(tiedOptions.map(o => o.effects))
+        }
+        : situation.options[tally.option.index];
       const pollDelta = applyEffects(world, chosen.effects);
       Object.keys(world.votes).forEach(pid => {
         const p = match.players[pid];
@@ -703,6 +822,8 @@
         situationTitle: situation.title,
         situationArt: situation.art,
         chosenIndex: tally.option.index,
+        chosenIndices: tally.tied ? tally.tied.map(o => o.index) : [tally.option.index],
+        crisis: !!situation.crisis,
         chosenText: chosen.text,
         outcome: chosen.outcome,
         counts: tally.counts,
@@ -757,8 +878,9 @@
       if (mult === 0) report.notes.push('Blackout: no production this turn.');
       addStat(world, 'energy', 3 * world.buildings.reactor.level - (2 + Math.floor(world.ships / 3)));
       addStat(world, 'morale', 2 * world.buildings.habitat.level - 1);
-      if (world.gold >= world.ships) {
-        world.gold -= world.ships;
+      const upkeep = shipUpkeep(world);
+      if (world.gold >= upkeep) {
+        world.gold -= upkeep;
       } else {
         world.gold = 0;
         addStat(world, 'morale', -3);
@@ -814,12 +936,14 @@
   }
 
   const api = {
-    AID_AMOUNT, EXP, MAX_MEMBERS, MAX_SHIP_ORDER, INVENTORY_CAP, PLAN_FIELDS, RAID_ENERGY_COST, SHIP_COST, START_VALUE, STAT_KEYS, GameError,
-    addPlayer, aidLockReason, applyEffects, buildCost, buildOptions, buildPasses, cancelBuild, cancelPlan, cancelRaid,
-    castVote, clamp, createMatch, fleetCap, harvest, membersOf, optionLockReason, optionValue, planPasses, playCard,
-    playerLevel, playerRanking, pollOptions, proposeAid, proposeBuild, proposeRaid, proposeShips, raidLockReason, raidPasses,
-    random, resolveTurn, shipOrderLockReason, standings, startTurn, storageCap, tallyPoll, voteBuild, votePlan, voteRaid,
-    worldPower
+    AID_AMOUNT, AID_GOODWILL, AID_RECEIVED, DEFENCE_BOUNTY, EXP, MAX_MEMBERS, MAX_SHIP_ORDER, INVENTORY_CAP, PACT_TURNS,
+    PLAN_FIELDS, RAID_ENERGY_COST, RAID_SPOILS, REVENGE_ATTACK, REVENGE_TURNS, SHIP_COST, START_VALUE, STAT_KEYS,
+    UNDERDOG_DEFENCE, UNDERDOG_PRODUCTION, UNDERDOG_RATIO, GameError,
+    addPlayer, aidLockReason, applyEffects, averageEffects, buildCost, buildOptions, buildPasses, cancelBuild, cancelPlan,
+    cancelRaid, cardAllowance, cardsLeft, castVote, clamp, createMatch, fleetCap, harvest, largestCrew, membersOf,
+    optionLockReason, optionValue, planPasses, playCard, playerLevel, playerRanking, pollOptions, proposeAid, proposeBuild,
+    proposeRaid, proposeShips, raidLockReason, raidOdds, raidPasses, random, resolveTurn, shipOrderLockReason, shipUpkeep,
+    standings, startTurn, storageCap, storageOf, tallyPoll, voteBuild, votePlan, voteRaid, worldPower
   };
 
   root.FleetCouncilCore = api;

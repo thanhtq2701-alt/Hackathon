@@ -794,34 +794,60 @@ const TheOvalCore = window.TheOvalCore;
       gs.lowApprovalTurns += (gs.bars.publicApproval < 10) ? 1 : -gs.lowApprovalTurns;
       gs.lowEconomyTurns += (gs.bars.economicState <= 20) ? 1 : -gs.lowEconomyTurns;
       gs.lowAuthorityTurns += (gs.bars.stateAuthority < 30) ? 1 : -gs.lowAuthorityTurns;
-      gs.highTensionTurns += (gs.bars.internationalTension > 90) ? 1 : -gs.highTensionTurns;
+      gs.highTensionTurns += (gs.bars.internationalTension > 80) ? 1 : -gs.highTensionTurns;
+      gs.lowLoyaltyTurns = (gs.bars.partyLoyalty < 10) ? (gs.lowLoyaltyTurns || 0) + 1 : 0;
 
-      if (gs.lowApprovalTurns >= 3 || gs.bars.publicApproval <= 0) {
+      // (b) Party revolt: four turns with almost no party support and the party removes you.
+      if (gs.lowLoyaltyTurns >= 1 && gs.lowLoyaltyTurns <= 3) {
+        showNotif(`⚠ Party revolt brewing: raise Party Loyalty above 10 within ${4 - gs.lowLoyaltyTurns} turn(s) or your party will remove you.`);
+      }
+      if (gs.lowLoyaltyTurns >= 4) {
+        gs.impeached = true;
+        showNotif('⚠ Party Revolt: your own party has voted you out.');
+        showEndScreen();
+        return true;
+      }
+
+      const approvalCrisis = gs.lowApprovalTurns >= 3 || gs.bars.publicApproval <= 0;
+      if (approvalCrisis && !gs.approvalWarned) {
+        gs.approvalWarned = true;
+        showNotif('⚠ Approval is collapsing: improve it this turn or face an Approval Crisis.');
+      } else if (approvalCrisis) {
         if (gs.activeArc && gs.activeArc.id === 'revolution') {
-          gs.impeached = true; showEndScreen(); return;
+          gs.impeached = true; showEndScreen(); return true;
         }
+        gs.approvalWarned = false;
         gs.bars.publicApproval = 50;
         gs.bars.economicState = clamp(gs.bars.economicState - 25, 0, 100);
         gs.bars.partyLoyalty = clamp(gs.bars.partyLoyalty - 20, 0, 100);
         gs.bars.stateAuthority = clamp(gs.bars.stateAuthority - 20, 0, 100);
         showNotif(`⚠ Approval Crisis: Confidence reset, penalties applied across Economy and Loyalty.`);
         gs.lowApprovalTurns = 0;
+      } else {
+        gs.approvalWarned = false;
       }
       // State Control < 30 penalty
       if (gs.bars.stateAuthority < 30) {
         gs.bars.partyLoyalty = clamp(gs.bars.partyLoyalty - 1, 0, 100);
       }
 
-      if (gs.lowEconomyTurns >= 3 || gs.bars.economicState <= 10) {
+      const economyCrisis = gs.lowEconomyTurns >= 3 || gs.bars.economicState <= 10;
+      if (economyCrisis && !gs.economyWarned) {
+        gs.economyWarned = true;
+        showNotif('⚠ The economy is failing: improve it this turn or face an Economic Collapse.');
+      } else if (economyCrisis) {
         if (gs.activeArc && gs.activeArc.id === 'revolution') {
-          gs.impeached = true; showEndScreen(); return;
+          gs.impeached = true; showEndScreen(); return true;
         }
+        gs.economyWarned = false;
         gs.bars.economicState = 50;
         gs.bars.publicApproval = clamp(gs.bars.publicApproval - 30, 0, 100);
         gs.bars.partyLoyalty = clamp(gs.bars.partyLoyalty - 10, 0, 100); // FIXED
         gs.bars.stateAuthority = clamp(gs.bars.stateAuthority - 20, 0, 100);
         showNotif(`⚠ Economic Collapse: Markets subsidized, immense public backlash absorbed.`);
         gs.lowEconomyTurns = 0;
+      } else {
+        gs.economyWarned = false;
       }
     }
 
@@ -846,7 +872,8 @@ const TheOvalCore = window.TheOvalCore;
 
       if (gs.bars.economicState <= 5) { showEndScreen(); return; }
       gs.turn++;
-      checkFailSafes();
+      // Returns true when a crisis ended the run.
+      if (checkFailSafes()) return;
       checkArcTriggers();
       updateHUD(true);
       if (gs.cheatMode) updateCheatUI();
@@ -944,6 +971,11 @@ const TheOvalCore = window.TheOvalCore;
         if (gs.arcsCompleted.includes(arc.id) || gs.arcsTriggered.includes(arc.id)) continue;
         if (arc.trigger()) {
           gs.activeArc = arc; gs.activeArcActIndex = 0;
+          // A revolution is a last chance, not an instant loss: your remaining supporters rally.
+          if (arc.id === 'revolution' && gs.bars.publicApproval < 20) {
+            gs.bars.publicApproval = 20;
+            showNotif('Your remaining supporters rally in the streets: Approval steadies at 20.');
+          }
           gs.arcsTriggered.push(arc.id);
           showArcTriggerOverlay(arc.name);
           return;
@@ -1001,7 +1033,7 @@ const TheOvalCore = window.TheOvalCore;
         if (gs.bars.publicApproval >= 80) {
           if (ch.eco > 0) ch.eco += 3;
           if (ch.eco < 0) ch.eco += 1;
-          if (ch.approval > 0) ch.approval -= 1;
+          if (ch.approval > 0) ch.approval = Math.ceil(ch.approval / 2); // diminishing returns near the top
           if (ch.approval < 0) ch.approval -= 1;
         }
 
@@ -1187,7 +1219,7 @@ const TheOvalCore = window.TheOvalCore;
                 <div class="gallery-card-title">${a.name}</div>
                 <div class="gallery-card-tag">${a.acts.length}-act arc</div>
                 <div class="gallery-card-desc" style="font-size: 0.8rem; margin: 8px 0;">
-                  <strong>Trigger Condition:</strong> ${a.id === 'convergence_route' ? 'International Tension > 90%' : a.id === 'the_scandal' ? 'Party Loyalty < 30%' : a.id === 'revolution' ? 'State Authority < 10%' : a.id === 'legacy' ? 'Turn 40' : '—'}
+                  <strong>Trigger Condition:</strong> ${a.id === 'convergence_route' ? 'From turn 6: International Tension above 80% for 3 turns (or 98%)' : a.id === 'the_scandal' ? 'Party Loyalty < 30%' : a.id === 'revolution' ? 'State Authority below 30% for 3 turns (or below 25%) while Approval is under 55%, or after turn 10, Approval below 10% for 3 turns' : a.id === 'legacy' ? 'Turn 40' : '—'}
                 </div>
                 <div style="font-size: 0.75rem; color: var(--text-mid); display: flex; flex-direction: column; gap: 12px;">
                   ${a.acts.map((act, i) => `

@@ -29,6 +29,8 @@ Browser scripts are classic scripts that attach to `window` (`TheOval*`, `FleetC
 
 ## Things to keep in mind
 
+- Crisis cards (`crisis: true` in `data/world-content.js`) are net-negative by design (every option about -3); they still follow the balance rule below.
+- Balance numbers live in `data/world-content.js` (costs, rates) and at the top of `app/world-core.js` (raid spoils, aid, underdog, revenge, crisis share, small-crew bonus). After changing them, re-run a bot-vs-bot simulation before shipping.
 - Fleet Council card options must stay balanced: the test requires every option on a card to be within 1 point of the others (`optionValue` in `app/world-core.js`) and to have both a gain and a cost.
 - Results shown to players must come from the change actually applied, not from the raw card numbers.
 - Online rooms need the Node server; on static hosting the page falls back to offline practice.
