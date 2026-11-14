@@ -32,7 +32,8 @@ A second mode where **every team is a world** (1–4 pilots per world, 2–4 wor
 * **Equal start:** every world begins with all stats at **50**, 50 gold, 50 ore and 3 ships.
 * **Build your planet:** a Command Core caps seven upgradeable buildings (Gold Mine, Ore Refinery, Reactor, Shipyard, Shield Array, Habitat Ring). Spending on construction is a crew decision: one build plan per turn, approved like a raid (more yes than no, and at least half the crew says yes).
 * **Harvest:** buildings fill their storage every turn. Harvesting moves it to the treasury and gives the pilot **EXP** and a chance at a **special card** (Overclock, Shield Matrix, Sabotage, Trade Convoy, Veto, Rally, Recruit Crew) for their personal inventory.
-* **Combat & diplomacy online:** propose a raid on a rival world — it launches only if your crew agrees — or send them supplies and quick signals.
+* **Combat & diplomacy online:** propose a raid on a rival world or an aid shipment (20 gold or ore), and send quick signals.
+* **Shared treasury, shared decisions:** everything that spends the world's resources or fleet (construction, ship orders of 1–3 ships, aid, raids) is a crew plan: one of each kind per turn, decided when the vote ends (more yes than no, and at least half the crew says yes).
 * **Illustrated:** the planet is drawn from its state (buildings, orbiting ships, shields, blackouts, smoke after a lost raid); every crisis and battle has its own illustration.
 * **Ranking:** a per-pilot EXP ranking in each match and an all-time pilot ranking on the server. An optional 4–8 digit **PIN** reserves a pilot name; only PIN-protected pilots enter the all-time ranking, and the PIN also lets you continue on another device.
 * **Survives restarts:** rooms, accounts and the ranking are saved, so a server restart or free-tier spin-down resumes matches where they stopped.

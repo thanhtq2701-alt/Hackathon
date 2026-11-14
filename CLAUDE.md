@@ -36,4 +36,5 @@ Browser scripts are classic scripts that attach to `window` (`TheOval*`, `FleetC
 - Accounts: an optional 4–8 digit PIN reserves a pilot name (scrypt hash, 5 wrong tries lock it for 10 minutes). Only PIN-protected pilots are ranked.
 - Wallet and NFT features are demos and must be labelled as such.
 - `docs/` holds Vietnamese planning and review documents; `deliverables/` holds the original hackathon files. Do not edit them unless asked.
-- Workflow: work on a branch, open a pull request, merge only after the owner confirms.
+- Crew plans: anything that spends a world's shared resources or fleet (raid, construction, ship order, aid) is a plan the crew votes on (`PLAN_FIELDS` in `app/world-core.js`), settled when the vote ends with `crewApproves`. Keep new spending actions in this pattern.
+- Workflow: work on a branch and commit; **ask the owner before every `git push`**; open a pull request and merge only after the owner confirms. `main` is protected against deletion (GitHub ruleset `protect-main`); never delete or force-push it.

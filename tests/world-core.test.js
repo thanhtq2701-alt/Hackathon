@@ -238,13 +238,60 @@ test('a raid needs crew support and a winning raid moves loot and protects the l
   assert.match(core.raidLockReason(match, attacker, defender), /protection/);
 });
 
-test('aid moves exactly 10 units once per pilot per turn', function () {
+test('ship orders are crew plans: 1-3 ships, paid only when approved, limited by treasury', function () {
   const match = twoWorldMatch();
   core.startTurn(match);
-  core.sendAid(match, 'a1', 'nova', 'ore');
-  assert.equal(match.worlds.aurora.ore, 40);
-  assert.equal(match.worlds.nova.ore, 60);
-  assert.throws(() => core.sendAid(match, 'a1', 'nova', 'ore'), /already sent/);
+  neutralPoll(match, 'aurora');
+  const world = match.worlds.aurora;
+  assert.throws(() => core.proposeShips(match, 'a1', 1), /Build a Shipyard first/);
+  world.buildings.shipyard.level = 1;
+  assert.throws(() => core.proposeShips(match, 'a1', 4), /Order 1 to 3 ships/);
+  core.proposeShips(match, 'a1', 2);
+  assert.equal(world.gold, 50);
+  assert.throws(() => core.proposeShips(match, 'a2', 1), /One ship order per turn/);
+  core.votePlan(match, 'a2', 'ships', true);
+  let report = core.resolveTurn(match).worlds.aurora;
+  assert.equal(world.ships, 5);
+  assert.equal(world.gold, 50 - 24 - 5); // two ships, then upkeep for five
+  assert.equal(world.ore, 50 - 16);
+  assert.ok(report.notes.some(n => /Crew approved 2 ships \(2 yes, 0 no\): 2 launched/.test(n)));
+
+  // Approved, but the treasury now only pays for one.
+  core.startTurn(match);
+  neutralPoll(match, 'aurora');
+  core.proposeShips(match, 'a1', 1);
+  world.shipPlan.count = 3;
+  world.gold = 20;
+  report = core.resolveTurn(match).worlds.aurora;
+  assert.equal(world.ships, 6);
+  assert.ok(report.notes.some(n => /1 launched.*Only 1 could be paid for/.test(n)));
+});
+
+test('aid is a crew plan: a teammate can block it, an approved shipment moves 20 units', function () {
+  const match = twoWorldMatch();
+  core.startTurn(match);
+  neutralPoll(match, 'aurora');
+  neutralPoll(match, 'nova');
+  assert.throws(() => core.proposeAid(match, 'a1', 'aurora', 'ore'), /Choose another world/);
+  core.proposeAid(match, 'a1', 'nova', 'ore');
+  assert.throws(() => core.proposeAid(match, 'a2', 'nova', 'gold'), /One aid shipment per turn/);
+  core.votePlan(match, 'a2', 'aid', false);
+  let reports = core.resolveTurn(match).worlds;
+  assert.equal(match.worlds.aurora.ore, 50);
+  assert.equal(match.worlds.nova.ore, 50);
+  assert.ok(reports.aurora.notes.some(n => /voted down \(1 yes, 1 no\)/.test(n)));
+
+  core.startTurn(match);
+  neutralPoll(match, 'aurora');
+  neutralPoll(match, 'nova');
+  const expBefore = match.players.a1.exp;
+  core.proposeAid(match, 'a1', 'nova', 'ore');
+  assert.throws(() => core.cancelPlan(match, 'a2', 'aid'), /Only the proposer/);
+  reports = core.resolveTurn(match).worlds;
+  assert.equal(match.worlds.aurora.ore, 30);
+  assert.equal(match.worlds.nova.ore, 70);
+  assert.ok(reports.nova.notes.some(n => /Aurora Prime sent you 20 ore/.test(n)));
+  assert.equal(match.players.a1.exp - expBefore, core.EXP.aid + core.EXP.vote);
 });
 
 test('a full room with bots plays to the end and ranks every pilot', function () {
@@ -259,15 +306,24 @@ test('a full room with bots plays to the end and ranks every pilot', function ()
   room.command(host.id, 'addBot', { worldId: host.worldId }, now);
   assert.equal(room.command(host.id, 'start', {}, now).ok, true);
 
+  let decidedEarly = 0;
   for (let guard = 0; room.phase !== 'ended' && guard < 10000; guard++) {
     now += 500;
     if (room.phase === 'vote') {
       const world = room.match.worlds[host.worldId];
       if (world.votes[host.id] === undefined) room.command(host.id, 'vote', { option: core.pollOptions(world).find(o => !o.lockReason && !o.vetoed).index }, now);
-      if (world.raid && world.raid.votes[host.id] === undefined) room.command(host.id, 'raidVote', { yes: false }, now);
+      Object.entries(core.PLAN_FIELDS).forEach(([kind, field]) => {
+        if (world[field] && world[field].votes[host.id] === undefined) {
+          assert.equal(room.command(host.id, 'planVote', { kind, yes: kind !== 'raid' }, now).ok, true);
+        }
+      });
     }
+    const wasVoting = room.phase === 'vote';
+    const deadline = room.deadline;
     room.tick(now);
+    if (wasVoting && room.phase !== 'vote' && now < deadline) decidedEarly++;
   }
+  assert.ok(decidedEarly > 0, 'votes should lock early once every plan is answered');
   assert.equal(room.phase, 'ended');
   assert.ok(ended && ended.winners.length >= 1);
   assert.equal(ended.players.length, 4); // host, a bot teammate, and one bot in each empty world
