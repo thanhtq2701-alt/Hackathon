@@ -5,6 +5,7 @@
 (function () {
   const C = window.FleetCouncilContent;
   const Art = window.FleetCouncilArt;
+  const Core = window.FleetCouncilCore;
   const { Room } = window.FleetCouncilRoom;
   const view = document.getElementById('view');
 
@@ -583,8 +584,13 @@
   function renderBase(s, w) {
     const pending = w.pendingBuild;
     const shipCost = C.SHIP_COST;
-    const canShip = w.buildings.shipyard.level > 0 && w.ships < w.fleetCap && w.gold >= shipCost.gold && w.ore >= shipCost.ore;
-    const shipReason = w.buildings.shipyard.level < 1 ? 'Build a Shipyard first' : w.ships >= w.fleetCap ? 'Fleet cap reached' : 'Not enough resources';
+    // Ship orders are crew plans like construction: propose 1-3 ships, the crew votes.
+    const shipButtons = s.phase !== 'vote'
+      ? '<span class="note">Order ships during the council vote</span>'
+      : Array.from({ length: Core.MAX_SHIP_ORDER }, (_, i) => i + 1).map(n => {
+        const why = Core.shipOrderLockReason(w, n);
+        return `<button class="btn tiny" data-act="ships" data-count="${n}" ${why ? 'disabled' : ''} title="${esc(why || `Propose ordering ${n} ship${n > 1 ? 's' : ''} to your crew`)}">${n} · ${cost({ gold: shipCost.gold * n, ore: shipCost.ore * n })}</button>`;
+      }).join('');
     const tiles = Object.keys(C.BUILDINGS).map(id => {
       const def = C.BUILDINGS[id];
       const b = w.buildings[id];
@@ -620,7 +626,7 @@
       </div>
       <div class="fleet-row">
         <span class="ships">${Array.from({ length: Math.min(w.ships, 12) }, () => Art.shipIcon(w.hue)).join('')}</span>
-        <button class="btn tiny" data-act="ship" ${canShip ? '' : 'disabled'} title="${canShip ? '' : shipReason}">Build ship · ${cost(shipCost)}</button>
+        <div class="ship-order"><span class="label">Propose ships</span><div class="row">${shipButtons}</div></div>
       </div>
       ${w.flags && (w.flags.overclock || w.flags.shieldMatrix) ? `<p class="flags">${w.flags.overclock ? '⚡ Overclock active ' : ''}${w.flags.shieldMatrix ? '🛡 Shield Matrix active' : ''}</p>` : ''}
       <h3 class="section-title">Your planet <span class="note">Construction needs crew approval · one per turn · decided when the vote ends</span></h3>
@@ -724,47 +730,42 @@
     else if (app.tab === 'ranking') body = rankingHtml(s);
     else body = logHtml(s);
     setRegion('g-side', `
-      ${buildPlanHtml(s, w)}
-      ${raidHtml(s, w)}
+      ${plansHtml(s, w)}
       <div class="panel side-panel">
         <div class="tabs" role="tablist">${tabs.map(([id, label]) => `<button role="tab" aria-selected="${app.tab === id}" class="${app.tab === id ? 'on' : ''}" data-act="tab" data-tab="${id}">${label}</button>`).join('')}</div>
         <div class="tab-body">${body}</div>
       </div>`);
   }
 
-  function buildPlanHtml(s, w) {
-    const p = w.buildPlan;
-    if (!p || s.phase !== 'vote') return '';
-    const name = C.BUILDINGS[p.id].name;
-    return `<div class="panel build-plan">
-      <span class="eyebrow">🏗 Build plan</span>
-      <h3>${esc(name)} Lv${p.target}?</h3>
-      <p class="note">Proposed by ${esc(p.by)}. Costs ${cost(p.cost)} from the shared treasury. Decided when the vote ends: more yes than no, and at least half the crew says yes. Staying silent counts as not objecting.</p>
-      <p>Yes: ${p.yes.map(esc).join(', ') || '—'}<br>No: ${p.no.map(esc).join(', ') || '—'}</p>
-      <p class="${p.passing ? 'ok' : 'warn'}">${p.passing ? 'Will be built' : 'Not enough support yet'}</p>
-      <div class="row">
-        <button class="btn small ${p.myVote === true ? 'primary' : ''}" data-act="buildVote" data-yes="1">Yes, build</button>
-        <button class="btn small ${p.myVote === false ? 'primary' : ''}" data-act="buildVote" data-yes="0">No</button>
-        ${p.byMe ? '<button class="btn small ghost" data-act="cancelBuild">Cancel plan</button>' : ''}</div>
-    </div>`;
-  }
-
-  function raidHtml(s, w) {
-    if (!w.raid) return '';
-    const r = w.raid;
-    const target = worldById(r.targetId);
-    const voting = s.phase === 'vote';
-    return `<div class="panel raid-plan">
-      <span class="eyebrow">⚔ Raid plan</span>
-      <h3>Raid ${esc(target.name)}?</h3>
-      <p class="note">Proposed by ${esc(r.by)}. Costs 10 Energy. Launches at the end of the vote if more crew say yes than no, and at least half the crew says yes.</p>
-      <p>Yes: ${r.yes.map(esc).join(', ') || '—'}<br>No: ${r.no.map(esc).join(', ') || '—'}</p>
-      <p class="${r.passing ? 'ok' : 'warn'}">${r.passing ? 'Will launch' : 'Not enough support yet'}</p>
-      ${voting ? `<div class="row">
-        <button class="btn small ${r.myVote === true ? 'primary' : ''}" data-act="raidVote" data-yes="1">Yes, attack</button>
-        <button class="btn small ${r.myVote === false ? 'primary' : ''}" data-act="raidVote" data-yes="0">No</button>
-        ${r.byMe ? '<button class="btn small ghost" data-act="cancelRaid">Cancel plan</button>' : ''}</div>` : ''}
-    </div>`;
+  // Open crew plans (raid, construction, ship order, aid), each with Yes / No / Cancel.
+  // All are decided when the vote ends: more yes than no, and at least half the crew says yes.
+  function plansHtml(s, w) {
+    if (s.phase !== 'vote') return '';
+    const panel = (kind, plan, css, eyebrow, title, detail, yesLabel, passLabel) => !plan ? '' : `
+      <div class="panel ${css}">
+        <span class="eyebrow">${eyebrow}</span>
+        <h3>${title}</h3>
+        <p class="note">Proposed by ${esc(plan.by)}. ${detail} Decided when the vote ends: more yes than no, and at least half the crew says yes. Staying silent counts as not objecting.</p>
+        <p>Yes: ${plan.yes.map(esc).join(', ') || '—'}<br>No: ${plan.no.map(esc).join(', ') || '—'}</p>
+        <p class="${plan.passing ? 'ok' : 'warn'}">${plan.passing ? passLabel : 'Not enough support yet'}</p>
+        <div class="row">
+          <button class="btn small ${plan.myVote === true ? 'primary' : ''}" data-act="planVote" data-kind="${kind}" data-yes="1">${yesLabel}</button>
+          <button class="btn small ${plan.myVote === false ? 'primary' : ''}" data-act="planVote" data-kind="${kind}" data-yes="0">No</button>
+          ${plan.byMe ? `<button class="btn small ghost" data-act="cancelPlan" data-kind="${kind}">Cancel plan</button>` : ''}</div>
+      </div>`;
+    const b = w.buildPlan;
+    const sp = w.shipPlan;
+    const a = w.aidPlan;
+    return [
+      panel('raid', w.raid, 'raid-plan', '⚔ Raid plan', w.raid ? `Raid ${esc(worldById(w.raid.targetId).name)}?` : '',
+        'Costs 10 Energy.', 'Yes, attack', 'Will launch'),
+      panel('build', b, 'build-plan', '🏗 Build plan', b ? `${esc(C.BUILDINGS[b.id].name)} Lv${b.target}?` : '',
+        b ? `Costs ${cost(b.cost)} from the shared treasury.` : '', 'Yes, build', 'Will be built'),
+      panel('ships', sp, 'build-plan', '🚀 Ship order', sp ? `Order ${sp.count} ship${sp.count > 1 ? 's' : ''}?` : '',
+        sp ? `Costs ${cost(sp.cost)} from the shared treasury. Ships cost 1 gold each per turn in upkeep.` : '', 'Yes, order', 'Will be built'),
+      panel('aid', a, 'build-plan', '🤝 Aid plan', a ? `Send ${a.amount} ${a.resource} to ${esc(a.targetName)}?` : '',
+        'Paid from the shared treasury.', 'Yes, send', 'Will be sent')
+    ].join('');
   }
 
   function galaxyHtml(s, w) {
@@ -783,12 +784,14 @@
         <p class="crew-line">${r.members.map(m => esc(m.name)).join(', ')}</p>
         <div class="row">
           ${voting ? `<button class="btn tiny danger" data-act="raid" data-id="${r.id}" ${reason ? 'disabled' : ''} title="${esc(reason || 'Propose a raid to your crew')}">⚔ Propose raid</button>` : ''}
-          <button class="btn tiny" data-act="aid" data-id="${r.id}" data-res="gold" ${s.me.aidSent ? 'disabled' : ''}>Send 10 gold</button>
-          <button class="btn tiny" data-act="aid" data-id="${r.id}" data-res="ore" ${s.me.aidSent ? 'disabled' : ''}>Send 10 ore</button>
+          ${voting ? ['gold', 'ore'].map(res => {
+            const why = Core.aidLockReason(w, r, res);
+            return `<button class="btn tiny" data-act="aid" data-id="${r.id}" data-res="${res}" ${why ? 'disabled' : ''} title="${esc(why || 'Propose this shipment to your crew')}">Propose aid: ${Core.AID_AMOUNT} ${res}</button>`;
+          }).join('') : ''}
         </div>
         ${voting && reason ? `<p class="lock">${esc(reason)}</p>` : ''}
       </div>`;
-    }).join('') + '<p class="note">Aid: each pilot can send one shipment per turn.</p>';
+    }).join('') + `<p class="note">Raids and aid are crew plans: one of each per turn, approved by vote. Aid sends ${Core.AID_AMOUNT} from the shared treasury.</p>`;
   }
 
   function cardsHtml(s, w) {
@@ -820,7 +823,7 @@
       <table class="rank-table"><thead><tr><th>#</th><th>Pilot</th><th>Lv</th><th>EXP</th></tr></thead><tbody>
       ${s.match.players.map((p, i) => `<tr class="${p.id === s.me.id ? 'me' : ''}"><td>${i + 1}</td><td><span class="dot" style="--h:${hueOf(p.worldId)}"></span>${esc(p.name)}</td><td>${p.level}</td><td>${p.exp}</td></tr>`).join('')}
       </tbody></table>
-      <p class="note">EXP: vote +5, build +4, harvest +1 per 4 units, special card +3, aid +2, winning raid +12, repelling a raid +8, finishing +10, winning world +30.</p>`;
+      <p class="note">EXP: vote +5, approved build (proposer) +4, harvest +1 per 4 units, special card +3, approved aid (proposer) +2, winning raid +12, repelling a raid +8, finishing +10, winning world +30.</p>`;
   }
 
   function logHtml(s) {
@@ -888,13 +891,15 @@
         if (r) toast(`Proposed ${C.BUILDINGS[d.id].name} Lv${r.target}. Your crew votes until the vote ends.`);
         break;
       }
-      case 'buildVote': await send('buildVote', { yes: d.yes === '1' }); break;
-      case 'cancelBuild': await send('cancelBuild'); break;
-      case 'ship': if (await send('buildShip') !== null) toast('A new ship joins the fleet.'); break;
+      case 'planVote': await send('planVote', { kind: d.kind, yes: d.yes === '1' }); break;
+      case 'cancelPlan': await send('cancelPlan', { kind: d.kind }); break;
+      case 'ships':
+        if (await send('proposeShips', { count: Number(d.count) }) !== null) toast(`Proposed ordering ${d.count} ship(s). Your crew votes until the vote ends.`);
+        break;
       case 'raid': await send('proposeRaid', { targetId: d.id }); break;
-      case 'raidVote': await send('raidVote', { yes: d.yes === '1' }); break;
-      case 'cancelRaid': await send('cancelRaid'); break;
-      case 'aid': if (await send('aid', { targetId: d.id, resource: d.res }) !== null) toast(`Sent 10 ${d.res} to ${worldName(d.id)}.`); break;
+      case 'aid':
+        if (await send('proposeAid', { targetId: d.id, resource: d.res }) !== null) toast(`Proposed sending ${Core.AID_AMOUNT} ${d.res} to ${worldName(d.id)}. Your crew votes until the vote ends.`);
+        break;
       case 'card': {
         const r = await send('playCard', { uid: d.uid, target: d.target });
         if (r) toast(`${C.SPECIAL_CARDS[r.type].name} played.`, 'good');

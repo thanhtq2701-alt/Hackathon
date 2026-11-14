@@ -280,39 +280,32 @@
           this.requirePhase('vote');
           core.proposeRaid(m, player.id, payload.targetId);
           return null;
-        case 'raidVote':
-          this.requirePhase('vote');
-          core.voteRaid(m, player.id, !!payload.yes);
-          return null;
-        case 'cancelRaid':
-          this.requirePhase('vote');
-          core.cancelRaid(m, player.id);
-          return null;
         case 'playCard':
           this.requirePhase('vote');
           return core.playCard(m, player.id, payload.uid, payload.target);
         case 'build':
           this.requirePhase('vote');
           return core.proposeBuild(m, player.id, payload.buildingId);
-        case 'buildVote':
+        case 'proposeShips':
           this.requirePhase('vote');
-          core.voteBuild(m, player.id, !!payload.yes);
+          core.proposeShips(m, player.id, payload.count);
           return null;
-        case 'cancelBuild':
+        case 'proposeAid':
           this.requirePhase('vote');
-          core.cancelBuild(m, player.id);
+          core.proposeAid(m, player.id, payload.targetId, payload.resource);
           return null;
-        case 'buildShip':
-          this.requirePhase('vote', 'report');
-          core.buildShip(m, player.id);
+        // Yes/no and cancel for any crew plan: kind is raid, build, ships or aid.
+        case 'planVote':
+          this.requirePhase('vote');
+          core.votePlan(m, player.id, payload.kind, !!payload.yes);
+          return null;
+        case 'cancelPlan':
+          this.requirePhase('vote');
+          core.cancelPlan(m, player.id, payload.kind);
           return null;
         case 'harvest':
           this.requirePhase('vote', 'report');
           return core.harvest(m, player.id, payload.buildingId);
-        case 'aid':
-          this.requirePhase('vote', 'report');
-          core.sendAid(m, player.id, payload.targetId, payload.resource);
-          return null;
         case 'ready':
           this.requirePhase('report');
           player.ready = true;
@@ -361,9 +354,7 @@
         const world = m.worlds[p.worldId];
         if (p.bot && this.botPlans.has(p.id)) return false;
         if (world.votes[p.id] === undefined) return false;
-        if (world.raid && world.raid.votes[p.id] === undefined) return false;
-        if (world.buildPlan && world.buildPlan.votes[p.id] === undefined) return false;
-        return true;
+        return Object.values(core.PLAN_FIELDS).every(field => !world[field] || world[field].votes[p.id] !== undefined);
       });
     }
 
@@ -417,27 +408,35 @@
         const bot = this.players.get(id);
         if (bot) { this.botAct(bot); acted = true; }
       }
-      // Bots answer raid and build plans proposed after they already acted.
+      // Bots answer plans proposed after they already acted.
       [...this.players.values()].filter(p => p.bot && !this.botPlans.has(p.id)).forEach(bot => {
-        const world = this.match.worlds[bot.worldId];
-        if (world.raid && world.raid.votes[bot.id] === undefined) {
-          const target = this.match.worlds[world.raid.targetId];
-          core.voteRaid(this.match, bot.id, world.ships >= target.ships);
-          acted = true;
-        }
-        if (world.buildPlan && world.buildPlan.votes[bot.id] === undefined) {
-          core.voteBuild(this.match, bot.id, this.botLikesBuild(world));
-          acted = true;
-        }
+        if (this.botVotePlans(bot)) acted = true;
       });
       return acted;
     }
 
-    // A bot backs a construction plan if the world keeps a small gold reserve afterwards.
-    botLikesBuild(world) {
-      const plan = world.buildPlan;
-      const cost = core.buildCost(plan.id, plan.target);
-      return world.gold - cost.gold >= 10 && world.ore >= cost.ore;
+    // Votes on every open crew plan the bot has not answered yet. Returns true if it voted.
+    botVotePlans(bot) {
+      const world = this.match.worlds[bot.worldId];
+      let voted = false;
+      Object.entries(core.PLAN_FIELDS).forEach(([kind, field]) => {
+        const plan = world[field];
+        if (!plan || plan.votes[bot.id] !== undefined) return;
+        core.votePlan(this.match, bot.id, kind, this.botLikesPlan(world, kind, plan));
+        voted = true;
+      });
+      return voted;
+    }
+
+    // Bots back plans that leave the world a small reserve; raids only against weaker fleets.
+    botLikesPlan(world, kind, plan) {
+      if (kind === 'raid') return world.ships >= this.match.worlds[plan.targetId].ships;
+      if (kind === 'build') {
+        const cost = core.buildCost(plan.id, plan.target);
+        return world.gold - cost.gold >= 10 && world.ore >= cost.ore;
+      }
+      if (kind === 'ships') return world.gold - core.SHIP_COST.gold * plan.count >= 10 && world.ore >= core.SHIP_COST.ore * plan.count;
+      return world[plan.resource] - plan.amount >= 30;
     }
 
     botAct(bot) {
@@ -459,8 +458,7 @@
       const builds = core.buildOptions(world);
       const choice = priorities.map(id => builds.find(b => b.id === id)).find(b => b && !b.lockReason);
       if (choice && world.gold - choice.cost.gold >= 15) attempt(() => core.proposeBuild(m, bot.id, choice.id));
-      if (world.buildPlan && world.buildPlan.votes[bot.id] === undefined) attempt(() => core.voteBuild(m, bot.id, this.botLikesBuild(world)));
-      if (world.ships < 4) attempt(() => core.buildShip(m, bot.id));
+      if (world.ships < 4) attempt(() => core.proposeShips(m, bot.id, 1));
 
       // Vote: favour whatever repairs the weakest stat, with a little noise.
       const weakest = core.STAT_KEYS.slice().sort((a, b) => world.stats[a] - world.stats[b])[0];
@@ -476,10 +474,7 @@
           .filter(r => !core.raidLockReason(m, world, r) && world.ships >= r.ships + 2);
         if (rivals.length) attempt(() => core.proposeRaid(m, bot.id, rivals[0].id));
       }
-      if (world.raid && world.raid.votes[bot.id] === undefined) {
-        const target = m.worlds[world.raid.targetId];
-        attempt(() => core.voteRaid(m, bot.id, world.ships >= target.ships));
-      }
+      this.botVotePlans(bot);
 
       const player = m.players[bot.id];
       if (player && player.inventory.length && player.cardPlayedTurn !== m.turn) {
@@ -541,27 +536,30 @@
           id: situation.id, title: situation.title, body: situation.body, art: situation.art,
           options: core.pollOptions(world), votes, myVote: world.votes[me.id]
         } : null,
-        raid: world.raid ? {
-          targetId: world.raid.targetId,
-          by: (this.players.get(world.raid.by) || {}).name,
-          byMe: world.raid.by === me.id,
-          yes: Object.entries(world.raid.votes).filter(([, v]) => v).map(([id]) => (this.players.get(id) || {}).name),
-          no: Object.entries(world.raid.votes).filter(([, v]) => !v).map(([id]) => (this.players.get(id) || {}).name),
-          myVote: world.raid.votes[me.id],
-          passing: core.raidPasses(this.match, world)
-        } : null,
-        buildPlan: world.buildPlan ? {
-          id: world.buildPlan.id,
-          target: world.buildPlan.target,
-          cost: core.buildCost(world.buildPlan.id, world.buildPlan.target),
-          by: (this.players.get(world.buildPlan.by) || {}).name,
-          byMe: world.buildPlan.by === me.id,
-          yes: Object.entries(world.buildPlan.votes).filter(([, v]) => v).map(([id]) => (this.players.get(id) || {}).name),
-          no: Object.entries(world.buildPlan.votes).filter(([, v]) => !v).map(([id]) => (this.players.get(id) || {}).name),
-          myVote: world.buildPlan.votes[me.id],
-          passing: core.buildPasses(this.match, world)
-        } : null,
+        raid: this.planView(world, 'raid', me, p => ({ targetId: p.targetId })),
+        buildPlan: this.planView(world, 'build', me, p => ({ id: p.id, target: p.target, cost: core.buildCost(p.id, p.target) })),
+        shipPlan: this.planView(world, 'ships', me, p => ({
+          count: p.count, cost: { gold: core.SHIP_COST.gold * p.count, ore: core.SHIP_COST.ore * p.count }
+        })),
+        aidPlan: this.planView(world, 'aid', me, p => ({
+          targetId: p.targetId, targetName: this.match.worlds[p.targetId].name, resource: p.resource, amount: p.amount
+        })),
         history: world.history.slice(-6)
+      });
+    }
+
+    // What a crewmate sees of an open plan: details, who proposed it, the votes so far.
+    planView(world, kind, me, details) {
+      const plan = world[core.PLAN_FIELDS[kind]];
+      if (!plan) return null;
+      const name = id => (this.players.get(id) || {}).name;
+      return Object.assign(details(plan), {
+        by: name(plan.by),
+        byMe: plan.by === me.id,
+        yes: Object.entries(plan.votes).filter(([, v]) => v).map(([id]) => name(id)),
+        no: Object.entries(plan.votes).filter(([, v]) => !v).map(([id]) => name(id)),
+        myVote: plan.votes[me.id],
+        passing: core.planPasses(this.match, world, kind)
       });
     }
 
@@ -603,7 +601,6 @@
         base.me.nextLevelExp = 25 * Math.pow(core.playerLevel(mine.exp), 2);
         base.me.inventory = mine.inventory.map(c => Object.assign({ uid: c.uid, type: c.type }, SPECIAL_CARDS[c.type]));
         base.me.cardPlayed = mine.cardPlayedTurn === m.turn;
-        base.me.aidSent = mine.aidTurn === m.turn;
         base.me.record = mine.record;
       }
       return base;
