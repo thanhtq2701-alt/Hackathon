@@ -6426,7 +6426,7 @@ const CARDS = {
         ]
       },
       {
-        id: 'revolution', name: 'The Revolution', trigger: () => ((gs.lowAuthorityTurns >= 2 || gs.bars.stateAuthority < 30) && gs.bars.publicApproval < 55) || gs.bars.publicApproval < 15, acts: [
+        id: 'revolution', name: 'The Revolution', trigger: () => ((gs.lowAuthorityTurns >= 2 || gs.bars.stateAuthority < 30) && gs.bars.publicApproval < 55) || gs.lowApprovalTurns >= 3, acts: [
           {
             tag: 'ACT I', title: 'The Breach',
             body: 'Protesters have occupied the state media building and are broadcasting a list of demands, starting with your immediate resignation. The capital is at a standstill.',
