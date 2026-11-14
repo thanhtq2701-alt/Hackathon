@@ -63,8 +63,7 @@ A second mode where **every team is a world** (1–4 pilots per world, 2–4 wor
 ## 🌐 Live links
 | Link | What works |
 | --- | --- |
-| **https://fleet-council.onrender.com/** | Everything, including Fleet Council online rooms. Free tier: after 15 minutes without visitors the first load takes 30–60 seconds. |
-| https://hackathon-gu8x.onrender.com/ | Solo story and Fleet Council practice with bots (static hosting, no online rooms). |
+| **https://fleet-council.onrender.com/** | Everything: the solo story (`/`) and Fleet Council (`/world.html`) with online rooms and practice. Free tier: after 15 minutes without visitors the first load takes 30–60 seconds. |
 
 ## 🏃 How to Play
 Requires [Node.js](https://nodejs.org/) 18 or newer. There are no packages to install.

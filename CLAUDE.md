@@ -22,10 +22,10 @@ Browser scripts are classic scripts that attach to `window` (`TheOval*`, `FleetC
 - Static only (solo + Fleet Council practice): `.\tools\start-local.cmd` → port 8000.
 - Checks: `.\tools\run-checks.cmd` (syntax checks + `tests/game-core.test.js` + `tests/world-core.test.js`). Run before every commit.
 
-## Deployments (Render, auto-deploy from `main`)
+## Deployment (Render, auto-deploy from `main`)
 
-- `https://fleet-council.onrender.com` — Web Service (`npm start`, health check `/healthz` or `/world.html`), full game including online rooms. Free tier: sleeps after 15 minutes idle, no persistent disk, so it relies on Upstash for storage.
-- `https://hackathon-gu8x.onrender.com` — Static Site, solo + practice only; links to the Web Service for online play (`ONLINE_URL` in `app/world-client.js`).
+- `https://fleet-council.onrender.com` — the only deployment: Web Service (`npm start`, health check `/healthz`), serving the solo game at `/` and Fleet Council at `/world.html` including online rooms. Free tier: sleeps after 15 minutes idle, no persistent disk, so it relies on Upstash (Singapore) for storage.
+- The Render Static Sites (`hackathon-gu8x`, `hackathon-z00g`) were deleted on 2026-11-14. `ONLINE_URL` in `app/world-client.js` still points static copies (e.g. `start-local.cmd`) to the Web Service.
 
 ## Things to keep in mind
 
