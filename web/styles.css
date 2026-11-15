@@ -763,6 +763,34 @@
       outline: none;
     }
 
+    .how-to {
+      width: 100%;
+      max-width: 480px;
+      margin-top: 1rem;
+      text-align: left;
+      font-family: sans-serif;
+      font-size: .8rem;
+      color: var(--text-mid);
+      position: relative;
+      z-index: 10;
+    }
+
+    .how-to summary {
+      cursor: pointer;
+      color: var(--gold);
+      letter-spacing: .08em;
+      padding: .4rem 0;
+    }
+
+    .how-to ol {
+      margin: .4rem 0 0;
+      padding-left: 1.2rem;
+      line-height: 1.55;
+    }
+
+    .how-to li { margin-bottom: .35rem; }
+    .how-to b { color: var(--text); font-weight: 600; }
+
     .cheat-hint {
       font-size: .7rem;
       color: var(--text-dim);

@@ -29,11 +29,11 @@
       <div class="mode-cards">
         <div class="mode-card" onclick="startGame('normal')">
           <h3>Normal Mode</h3>
-          <p>Pure moral choices. Discover what your decisions say about you. Pick a length:</p>
+          <p>Pure moral choices. Discover what your decisions say about you. Choose 20, 30 or 40 turns:</p>
           <div class="length-row">
-            <button class="length-btn" onclick="event.stopPropagation(); startGame('normal', 20)">20 turns</button>
-            <button class="length-btn" onclick="event.stopPropagation(); startGame('normal', 30)">30 turns</button>
-            <button class="length-btn" onclick="event.stopPropagation(); startGame('normal', 40)">40 turns</button>
+            <button class="length-btn" aria-label="Play 20 turns" onclick="event.stopPropagation(); startGame('normal', 20)">20</button>
+            <button class="length-btn" aria-label="Play 30 turns" onclick="event.stopPropagation(); startGame('normal', 30)">30</button>
+            <button class="length-btn" aria-label="Play 40 turns" onclick="event.stopPropagation(); startGame('normal', 40)">40</button>
           </div>
         </div>
         <div class="mode-card" onclick="location.href='world.html'">
@@ -45,6 +45,17 @@
           <p>Explore all the different endings, cards, and classified story files.</p>
         </div>
       </div>
+      <details class="how-to">
+        <summary>How to play</summary>
+        <ol>
+          <li><b>One card per turn.</b> Tap an option to reveal it, tap again to confirm. The card then shows what actually changed.</li>
+          <li><b>Keep five bars in balance:</b> Public Approval, International Tension (lower is safer), Economic State, State Control and Party Loyalty. A bar flashes red when it is in danger.</li>
+          <li><b>Watch the Energy Core.</b> Choices spend or restore it and it recovers +1 each turn. At 0 the station collapses and the run ends (The Lazarus Protocol).</li>
+          <li><b>Crises give one warning.</b> If Approval or the Economy collapses you get one turn to recover before the penalty. Party Loyalty under 10 for four turns and your own party removes you.</li>
+          <li><b>Story arcs</b> (war, scandal, revolution, the final address) take over when their conditions are met.</li>
+          <li><b>Twelve endings.</b> Your final bars and choices decide the ending, and the Moral Profile shows what your decisions say about you.</li>
+        </ol>
+      </details>
       <div class="cheat-hint">Press <strong style="color:var(--gold-dim)">F</strong> at any time to enter a cheat code
       </div>
       <div class="cheat-hint"><a href="feedback.html" style="color:var(--text-dim)">Feedback</a> · <a href="feedback.html#privacy" style="color:var(--text-dim)">What this game stores</a></div>
