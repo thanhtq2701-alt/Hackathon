@@ -699,8 +699,8 @@
     return !!attacker.revenge && attacker.revenge.targetId === defender.id && attacker.revenge.untilTurn >= match.turn;
   }
 
-  function attackStrength(match, attacker, defender) {
-    const base = attacker.ships * 10 * (0.75 + attacker.stats.energy / 200);
+  function attackStrength(match, attacker, defender, energy) {
+    const base = attacker.ships * 10 * (0.75 + energy / 200);
     return hasRevenge(match, attacker, defender) ? base * REVENGE_ATTACK : base;
   }
 
@@ -711,8 +711,12 @@
   }
 
   // Expected strengths before the ±15% battle roll; shown to players and used by bots.
-  function raidOdds(match, attacker, defender) {
-    return { attack: Math.round(attackStrength(match, attacker, defender)), defence: Math.round(defenceStrength(defender)) };
+  // The attack is measured after paying the raid's Energy, as in the battle itself (balance_multi_1:
+  // before, the estimate left the cost out and overstated the attack by about 5%).
+  // `launched`: the Energy has already been paid (inside resolveRaid).
+  function raidOdds(match, attacker, defender, launched) {
+    const energy = launched ? attacker.stats.energy : Math.max(0, attacker.stats.energy - RAID_ENERGY_COST);
+    return { attack: Math.round(attackStrength(match, attacker, defender, energy)), defence: Math.round(defenceStrength(defender)) };
   }
 
   function storageOf(world, resource) {
@@ -742,7 +746,7 @@
     addRecord(match.players[attacker.raid.by], 'plans');
     yesVoters.forEach(id => addRecord(match.players[id], 'raids'));
     const revenge = hasRevenge(match, attacker, defender);
-    const odds = raidOdds(match, attacker, defender);
+    const odds = raidOdds(match, attacker, defender, true);
     const attack = Math.round(odds.attack * (0.85 + random(match) * 0.3));
     const defence = Math.round(odds.defence * (0.85 + random(match) * 0.3));
     const result = {

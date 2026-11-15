@@ -410,8 +410,13 @@ test('raids pay big spoils, give the loser revenge and the underdog bonus, and r
   core.startTurn(match);
   assert.equal(defender.underdog, true);
   assert.equal(attacker.underdog, false);
-  const plain = defender.ships * 10 * (0.75 + defender.stats.energy / 200);
+  // The estimate counts the Energy the raid will spend, exactly like the battle.
+  const plain = defender.ships * 10 * (0.75 + (defender.stats.energy - core.RAID_ENERGY_COST) / 200);
   assert.equal(core.raidOdds(match, defender, attacker).attack, Math.round(plain * core.REVENGE_ATTACK));
+  const shown = core.raidOdds(match, defender, attacker);
+  defender.stats.energy -= core.RAID_ENERGY_COST;
+  assert.deepEqual(core.raidOdds(match, defender, attacker, true), shown);
+  defender.stats.energy += core.RAID_ENERGY_COST;
 
   // A weak raid is repelled: the defender salvages a bounty.
   const second = twoWorldMatch();
