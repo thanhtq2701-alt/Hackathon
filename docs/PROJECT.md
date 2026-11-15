@@ -64,6 +64,7 @@ Cập nhật lần cuối: 15/11/2026. Tài liệu cũ (tháng 10/2026) nằm tr
 | #9 | Đợt cân bằng lớn cho Fleet Council và The Oval |
 | #10 | Gom tài liệu vào `docs/PROJECT.md`, lưu trữ tài liệu cũ vào `old/` |
 | #11 | Công cụ mô phỏng cân bằng có seed cho cả hai game (`tools/sim/`); đo lại số cân bằng |
+| #12 | Số đếm ẩn danh, trang góp ý `feedback.html` + mục "What this game stores"; chốt quyết định dữ liệu người chơi |
 
 ## 5. Lỗi trong tài liệu cũ — đối chiếu
 
