@@ -435,7 +435,7 @@
       const m = this.match;
       if (kind === 'raid') {
         const odds = core.raidOdds(m, world, m.worlds[plan.targetId]);
-        return odds.attack >= odds.defence * 0.9;
+        return odds.attack >= odds.defence * 0.85; // balance_multi_1: 0.9 before the estimate counted the Energy cost
       }
       if (kind === 'build') {
         const cost = core.buildCost(plan.id, plan.target);
@@ -501,7 +501,7 @@
         const targets = rivals
           .filter(r => !core.raidLockReason(m, world, r))
           .map(r => ({ r, odds: core.raidOdds(m, world, r) }))
-          .filter(t => t.odds.attack >= t.odds.defence * 1.0)
+          .filter(t => t.odds.attack >= t.odds.defence * 0.95) // balance_multi_1: 1.0 before; keeps bots as bold as before
           .map(t => ({ r: t.r, value: t.r.gold * 0.5 + t.r.ore * 0.4 + (world.revenge && world.revenge.targetId === t.r.id ? 100 : 0) + core.random(this.botRng) * 5 }))
           .sort((a, b) => b.value - a.value);
         if (targets.length) attempt(() => core.proposeRaid(m, bot.id, targets[0].r.id));
