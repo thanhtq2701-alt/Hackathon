@@ -48,7 +48,7 @@ Cập nhật lần cuối: 15/11/2026. Tài liệu cũ (tháng 10/2026) nằm tr
   - `node tools/sim/oval.js` — chạy chính mã The Oval trong Node (DOM giả, Math.random có seed), bấm chọn thẻ như người chơi; chiến thuật `random`, `balanced`, `approval` (`--strategy`, `--games`, `--seed`, `--turns 20|30|40`).
   - `tools\run-checks.cmd` chạy thử nhanh cả hai để công cụ không bị hỏng khi mã game đổi.
 - **Cân bằng đã đo** (đo lại bằng `tools/sim/` ngày 15/11/2026, seed 1):
-  - Fleet Council (10 lượt): đội 4 vs 1 = 51,0% (3.000 trận, đổi bên luân phiên); 2v2 (1.000 trận) 1,8 raid/trận, 86,5% trận có raid, bên tấn công thắng 62%, vị trí world 50,7 / 49,3%; Command Core cuối trận trung bình Lv2,2 (Lv2 ~81%, Lv3 ~18%); 35% poll là khủng hoảng; không vòng vote nào phải chờ hết giờ. 3 world 1 người (2.500 trận): 32,9 / 35,5 / 31,6% — Nova Kepler cao hơn ~2 điểm, cần theo dõi.
+  - Fleet Council (10 lượt): đội 4 vs 1 = 51,0% (3.000 trận, đổi bên luân phiên); 2v2 (1.000 trận) 1,8 raid/trận, 86,5% trận có raid, bên tấn công thắng 62%, vị trí world 50,7 / 49,3%; Command Core cuối trận trung bình Lv2,2 (Lv2 ~81%, Lv3 ~18%); 35% poll là khủng hoảng; không vòng vote nào phải chờ hết giờ. 3 world 1 người: đo lại 20.000 trận (4 seed) được 33,1 / 33,7 / 33,2% — không lệch theo vị trí (con số 35,5% của Nova Kepler trước đó chỉ là dao động ngẫu nhiên của 2.500 trận).
   - The Oval: chơi ngẫu nhiên (1.000 ván) đủ 12/12 màn kết thúc (thêm The Lazarus Protocol 0,3% khi Energy cạn), cao nhất The Tyrant 25,6% / The Neutral 25,3%; The Resignation hiếm (0,1%); Revolution 19%, Convergence 9%; 33,5% ván kết thúc trước lượt 40. Chơi cân bằng (100 ván) → The Statesman 97%. Spam Approval (100 ván) → bị đảng phế truất 83%.
   - Chơi đơn ván ngắn (`balance_solo_1`): trước đó ván 20 lượt hầu như không gặp tuyến truyện (Revolution 4%, Scandal 5%, Convergence 0,2%; 9 màn kết thúc) vì các tuyến thường bật quanh lượt 27–33. Nay mỗi thẻ thường nặng ký hơn trong ván ngắn (`RUN_PACE` = ×1,7 cho 20 lượt, ×1,25 cho 30 lượt; trần mỗi lựa chọn 15 và 11 thay cho 9; act tuyến truyện và Energy giữ nguyên). Kết quả 1.000 ván ngẫu nhiên: **20 lượt** đủ 12 màn kết thúc, cao nhất 26,9%, Scandal 21% / Revolution 11% / Convergence 8%, 32,5% kết thúc sớm; **30 lượt** đủ 12, cao nhất Tyrant 29,3%, 22% / 14% / 10%, 31,6% kết thúc sớm (ván 40: 25,5% / 19% / 9,4%, 33,5%). Chơi cân bằng → Statesman 90,5% (20) và 96,5% (30); spam Approval → Impeached 50,5% + Martyr 25% (20), Impeached 70,5% (30). Ván 40 lượt không đổi (1.500 ván mô phỏng giống hệt).
 - **Thời gian chơi ước tính:** chơi đơn 14–21 phút/ván 40 lượt (suy theo tỉ lệ: ~7–11 phút/20 lượt, ~11–16 phút/30 lượt); Fleet Council 5–10 phút/trận 10 lượt.
@@ -72,6 +72,7 @@ Cập nhật lần cuối: 15/11/2026. Tài liệu cũ (tháng 10/2026) nằm tr
 | #13 | Chơi đơn: tách luật sang `game-core.js` (+12 test), chọn độ dài ván 20/30/40, mục "How to play" |
 | #14 | Chơi đơn chuyển sang bối cảnh vũ trụ (698 đoạn chữ, số liệu giữ nguyên); hướng dẫn chơi song ngữ Việt/Anh cho cả hai chế độ; chốt: không có kế nhiệm, quy ước branch cân bằng theo chế độ |
 | #15 | `balance_solo_1`: ván chơi đơn 20/30 lượt có nhịp nhanh hơn (`RUN_PACE`) để vẫn gặp tuyến truyện; ván 40 lượt không đổi |
+| #16 | GitHub Actions chạy toàn bộ checks trên mỗi PR; ghi câu trả lời cho các câu hỏi mở; Nova Kepler không lệch |
 
 ## 5. Lỗi trong tài liệu cũ — đối chiếu
 
@@ -90,14 +91,18 @@ Mười lỗi trong `old/THE-OVAL-LOI-HE-THONG-VA-CHU-TRINH-KHAC-PHUC.txt` và `
 | "Lease to Allies" mô tả ngược số liệu | PR #7 |
 | Bộ test chưa bảo vệ các lỗi đã biết | PR #1–#9 (31 test) |
 
-## 6. Câu hỏi còn mở
+## 6. Câu hỏi đã chốt và còn mở
 
-1. **Mục tiêu chính:** chơi giải trí với bạn bè, nộp dự thi, hay portfolio? → quyết định ưu tiên tính năng mới hay độ hoàn thiện.
-2. **Ngôn ngữ giao diện:** thêm tiếng Việt song song tiếng Anh khi nào? (Đã có hướng dẫn chơi song ngữ cho cả hai chế độ, nút chuyển Tiếng Việt / English, mặc định tiếng Việt; phần còn lại của giao diện vẫn tiếng Anh.)
-3. **Web3 / Sui:** giữ demo, bỏ, hay tích hợp thật sau này?
-4. **Ngân sách:** giữ hoàn toàn miễn phí, hay chấp nhận ~7 USD/tháng để server không ngủ khi có người chơi đều?
-5. **Playtest:** ai chơi thử, bao nhiêu nhóm, khi nào; có ghi hình không (cần người chơi đồng ý).
-6. **Thành viên nhóm Auraa** và đóng góp của từng người (cần nếu dùng cho portfolio).
+Đã chốt (15/11/2026):
+
+1. **Mục tiêu chính:** phát triển thành một game hay, ai cũng chơi được → ưu tiên độ hoàn thiện và trải nghiệm người chơi hơn là thêm tính năng.
+2. **Ngôn ngữ:** tiếng Việt cho toàn bộ giao diện và nội dung cả hai chế độ, mặc định tiếng Việt, có nút chuyển sang tiếng Anh, lựa chọn được nhớ trên máy người chơi.
+3. **Web3 / Sui:** chưa tính đến; giữ phần demo như hiện tại (có nhãn demo).
+4. **Ngân sách:** 0 đồng — giữ Render free + Upstash free (server ngủ sau 15 phút không ai vào).
+5. **Playtest:** nhờ các bạn trong lớp, làm sau.
+6. **Thành viên:** nhóm Auraa ban đầu; hiện chỉ còn chủ dự án phát triển tiếp.
+
+Còn mở: lịch và cách tổ chức playtest (số nhóm, có ghi hình không — nếu ghi hình phải hỏi và được đồng ý).
 
 ## 7. Lộ trình phát triển
 
@@ -105,7 +110,7 @@ Mười lỗi trong `old/THE-OVAL-LOI-HE-THONG-VA-CHU-TRINH-KHAC-PHUC.txt` và `
 
 **Giai đoạn 0 — Nền móng (~1 tuần)**
 - ~~Đưa công cụ mô phỏng bot vào repo (`tools/sim/`)~~ — đã làm (xem mục 3).
-- GitHub Actions tự chạy test khi mở PR.
+- ~~GitHub Actions tự chạy test khi mở PR~~ — đã làm: `.github/workflows/checks.yml` chạy kiểm tra cú pháp, toàn bộ test và mô phỏng nhanh trên mỗi PR và mỗi commit vào `main`; ruleset `protect-main` bắt buộc job `checks` qua mới được merge.
 - ~~Nút "Góp ý" trong game + thống kê ẩn danh lưu dạng số đếm trong Upstash~~ — đã làm (xem mục 3).
 - Theo dõi giới hạn Upstash và Render free.
 
