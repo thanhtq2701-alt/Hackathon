@@ -54,6 +54,7 @@ A second mode where **every team is a world** (1–4 pilots per world, 2–4 wor
 ## 🛠 Tech Stack
 * **Frontend:** HTML5, CSS3 (Modern Glassmorphism), Vanilla JavaScript.
 * **UI/UX:** Space-aesthetic HUD with real-time bar animations.
+* **Languages:** Vietnamese (default) and English for the whole game, interface and story; switch with the Tiếng Việt / English buttons. `app/i18n.js` translates the page with the dictionaries in `data/vi-*.js`.
 * **Blockchain Concept:** Move Language (Roadmap), Sui dApp Kit (Roadmap).
 
 ---

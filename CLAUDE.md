@@ -16,6 +16,10 @@ One browser game, **The Oval**, with two modes, plain JavaScript, no build step 
 
 Browser scripts are classic scripts that attach to `window` (`TheOval*`, `FleetCouncil*`) and also export with `module.exports`, so the same files run in Node tests and on the server.
 
+Language: the game is written in English and shown in Vietnamese by default. `app/i18n.js` translates text as it appears on the page (exact phrases, then patterns for texts with numbers or names) using `data/vi-common.js`, `data/vi-solo-ui.js`, `data/vi-solo-content.js`, `data/vi-fleet-ui.js` and `data/vi-fleet-content.js`; the player's choice (`oval.lang`) is remembered in the browser. Rules, data, counters and the simulators stay in English.
+
+First-game tips: `app/tips.js` (`TheOvalTips.show(id)`, texts in `TIPS`, Vietnamese in `data/vi-common.js`) shows each tip once; seen tips are remembered in the browser (`oval.tips`). Both clients call it through a guarded `tip(id)` helper so the simulators run without it.
+
 ## Commands
 
 - Run everything: `npm start` → `http://localhost:8080/` (Node 18+).
@@ -40,6 +44,7 @@ Browser scripts are classic scripts that attach to `window` (`TheOval*`, `FleetC
 - Accounts: an optional 4–8 digit PIN reserves a pilot name (scrypt hash, 5 wrong tries lock it for 10 minutes). Only PIN-protected pilots are ranked.
 - Player data: store only what `feedback.html#privacy` lists (no email, phone, IP or third-party analytics; counters carry no names or ids). Any new stored data must be added to that page first.
 - Wallet and NFT features are demos and must be labelled as such.
+- Any new or changed player-facing English text needs its Vietnamese in `data/vi-*.js` (dictionary keys must match the English exactly; texts with numbers or names need a pattern). The tests fail if card, arc, ending or Fleet content, or a message from a bot match, has no translation; plain UI labels are not checked automatically, so look at the page in Vietnamese.
 - Setting: both modes share one space setting. In the solo story the player is the **Commander** of a colony/station ruling from **the Oval** (its command deck); rivals are other colonies, the "UN" is the Sector Assembly, money is credits (glossary in `docs/PROJECT.md`). "Content" changes apply to both modes.
 - `docs/PROJECT.md` is the single living project document (decisions, status, PR history, open questions, roadmap): read it for context and update it when decisions or status change. `old/` is a read-only archive of earlier planning docs and the original hackathon script/slides: do not edit it unless asked.
 - Crew plans: anything that spends a world's shared resources or fleet (raid, construction, ship order, aid) is a plan the crew votes on (`PLAN_FIELDS` in `app/world-core.js`), settled when the vote ends with `crewApproves`. Keep new spending actions in this pattern.

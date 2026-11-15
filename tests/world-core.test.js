@@ -432,6 +432,48 @@ test('raids pay big spoils, give the loser revenge and the underdog bonus, and r
   assert.ok(second.worlds.nova.gold > goldBefore);
 });
 
+test('Fleet Council content and every message of a full bot match read in Vietnamese', function () {
+  const i18n = require('../app/i18n.js');
+  require('../data/vi-common.js');
+  require('../data/vi-fleet-ui.js');
+  require('../data/vi-fleet-content.js');
+  i18n._setLangForTests('vi');
+  const missing = new Set();
+  const check = text => { if (typeof text === 'string' && text.trim() && !i18n.has(text)) missing.add(text); };
+  content.SITUATIONS.forEach(s => { check(s.title); check(s.body); s.options.forEach(o => { check(o.text); check(o.outcome); }); });
+  Object.values(content.BUILDINGS).forEach(b => { check(b.name); [0, 1, 2, 3].forEach(l => check(b.describe(l))); });
+  Object.values(content.SPECIAL_CARDS).forEach(c => { check(c.name); check(c.text); });
+  content.SIGNALS.forEach(check);
+
+  // Every log line, report note, battle text and vote reason of several bot matches.
+  for (let seed = 1; seed <= 6; seed++) {
+    let now = 0;
+    const room = new Room({ code: 'VI' + seed, seed });
+    room.settings.worldCount = 3;
+    room.settings.maxTurns = 14;
+    ['aurora', 'nova', 'vega'].forEach(id => { room.addPlayer('Bot ' + id, now, true, id); room.addPlayer('Mate ' + id, now, true, id); });
+    room.startMatch(now);
+    while (room.phase !== 'ended') {
+      now += 500;
+      if (room.phase === 'vote') {
+        room.runBots(now);
+        if (room.everyoneDecided() || now >= room.deadline) {
+          room.lockAndResolve(now);
+          Object.values(room.match.lastReport.worlds).forEach(r => {
+            check(r.reason); check(r.chosenText); check(r.outcome);
+            r.notes.forEach(check);
+            r.battles.forEach(b => check(b.text));
+          });
+        }
+      } else if (room.phase === 'report') room.beginVote(now);
+    }
+    room.match.log.forEach(e => check(e.text));
+  }
+  assert.deepEqual([...missing].slice(0, 8), []);
+  assert.equal(i18n.t('Crew votes 2/3'), 'Đội đã bỏ phiếu 2/3');
+  assert.equal(i18n.t('Not enough resources.'), 'Không đủ tài nguyên.');
+});
+
 test('a full room with bots plays to the end and ranks every pilot', function () {
   let now = 0;
   let ended = null;

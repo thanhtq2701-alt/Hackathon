@@ -790,14 +790,15 @@
 
     .how-to li { margin-bottom: .35rem; }
     .guide [hidden] { display: none; }
+    .link-btn { background: none; border: 0; padding: 0; font: inherit; color: inherit; text-decoration: underline; cursor: pointer; }
 
-    .guide-lang {
+    .guide-lang, .lang-switch {
       display: inline-flex;
       gap: .3rem;
       margin: .2rem 0 .3rem;
     }
 
-    .guide-lang button {
+    .guide-lang button, .lang-switch button {
       min-height: 30px;
       padding: .25rem .7rem;
       background: transparent;
@@ -808,7 +809,7 @@
       cursor: pointer;
     }
 
-    .guide-lang button[aria-pressed="true"] {
+    .guide-lang button[aria-pressed="true"], .lang-switch button[aria-pressed="true"] {
       border-color: var(--gold);
       color: var(--gold);
       background: var(--bg4);

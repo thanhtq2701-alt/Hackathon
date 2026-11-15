@@ -6,7 +6,13 @@ node --check app\game-core.js || goto :failed
 node --check data\content.js || goto :failed
 node --check app\audio.js || goto :failed
 node --check app\client.js || goto :failed
-node --check app\guide.js || goto :failed
+node --check app\i18n.js || goto :failed
+node --check app\tips.js || goto :failed
+node --check data\vi-common.js || goto :failed
+node --check data\vi-solo-ui.js || goto :failed
+node --check data\vi-solo-content.js || goto :failed
+node --check data\vi-fleet-ui.js || goto :failed
+node --check data\vi-fleet-content.js || goto :failed
 node --check data\world-content.js || goto :failed
 node --check app\world-core.js || goto :failed
 node --check app\world-room.js || goto :failed
