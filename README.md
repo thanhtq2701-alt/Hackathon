@@ -90,8 +90,8 @@ Hackathon/
 ├── app/                 # Browser UI, game rules, and audio (both modes)
 ├── data/                # Cards, story arcs, endings, Fleet Council content
 ├── server/              # Fleet Council online server (Node, no dependencies)
-├── deliverables/        # Original hackathon presentation files
-├── docs/                # Handover, assessment, and planning documents
+├── docs/PROJECT.md      # The project document: decisions, status, history, roadmap
+├── old/                 # Archive: October 2026 planning docs and the hackathon slides/script
 ├── tests/               # Focused automated checks
 ├── tools/               # Local run and validation scripts
 ├── web/                 # Stylesheets and browser presentation assets
@@ -117,8 +117,8 @@ Hackathon/
 | `server/storage.js` | Key-value storage: Upstash Redis over HTTPS, or JSON files. |
 | `web/styles.css` | The Oval presentation. |
 | `web/world.css` | Fleet Council presentation. |
-| `docs/` | Project handover, assessment, and planning documents. |
-| `deliverables/` | Original presentation files. |
+| `docs/PROJECT.md` | Single living project document (Vietnamese): decisions, current status, PR history, open questions, roadmap. |
+| `old/` | Read-only archive: earlier planning/review documents and the original hackathon script and slides. |
 | `tests/` | Focused checks for game rules and content. |
 | `tools/` | Repeatable local run and validation commands. |
 
