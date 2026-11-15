@@ -372,6 +372,7 @@
               </ol>
               <p class="note">All worlds start equal: every stat at 50, 50 gold, 50 ore, 3 ships.</p>
             </div>
+            <p class="note"><button type="button" class="link-btn" data-tips-reset>Show tips again</button></p>
           </article>
           <article class="panel">
             <h2>Pilot ranking</h2>
@@ -542,6 +543,7 @@
       <button class="btn ghost" data-act="leave">Leave</button>`);
 
     setRegion('lobby-signals', signalsHtml(s));
+    if (host) tip('fleet-lobby');
   }
 
   function signalsHtml(s) {
@@ -573,6 +575,19 @@
     if (s.phase === 'vote') renderPoll(s, world);
     else renderReport(s, world);
     renderSide(s, world);
+    // First-game tips (app/tips.js), each shown once.
+    if (s.phase === 'vote') {
+      tip('fleet-vote');
+      if (Object.values(world.buildings).some(b => b.storage > 0)) tip('fleet-harvest');
+      tip('fleet-build');
+      if (s.match.turn >= 2) tip('fleet-raid');
+    } else {
+      tip('fleet-report');
+    }
+  }
+
+  function tip(id) {
+    if (window.TheOvalTips) window.TheOvalTips.show(id);
   }
 
   function planetKey(w) {

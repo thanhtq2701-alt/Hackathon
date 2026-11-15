@@ -98,7 +98,7 @@ test('root web entry point references existing organized assets', function () {
     .map(function (reference) { return reference.match(/="([^"]+)"/)[1]; })
     .filter(function (reference) { return /\.(?:js|css)$/.test(reference); });
 
-  assert.equal(localAssets.length, 9);
+  assert.equal(localAssets.length, 10);
   localAssets.forEach(function (asset) {
     assert.ok(fs.existsSync(path.join(repositoryRoot, asset)), 'Missing web asset: ' + asset);
   });
@@ -356,6 +356,13 @@ test('every solo story text has a Vietnamese translation', function () {
   content.ENDINGS.forEach(e => ['title', 'tagline', 'narrative', 'profile'].forEach(f => check(e[f])));
   Object.values(content.GIFTS).forEach(g => { check(g.title); check(g.body); g.choices.forEach(c => fields.forEach(f => check(c[f]))); });
   assert.deepEqual([...new Set(missing)].slice(0, 5), []);
+});
+
+test('every first-game tip and its buttons have Vietnamese', function () {
+  i18n._setLangForTests('vi');
+  const tips = require('../app/tips.js');
+  Object.values(tips.TIPS).concat(['First game tip', 'Got it', 'Turn off tips', 'Show tips again', 'Tips are on again'])
+    .forEach(text => assert.ok(i18n.has(text), text));
 });
 
 test('the solo rules messages and endings read in Vietnamese', function () {

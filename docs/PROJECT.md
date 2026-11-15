@@ -112,7 +112,7 @@ Mười lỗi trong `old/THE-OVAL-LOI-HE-THONG-VA-CHU-TRINH-KHAC-PHUC.txt` và `
 
 **Giai đoạn 1 — Playtest & người mới (2–3 tuần)**
 - 3–5 nhóm bạn chơi thử: đo thời gian thật, chỗ khó hiểu, có muốn chơi lại không, trận 1v4 có thấy công bằng không.
-- Hướng dẫn trận đầu tiên (bỏ phiếu, harvest, đề xuất xây, raid). Đã có phần tóm tắt luật song ngữ Việt/Anh cho cả hai chế độ ("Cách chơi · How a turn works" ở Fleet Council, "Cách chơi · How to play" ở chơi đơn; `app/guide.js` chuyển ngôn ngữ, không lưu gì); còn thiếu hướng dẫn từng bước trong trận đầu.
+- ~~Hướng dẫn trận đầu tiên~~ — đã làm: phần "Cách chơi" song ngữ ở cả hai chế độ, cộng **gợi ý trong ván/trận đầu** (`app/tips.js`): khung gợi ý ngắn hiện đúng lúc, từng cái một, có "Đã hiểu" / "Tắt gợi ý"; máy nhớ gợi ý đã xem; nút "Xem lại gợi ý" ở màn hình chính chơi đơn và trang chủ Fleet Council. Chơi đơn 5 gợi ý (chỉ số, thẻ đầu, kết quả đầu, cảnh báo khủng hoảng đầu, tuyến truyện đầu); Fleet Council 6 gợi ý (phòng chờ, bỏ phiếu, thu hoạch, kế hoạch đội, báo cáo lượt, đột kích từ lượt 2).
 - ~~Giao diện tiếng Việt~~ — đã làm: cả giao diện lẫn nội dung, hai chế độ (xem mục 3).
 - Tóm tắt sau trận: quyết định bước ngoặt, trận raid lớn, ai đóng góp gì; thẻ chia sẻ.
 - Cân bằng lại theo dữ liệu thật (branch `balance_1`).

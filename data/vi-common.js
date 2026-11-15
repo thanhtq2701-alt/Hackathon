@@ -39,8 +39,37 @@
     ': the text, which mode it is about and the day it was sent. Only the newest 200 are kept.':
       ': nội dung, chế độ được góp ý và ngày gửi. Chỉ giữ 200 góp ý mới nhất.',
     'On your device only': 'Chỉ trên máy của bạn',
-    ': your browser remembers your language, your last pilot name and your offline practice ranking, and, while the tab is open, the room you are in so you can rejoin it.':
-      ': trình duyệt nhớ ngôn ngữ bạn chọn, tên pilot gần nhất và bảng xếp hạng luyện tập offline; khi tab còn mở, trình duyệt nhớ phòng bạn đang ở để vào lại được.',
+    ': your browser remembers your language, which first-game tips you have seen, your last pilot name and your offline practice ranking, and, while the tab is open, the room you are in so you can rejoin it.':
+      ': trình duyệt nhớ ngôn ngữ bạn chọn, những gợi ý ván đầu bạn đã xem, tên phi công gần nhất và bảng xếp hạng luyện tập offline; khi tab còn mở, trình duyệt nhớ phòng bạn đang ở để vào lại được.',
+
+    // First-game tips (app/tips.js)
+    'First game tip': 'Gợi ý ván đầu',
+    'Got it': 'Đã hiểu',
+    'Turn off tips': 'Tắt gợi ý',
+    'Show tips again': 'Xem lại gợi ý',
+    'Tips are on again': 'Đã bật lại gợi ý',
+    'These five bars must stay in balance; a bar flashing red is in danger. If the Energy Core reaches 0, the station collapses and the run ends.':
+      'Hãy giữ năm chỉ số này cân bằng; chỉ số nhấp nháy đỏ là đang nguy hiểm. Nếu Lõi năng lượng về 0, trạm sụp đổ và ván kết thúc.',
+    'Each turn brings one card. Tap an option to reveal it, then tap it again to confirm your choice.':
+      'Mỗi lượt có một thẻ. Chạm vào một lựa chọn để lật xem, rồi chạm lần nữa để xác nhận.',
+    'The card now shows what actually changed. Press Continue for the next turn.':
+      'Thẻ đang hiện đúng những gì đã thay đổi. Bấm Tiếp tục để sang lượt mới.',
+    'A warning gives you one turn to recover. Fix that bar now, or the penalty hits next turn.':
+      'Cảnh báo cho bạn một lượt để gỡ. Hãy cứu chỉ số đó ngay, nếu không lượt sau sẽ bị phạt.',
+    'A story arc has started: its acts replace the normal cards until it ends, and its choices weigh heavily.':
+      'Một tuyến truyện đã bắt đầu: các hồi của nó thay cho thẻ thường cho đến khi kết thúc, và mỗi lựa chọn đều rất nặng ký.',
+    'Pick the number of worlds, turns and vote time, add bots or share the invite link, then launch the match.':
+      'Chọn số thế giới, số lượt và thời gian bỏ phiếu, thêm bot hoặc gửi link mời, rồi bắt đầu trận.',
+    'Every pilot votes for one card; the most votes wins. You can change your vote until the timer runs out.':
+      'Mỗi phi công bầu cho một lá; lá nhiều phiếu nhất thắng. Bạn có thể đổi phiếu cho đến khi hết giờ.',
+    'Your buildings filled their storage. Press Harvest to move it into the treasury and earn EXP.':
+      'Công trình đã tích hàng vào kho. Bấm Thu hoạch để chuyển vào ngân khố và nhận EXP.',
+    'Building and ordering ships spend the shared treasury, so they are crew plans: propose one, then the crew votes yes or no.':
+      'Xây dựng và đóng tàu tiêu ngân khố chung nên là kế hoạch của đội: bạn đề xuất, cả đội bỏ phiếu Đồng ý hoặc Không.',
+    'The report shows what your crew chose and what changed this turn. Press Ready when you are done.':
+      'Báo cáo cho biết đội đã chọn gì và lượt này thay đổi ra sao. Bấm Sẵn sàng khi bạn xem xong.',
+    'From turn 2 you can propose a raid on a rival in the Galaxy tab. Check the raid estimate before you attack.':
+      'Từ lượt 2 bạn có thể đề xuất đột kích một đối thủ ở tab Thiên hà. Hãy xem ước tính đột kích trước khi tấn công.',
     'Not stored: email, phone number, real name, IP address or location. There are no cookies and no third-party analytics. The Sui wallet and NFT buttons are demos: nothing is sent or recorded. The game runs on Render and keeps its data in Upstash Redis; these hosts may keep short technical logs.':
       'Không lưu: email, số điện thoại, tên thật, địa chỉ IP hay vị trí. Không có cookie và không dùng công cụ phân tích của bên thứ ba. Nút ví Sui và NFT chỉ là bản demo: không gửi hay ghi lại gì cả. Game chạy trên Render và lưu dữ liệu ở Upstash Redis; hai dịch vụ này có thể giữ nhật ký kỹ thuật ngắn hạn.',
     'Deleting your data': 'Xóa dữ liệu của bạn',

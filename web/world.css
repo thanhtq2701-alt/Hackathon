@@ -171,6 +171,7 @@ input:disabled { opacity: .45; cursor: not-allowed; }
 .steps li { margin-bottom: .45rem; }
 .steps b { color: var(--text); }
 .guide [hidden] { display: none; }
+.link-btn { background: none; border: 0; padding: 0; font: inherit; color: inherit; text-decoration: underline; cursor: pointer; }
 .guide-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem; margin-bottom: .5rem; }
 .guide-head h2 { margin: 0; }
 .guide-lang, .lang-switch { display: inline-flex; gap: .3rem; }

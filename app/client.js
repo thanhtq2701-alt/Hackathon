@@ -616,6 +616,7 @@ const TheOvalCore = window.TheOvalCore;
       }, 600);
 
       state.stage = 2;
+      tip('solo-result');
     }
 
     function continueAfterChoice() {
@@ -685,6 +686,7 @@ const TheOvalCore = window.TheOvalCore;
     function advanceTurn() {
       const step = TheOvalCore.nextTurn(gs);
       step.notices.forEach(showNotif);
+      if (step.notices.some(n => n.startsWith('⚠'))) tip('solo-crisis');
       if (step.end) {
         updateHUD(false);
         showEndScreen(step.override);
@@ -705,6 +707,7 @@ const TheOvalCore = window.TheOvalCore;
     }
 
     function showArcTriggerOverlay(name) {
+      tip('solo-arc');
       const el = document.createElement('div');
       el.className = 'arc-overlay';
       el.innerHTML = `<div class="arc-overlay-label">Story Arc Activated</div><div class="arc-overlay-line"></div><div class="arc-overlay-title">⚡ ${name}</div><div class="arc-overlay-line"></div>`;
@@ -954,6 +957,11 @@ const TheOvalCore = window.TheOvalCore;
         .catch(() => {});
     }
 
+    // First-game tips (app/tips.js); shown once each, skipped when tips.js is not loaded.
+    function tip(id) {
+      if (window.TheOvalTips) window.TheOvalTips.show(id);
+    }
+
     // turns: 20, 30 or 40 (the default, the full story).
     function startGame(mode, turns) {
       if (mode !== 'normal') return;
@@ -973,6 +981,8 @@ const TheOvalCore = window.TheOvalCore;
       document.getElementById('continue-wrap').classList.remove('visible');
       updateHUD(false);
       renderNextCard();
+      tip('solo-bars');
+      tip('solo-card');
     }
 
     function restartGame() {

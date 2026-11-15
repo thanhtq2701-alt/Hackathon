@@ -18,6 +18,8 @@ Browser scripts are classic scripts that attach to `window` (`TheOval*`, `FleetC
 
 Language: the game is written in English and shown in Vietnamese by default. `app/i18n.js` translates text as it appears on the page (exact phrases, then patterns for texts with numbers or names) using `data/vi-common.js`, `data/vi-solo-ui.js`, `data/vi-solo-content.js`, `data/vi-fleet-ui.js` and `data/vi-fleet-content.js`; the player's choice (`oval.lang`) is remembered in the browser. Rules, data, counters and the simulators stay in English.
 
+First-game tips: `app/tips.js` (`TheOvalTips.show(id)`, texts in `TIPS`, Vietnamese in `data/vi-common.js`) shows each tip once; seen tips are remembered in the browser (`oval.tips`). Both clients call it through a guarded `tip(id)` helper so the simulators run without it.
+
 ## Commands
 
 - Run everything: `npm start` → `http://localhost:8080/` (Node 18+).
