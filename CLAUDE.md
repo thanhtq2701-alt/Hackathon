@@ -25,6 +25,7 @@ First-game tips: `app/tips.js` (`TheOvalTips.show(id)`, texts in `TIPS`, Vietnam
 - Run everything: `npm start` → `http://localhost:8080/` (Node 18+).
 - Static only (solo + Fleet Council practice): `.\tools\start-local.cmd` → port 8000.
 - Checks: `.\tools\run-checks.cmd` (syntax checks + `tests/game-core.test.js` + `tests/world-core.test.js` + a quick smoke run of the simulators). Run before every commit.
+- CI: `.github/workflows/checks.yml` runs the same checks on every pull request and push to `main`; the `protect-main` ruleset requires the `checks` job to pass before merging, so every change to `main` goes through a pull request.
 - Balance simulations: `node tools/sim/fleet.js` (Fleet Council bot vs bot) and `node tools/sim/oval.js` (The Oval auto-play through the real `client.js`). Seeded; options are listed at the top of each file.
 
 ## Deployment (Render, auto-deploy from `main`)
