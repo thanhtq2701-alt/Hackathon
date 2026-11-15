@@ -238,7 +238,7 @@ const TheOvalCore = window.TheOvalCore;
       pendingAdvance = null;
       document.getElementById('continue-wrap').classList.remove('visible');
       if (arc.id === 'convergence_route') document.getElementById('hud').style.display = 'none';
-      const act = arc.acts[actIdx];
+      const act = TheOvalCore.resolveAct(arc.acts[actIdx], gs);
       const banner = document.getElementById('arc-banner');
       banner.style.display = 'block';
       banner.classList.add('visible');
@@ -340,7 +340,7 @@ const TheOvalCore = window.TheOvalCore;
     function getChoiceOutcomeText(originalChoice, effectiveChoice, topic) {
       if (originalChoice && originalChoice.resignation) return gs.resigned ? originalChoice.outcomeAccepted : originalChoice.outcomeRefused;
       if (originalChoice && originalChoice.outcome) return originalChoice.outcome;
-      // Describe only; state changes happen once, in applyDeltas.
+      // Describe only; state changes happen once, in TheOvalCore.applyChoice.
       // (This used to add the deltas to gs a second time, under the wrong bar keys.)
       const positives = [];
       const negatives = [];
@@ -508,7 +508,7 @@ const TheOvalCore = window.TheOvalCore;
     function performStage2Confirm(btn, cardId, state) {
       transitioning = true;
 
-      const { choice, cardTitle, choiceText, topic, isArc } = state;
+      const { choice, cardTitle, topic, isArc } = state;
 
       const allCards = document.querySelectorAll('.choice-card');
       // All cards are now selectable immediately - proceed with selection
@@ -556,23 +556,11 @@ const TheOvalCore = window.TheOvalCore;
       continueWrap.classList.add('selected-state', 'visible');
 
 
-      const effectiveChoice = scaleChoice(choice);
-
       // Apply game state changes first, then show what actually changed.
       // Delta caps, arc multipliers and the 0-100 limits mean the raw card numbers
       // can differ from the real change, so the card shows the measured difference.
-      const before = Object.assign({}, gs.bars, { energy: gs.energy });
-      if (typeof choice.onSelect === 'function') choice.onSelect();
-      applyDeltas(effectiveChoice);
-      // Offering to resign: the people accept when Approval (after this choice) is below 50.
-      if (choice.resignation) gs.resigned = gs.bars.publicApproval < 50;
-      const applied = {};
-      const barKeyFor = { approval: 'publicApproval', tension: 'internationalTension', eco: 'economicState', unrest: 'stateAuthority', party: 'partyLoyalty', energy: 'energy' };
-      Object.entries(barKeyFor).forEach(([k, stateKey]) => {
-        const now = stateKey === 'energy' ? gs.energy : gs.bars[stateKey];
-        const d = Math.round((now - before[stateKey]) * 10) / 10;
-        if (d) applied[k] = d;
-      });
+      const { effective: effectiveChoice, applied } = TheOvalCore.applyChoice(gs, choice, topic, isArc, cardTitle);
+      if (gs.cheatMode) updateCheatUI();
 
       const outcomeMsg = btn.querySelector('.choice-back-msg');
       const outcomeList = btn.querySelector('.choice-back-list');
@@ -587,15 +575,6 @@ const TheOvalCore = window.TheOvalCore;
       // Trigger the scaleX flip to show outcome
       btn.classList.remove('floating', 'revealed');
       btn.classList.add('confirming');
-      trackHiddenBehaviors(choice, topic, isArc);
-      applySacrificeIfNeeded();
-      if (!isArc) gs.arcTriggerCounts[topic]++;
-      gs.definingChoices.push({
-        topic: topic.toUpperCase().replace('CIVILRIGHTS', 'CIVIL RIGHTS'),
-        card: cardTitle,
-        choice: choiceText
-      });
-      if (gs.definingChoices.length > 8) gs.definingChoices.shift();
       updateHUD(false);
 
       // At the midpoint (0.2s when card is completely flat), swap the content visibility
@@ -638,45 +617,6 @@ const TheOvalCore = window.TheOvalCore;
       state.stage = 2;
     }
 
-    // Legacy function for backwards compatibility
-    function onChoiceClick(btn, choice, cardTitle, choiceText, topic, isArc) {
-      if (transitioning || awaitingContinue) return;
-      transitioning = true;
-      document.querySelectorAll('.choice-card').forEach(b => {
-        b.classList.add('locked');
-        if (b === btn) b.classList.add('spinning');
-        else b.classList.add('faded');
-      });
-      if (typeof choice.onSelect === 'function') choice.onSelect();
-      const effectiveChoice = scaleChoice(choice);
-      applyDeltas(effectiveChoice);
-      trackHiddenBehaviors(choice, topic, isArc);
-      applySacrificeIfNeeded();
-      if (!isArc) gs.arcTriggerCounts[topic]++;
-      gs.definingChoices.push({ topic: topic.toUpperCase().replace('CIVILRIGHTS', 'CIVIL RIGHTS'), card: cardTitle, choice: choiceText });
-      if (gs.definingChoices.length > 8) gs.definingChoices.shift();
-      updateHUD(false);
-
-      const backMsg = btn.querySelector('.choice-back-msg');
-      const backList = btn.querySelector('.choice-back-list');
-      if (backMsg) backMsg.textContent = getChoiceOutcomeText(choice, effectiveChoice, topic);
-      if (backList) {
-        const lines = outcomeLines(effectiveChoice);
-        backList.innerHTML = lines.length
-          ? lines.map(l => `<div class="choice-back-line ${l.isGood ? 'good' : 'bad'}">${l.text}</div>`).join('')
-          : '<div class="choice-back-line">No immediate stat movement.</div>';
-      }
-
-      awaitingContinue = true;
-      pendingAdvance = { isArc, effectiveChoice };
-      setTimeout(() => {
-        btn.classList.remove('spinning');
-        btn.classList.add('selected', 'floating');
-        document.getElementById('continue-wrap').classList.add('visible');
-        transitioning = false;
-      }, 430);
-    }
-
     function continueAfterChoice() {
       if (!awaitingContinue || !pendingAdvance || transitioning) return;
       transitioning = true;
@@ -717,164 +657,39 @@ const TheOvalCore = window.TheOvalCore;
     }
 
     // Closes the active story arc without starting another turn (the run is ending).
-    function closeArcForEnding(arc) {
+    // Hides the arc banner when an arc closes.
+    function closeArcView() {
       document.getElementById('hud').style.display = 'block';
-      gs.arcsCompleted.push(arc.id);
-      gs.activeArc = null;
-      gs.activeArcActIndex = 0;
       document.getElementById('arc-banner').style.display = 'none';
       Music.updateAtmosphere(false);
     }
 
+    // The rules decide what follows an arc choice (TheOvalCore.advanceArc); this shows it.
     function advanceArc(choice) {
-      const arc = gs.activeArc;
-      const nextActIdx = (choice && typeof choice.nextAct === 'number') ? choice.nextAct : gs.activeArcActIndex + 1;
-
-      // The people accepted your resignation: the term ends here.
-      if (gs.resigned) {
-        closeArcForEnding(arc);
-        showEndScreen();
+      const step = TheOvalCore.advanceArc(gs, choice);
+      if (step.end) {
+        closeArcView();
+        showEndScreen(step.override);
         return;
       }
-
-      // During the Revolution a collapse of Approval or the Economy is not rescued: you are removed.
-      // (checkFailSafes only runs between turns, after the arc has already closed.)
-      if (arc && arc.id === 'revolution' && (gs.bars.publicApproval <= 0 || gs.bars.economicState <= 10)) {
-        gs.impeached = true;
-        closeArcForEnding(arc);
-        showEndScreen();
+      if (step.act !== undefined) {
+        renderArcAct(gs.activeArc, step.act);
         return;
       }
-
-      if (arc && arc.id === 'convergence_route' && (nextActIdx === 999 || nextActIdx >= arc.acts.length)) {
-        document.getElementById('hud').style.display = 'block';
-        gs.arcsCompleted.push(arc.id);
-        gs.activeArc = null;
-        gs.activeArcActIndex = 0;
-        document.getElementById('arc-banner').style.display = 'none';
-        Music.updateAtmosphere(false); // Reset atmosphere
-        showEndScreen(choice);
-        return;
-      }
-
-      if (nextActIdx < arc.acts.length) {
-        gs.activeArcActIndex = nextActIdx;
-        renderArcAct(arc, nextActIdx);
-      } else {
-        if (arc.id === 'convergence_route') document.getElementById('hud').style.display = 'none';
-        else document.getElementById('hud').style.display = 'block';
-        gs.arcsCompleted.push(arc.id);
-        gs.activeArc = null;
-        gs.activeArcActIndex = 0;
-        document.getElementById('arc-banner').style.display = 'none';
-        Music.updateAtmosphere(false); // Reset atmosphere
-        advanceTurn();
-      }
+      closeArcView();
+      advanceTurn();
     }
 
-    function applyDeltas(choice) {
-      TheOvalCore.applyDeltas(gs, choice);
-      if (gs.cheatMode) updateCheatUI();
-    }
-
-    function scaleDelta(v) {
-      return TheOvalCore.scaleDelta(v);
-    }
-
-    function scaleChoice(choice) {
-      return TheOvalCore.scaleChoice(choice);
-    }
-
-    function trackHiddenBehaviors(choice, topic, isArc) {
-      TheOvalCore.trackHiddenBehaviors(gs, choice, topic, isArc);
-    }
-
-    function checkFailSafes() {
-      // Track turns
-      gs.lowApprovalTurns += (gs.bars.publicApproval < 10) ? 1 : -gs.lowApprovalTurns;
-      gs.lowEconomyTurns += (gs.bars.economicState <= 20) ? 1 : -gs.lowEconomyTurns;
-      gs.lowAuthorityTurns += (gs.bars.stateAuthority < 30) ? 1 : -gs.lowAuthorityTurns;
-      gs.highTensionTurns += (gs.bars.internationalTension > 80) ? 1 : -gs.highTensionTurns;
-      gs.lowLoyaltyTurns = (gs.bars.partyLoyalty < 10) ? (gs.lowLoyaltyTurns || 0) + 1 : 0;
-
-      // (b) Party revolt: four turns with almost no party support and the party removes you.
-      if (gs.lowLoyaltyTurns >= 1 && gs.lowLoyaltyTurns <= 3) {
-        showNotif(`⚠ Party revolt brewing: raise Party Loyalty above 10 within ${4 - gs.lowLoyaltyTurns} turn(s) or your party will remove you.`);
-      }
-      if (gs.lowLoyaltyTurns >= 4) {
-        gs.impeached = true;
-        showNotif('⚠ Party Revolt: your own party has voted you out.');
-        showEndScreen();
-        return true;
-      }
-
-      const approvalCrisis = gs.lowApprovalTurns >= 3 || gs.bars.publicApproval <= 0;
-      if (approvalCrisis && !gs.approvalWarned) {
-        gs.approvalWarned = true;
-        showNotif('⚠ Approval is collapsing: improve it this turn or face an Approval Crisis.');
-      } else if (approvalCrisis) {
-        if (gs.activeArc && gs.activeArc.id === 'revolution') {
-          gs.impeached = true; showEndScreen(); return true;
-        }
-        gs.approvalWarned = false;
-        gs.bars.publicApproval = 50;
-        gs.bars.economicState = clamp(gs.bars.economicState - 25, 0, 100);
-        gs.bars.partyLoyalty = clamp(gs.bars.partyLoyalty - 20, 0, 100);
-        gs.bars.stateAuthority = clamp(gs.bars.stateAuthority - 20, 0, 100);
-        showNotif(`⚠ Approval Crisis: Confidence reset, penalties applied across Economy and Loyalty.`);
-        gs.lowApprovalTurns = 0;
-      } else {
-        gs.approvalWarned = false;
-      }
-      // State Control < 30 penalty
-      if (gs.bars.stateAuthority < 30) {
-        gs.bars.partyLoyalty = clamp(gs.bars.partyLoyalty - 1, 0, 100);
-      }
-
-      const economyCrisis = gs.lowEconomyTurns >= 3 || gs.bars.economicState <= 10;
-      if (economyCrisis && !gs.economyWarned) {
-        gs.economyWarned = true;
-        showNotif('⚠ The economy is failing: improve it this turn or face an Economic Collapse.');
-      } else if (economyCrisis) {
-        if (gs.activeArc && gs.activeArc.id === 'revolution') {
-          gs.impeached = true; showEndScreen(); return true;
-        }
-        gs.economyWarned = false;
-        gs.bars.economicState = 50;
-        gs.bars.publicApproval = clamp(gs.bars.publicApproval - 30, 0, 100);
-        gs.bars.partyLoyalty = clamp(gs.bars.partyLoyalty - 10, 0, 100); // FIXED
-        gs.bars.stateAuthority = clamp(gs.bars.stateAuthority - 20, 0, 100);
-        showNotif(`⚠ Economic Collapse: Markets subsidized, immense public backlash absorbed.`);
-        gs.lowEconomyTurns = 0;
-      } else {
-        gs.economyWarned = false;
-      }
-    }
-
-    function applySacrificeIfNeeded() {
-      // Kept for backward compatibility if needed, replaced by checkFailSafes
-    }
-
+    // Between turns the rules (TheOvalCore.nextTurn) move the run on; this shows the next card or the end.
     function advanceTurn() {
-      // Check depletion before the passive +1, otherwise an empty core was revived to 1.
-      if (gs.energy <= 0) {
-        gs.energy = 0;
-        updateHUD(false); 
-        
-        showEndScreen({
-          text: "CRITICAL FAILURE",
-          outcome: "ENDING: The Lazarus Protocol. Energy core depleted. The space station has collapsed. Preparing to extract Legacy Data..."
-        });
-        return; 
+      const step = TheOvalCore.nextTurn(gs);
+      step.notices.forEach(showNotif);
+      if (step.end) {
+        updateHUD(false);
+        showEndScreen(step.override);
+        return;
       }
-      gs.energy = Math.min(100, gs.energy + 1); // Passive energy gain each turn, capped at 100
-      if (gs.turn >= 40 && !gs.activeArc) { showEndScreen(); return; }
-
-      if (gs.bars.economicState <= 5) { showEndScreen(); return; }
-      gs.turn++;
-      // Returns true when a crisis ended the run.
-      if (checkFailSafes()) return;
-      checkArcTriggers();
+      if (step.arcStarted) showArcTriggerOverlay(step.arcStarted.name);
       updateHUD(true);
       if (gs.cheatMode) updateCheatUI();
       if (gs.activeArc) {
@@ -882,104 +697,9 @@ const TheOvalCore = window.TheOvalCore;
         renderArcAct(gs.activeArc, gs.activeArcActIndex);
       } else {
         Music.updateAtmosphere(false);
-        if (!checkGiftTriggers()) renderNextCard();
-      }
-    }
-
-
-    function checkGiftTriggers() {
-      // Return true if a gift card was drawn, overriding normal draw
-
-      // Tension Gift
-      if (!gs.tensionGiftTriggered && gs.bars.internationalTension <= 10) {
-        const chance = 10 + (10 - gs.bars.internationalTension);
-        if (Math.random() * 100 < chance) {
-          gs.tensionGiftTriggered = true;
-          const giftCard = {
-            title: "The Golden Standard",
-            body: "Your commitment to global peace has made you the 'Golden Standard' of leadership. Several world powers and international bodies have arrived at The Oval with a tribute to your administration. Choose how to accept their gratitude.",
-            choices: [
-              {
-                text: "Accept a multi-nation agreement to lower all tariffs on your exports.",
-                outcome: "The economy surges as your goods flood the global market.",
-                eco: 7, party: 6, tension: 3
-              },
-              {
-                text: "Accept the highest global honor for peace and use the platform to inspire your citizens.",
-                outcome: "Your approval rating reaches record highs, and your party stands behind your fame.",
-                approval: 12, party: 5, empathy: 5
-              },
-              {
-                text: "Friendly nations offer to share their high-tech surveillance and police data.",
-                outcome: "Your control over the nation tightens without firing a single shot.",
-                unrest: 8, approval: 3, courage: 5
-              },
-              {
-                text: "International banks agree to wipe a significant portion of your nation's high-interest loans.",
-                outcome: "Your treasury is suddenly full, giving you massive room to spend in the future.",
-                eco: 11, tension: 3, integrity: 5
-              }
-            ]
-          };
-          renderCard(giftCard, 'gift');
-          return true;
-        }
-      }
-
-      // Economy Gift
-      if (!gs.ecoGiftTriggered && gs.bars.economicState >= 80) {
-        const chance = 10 + (gs.bars.economicState - 80);
-        if (Math.random() * 100 < chance) {
-          gs.ecoGiftTriggered = true;
-          const giftCard = {
-            title: "Historic Wealth",
-            body: "Your nation's coffers are overflowing. The markets have hit an all-time high, and the Treasury reports a massive surplus. As President, how will you reinvest this historic wealth?",
-            choices: [
-              {
-                text: "Issue a direct stimulus check to every citizen.",
-                outcome: "Your popularity skyrockets overnight as families feel the wealth.",
-                approval: 18, eco: -10, empathy: 10, party: -3
-              },
-              {
-                text: "Funnel the surplus into 'infrastructure projects' in your party leaders' home states.",
-                outcome: "Your party is fiercely loyal to you, securing your power against scandals.",
-                party: 15, unrest: 7, integrity: -10, eco: -10
-              },
-              {
-                text: "Provide massive low-interest loans to struggling rival nations.",
-                outcome: "You 'buy' peace. Tension drops as they are now financially dependent on you.",
-                tension: -15, eco: -10, courage: 5
-              },
-              {
-                text: "Don't spend a cent. Move the surplus into a 'Rainy Day' vault for future crises.",
-                outcome: "The economy grows even stronger, and your authority over the budget is absolute.",
-                eco: 9, unrest: 7, integrity: 8, party: -2
-              }
-            ]
-          };
-          renderCard(giftCard, 'gift');
-          return true;
-        }
-      }
-      return false;
-    }
-
-    function checkArcTriggers() {
-      if (gs.activeArc) return;
-      if (gs.arcsCompleted.length >= 3) return;
-      for (const arc of ARCS) {
-        if (gs.arcsCompleted.includes(arc.id) || gs.arcsTriggered.includes(arc.id)) continue;
-        if (arc.trigger()) {
-          gs.activeArc = arc; gs.activeArcActIndex = 0;
-          // A revolution is a last chance, not an instant loss: your remaining supporters rally.
-          if (arc.id === 'revolution' && gs.bars.publicApproval < 20) {
-            gs.bars.publicApproval = 20;
-            showNotif('Your remaining supporters rally in the streets: Approval steadies at 20.');
-          }
-          gs.arcsTriggered.push(arc.id);
-          showArcTriggerOverlay(arc.name);
-          return;
-        }
+        const gift = TheOvalCore.giftCard(gs);
+        if (gift) renderCard(gift, 'gift');
+        else renderNextCard();
       }
     }
 
@@ -1012,72 +732,23 @@ const TheOvalCore = window.TheOvalCore;
 
     function renderNextCard() {
       updateDirectivesHUD();
+      const { card, topic } = TheOvalCore.drawCard(gs);
+      renderCard(card, topic);
 
-      let pickTargetTopic;
-      // Normal draw
-      const topic = gs.topicQueue[(gs.turn - 1) % gs.topicQueue.length];
-      const pool = CARDS[topic];
-      const used = gs.cardHistory[topic];
-      let available = pool.filter((_, i) => !used.includes(i));
-      if (!available.length) { gs.cardHistory[topic] = []; available = pool; }
-      const originalPick = available[Math.floor(Math.random() * available.length)];
-      const idx = pool.indexOf(originalPick);
-      gs.cardHistory[topic].push(idx);
-
-      // Clone the card to apply active rules safely
-      const pick = JSON.parse(JSON.stringify(originalPick));
-
-      // Apply Conditional Modifiers
-      pick.choices.forEach(ch => {
-        // Public Approval > 80% Rule
-        if (gs.bars.publicApproval >= 80) {
-          if (ch.eco > 0) ch.eco += 3;
-          if (ch.eco < 0) ch.eco += 1;
-          if (ch.approval > 0) ch.approval = Math.ceil(ch.approval / 2); // diminishing returns near the top
-          if (ch.approval < 0) ch.approval -= 1;
-        }
-
-        // State Authority > 80% Rule
-        if (gs.bars.stateAuthority >= 80) {
-          if (ch.approval < 0) ch.approval -= 3;
-          if (ch.approval > 0) ch.approval -= 1;
-        }
-
-        // Party Loyalty > 80% SCANDAL Rule
-        if (gs.bars.partyLoyalty >= 80 && topic === 'scandal') {
-          // Positive changes +1
-          ['approval', 'tension', 'eco', 'unrest', 'empathy', 'integrity', 'courage'].forEach(k => {
-            if (ch[k] > 0) ch[k] += 1;
-            if (ch[k] < 0) ch[k] += 1; // negative magnitude shrinks
-          });
-          if (ch.party > 0) ch.party -= 1;
-          if (ch.party < 0) ch.party -= 1;
-        }
-      });
-
-      renderCard(pick, topic);
-
-      // Choice locking mechanic injected after rendering cards
+      // Low Party Loyalty can lock two options once the cards are on screen.
       setTimeout(() => {
-        if (gs.bars.partyLoyalty <= 20) {
-          const chance = 20 - gs.bars.partyLoyalty;
-          if (Math.random() * 100 < chance) {
-            const allCards = Array.from(document.querySelectorAll('.choice-card'));
-            if (allCards.length >= 4) {
-              // Lock 2 random choices
-              const shuffled = allCards.sort(() => 0.5 - Math.random());
-              for (let i = 0; i < 2; i++) {
-                shuffled[i].classList.add('locked-by-party');
-                shuffled[i].style.pointerEvents = 'none';
-                shuffled[i].style.opacity = '0.4';
-                shuffled[i].style.filter = 'grayscale(100%)';
-                const backHint = shuffled[i].querySelector('.choice-back-hint');
-                if (backHint) backHint.textContent = '🔒 Labeled Disloyal. Blocked by Party.';
-              }
-              showNotif('⚠ Warning: Low Party Loyalty restricted your options.');
-            }
-          }
-        }
+        const cards = Array.from(document.querySelectorAll('.choice-card'));
+        const locked = TheOvalCore.partyLock(gs, cards.length);
+        locked.forEach(i => {
+          const card = cards[i];
+          card.classList.add('locked-by-party');
+          card.style.pointerEvents = 'none';
+          card.style.opacity = '0.4';
+          card.style.filter = 'grayscale(100%)';
+          const backHint = card.querySelector('.choice-back-hint');
+          if (backHint) backHint.textContent = '🔒 Labeled Disloyal. Blocked by Party.';
+        });
+        if (locked.length) showNotif('⚠ Warning: Low Party Loyalty restricted your options.');
       }, 300); // give time for cards to render
     }
 
@@ -1089,45 +760,9 @@ const TheOvalCore = window.TheOvalCore;
       window.scrollTo(0, 0);
       const end = document.getElementById('end-screen');
       end.style.display = 'block';
-      let ending = pickEnding();
-
-      // Handle special Convergence narrative overrides
-      // The peace branch has its own ending card; without this check its outcome
-      // sentence was used as the ending title.
-      if (choiceOverride && choiceOverride.outcome && choiceOverride.text !== 'The Peacemaker Ending.') {
-        const parts = choiceOverride.outcome.split('. ');
-        const rawTitle = parts[0].replace('ENDING: ', '').trim();
-        const scenarioLine = parts.slice(1).join('. ').trim();
-
-        // Check for recognized Canonical endings FIRST
-        const canonical = ENDINGS.find(e => e.title === rawTitle || ("The " + e.title) === rawTitle || e.title === ("The " + rawTitle));
-
-        if (canonical) {
-          ending = Object.assign({}, canonical);
-          // Blend specific scenario into the narrative
-          if (scenarioLine) ending.narrative = `<b>${scenarioLine}</b><br><br>${ending.narrative}`;
-        } else {
-          ending = {
-            id: 'convergence',
-            title: rawTitle,
-            emoji: rawTitle.includes('Warmonger') ? '⚔️' : rawTitle.includes('Peacemaker') ? '🕊️' : rawTitle.includes('Pacifist') ? '☮️' : '⌛',
-            tagline: 'The World on Fire',
-            narrative: scenarioLine,
-            profile: 'Legacy of the Ultimatum'
-          };
-        }
-      } else if (choiceOverride && choiceOverride.text === 'The Peacemaker Ending.') {
-        ending = {
-          id: 'convergence_peace',
-          title: 'The Peacemaker',
-          emoji: '🕊️',
-          tagline: 'Healed the Divide',
-          narrative: 'By de-escalating global tension before the brink, you secured a era of prosperity without firing a single shot.',
-          profile: 'The Architect of Peace'
-        };
-      }
+      const ending = TheOvalCore.resolveEnding(gs, choiceOverride);
       sendStat({ event: 'oval_end', ending: ending.title, turn: gs.turn, minutes: (Date.now() - runStartedAt) / 60000 });
-      const axes = computeAxes();
+      const axes = TheOvalCore.moralAxes(gs);
       const top5 = gs.definingChoices.slice(-5);
       end.innerHTML = `
     <div class="end-header">
@@ -1153,21 +788,6 @@ const TheOvalCore = window.TheOvalCore;
           if (el) el.style.left = a.pct + '%';
         });
       }, 400);
-    }
-
-    function pickEnding() {
-      for (const e of ENDINGS) if (e.check()) return e;
-      return ENDINGS.find(e => e.id === 'forgotten') || ENDINGS[0];
-    }
-
-    function computeAxes() {
-      function pct(v, r) { return clamp(Math.round(50 + (v / r) * 50), 2, 98); }
-      return [
-        { id: 'a', left: 'Logic', right: 'Empathy', pct: pct(gs.empathy, 100) },
-        { id: 'b', left: 'Freedom', right: 'Order', pct: pct(gs.ideologyScore, 100) },
-        { id: 'c', left: 'Caution', right: 'Courage', pct: pct(gs.courage, 100) },
-        { id: 'd', left: 'Pragmatism', right: 'Integrity', pct: pct(gs.integrity, 100) }
-      ];
     }
 
     // ═══════════════════════════════════════════════════════════
@@ -1223,7 +843,7 @@ const TheOvalCore = window.TheOvalCore;
                   <strong>Trigger Condition:</strong> ${a.id === 'convergence_route' ? 'From turn 6: International Tension above 80% for 3 turns (or 98%)' : a.id === 'the_scandal' ? 'Party Loyalty < 30%' : a.id === 'revolution' ? 'State Authority below 30% for 3 turns (or below 25%) while Approval is under 55%, or after turn 10, Approval below 10% for 3 turns' : a.id === 'legacy' ? 'Turn 40' : '—'}
                 </div>
                 <div style="font-size: 0.75rem; color: var(--text-mid); display: flex; flex-direction: column; gap: 12px;">
-                  ${a.acts.map((act, i) => `
+                  ${a.acts.map(raw => TheOvalCore.resolveAct(raw, gs)).map((act, i) => `
                     <div style="border-left: 2px solid var(--border); padding-left: 10px;">
                       <strong style="color:var(--gold-light); font-size: 0.85rem;">Act ${i+1}: ${act.title}</strong><br>
                       <i style="color:var(--text);">${act.body}</i>

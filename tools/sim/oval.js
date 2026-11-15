@@ -154,7 +154,10 @@ function playRun(strategy, seed) {
     game.flush();
   }
   const gs = game.state();
-  return { ending: game.ending, turn: gs.turn, arcs: gs.arcsTriggered.slice(), partyRevolt: gs.lowLoyaltyTurns >= 4 };
+  return {
+    ending: game.ending, turn: gs.turn, arcs: gs.arcsTriggered.slice(), partyRevolt: gs.lowLoyaltyTurns >= 4,
+    bars: Object.assign({}, gs.bars, { energy: gs.energy })
+  };
 }
 
 function pct(part, whole) {

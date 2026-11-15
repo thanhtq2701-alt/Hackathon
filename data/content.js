@@ -5505,7 +5505,7 @@ const CARDS = {
 
     const ARCS = [
       {
-        id: 'convergence_route', name: 'Convergence Route', trigger: () => gs.turn >= 6 && (gs.highTensionTurns >= 3 || gs.bars.internationalTension >= 98), acts: [
+        id: 'convergence_route', name: 'Convergence Route', trigger: gs => gs.turn >= 6 && (gs.highTensionTurns >= 3 || gs.bars.internationalTension >= 98), acts: [
           {
             tag: 'ACT I', title: 'The Ultimatum',
             body: 'A coalition of world powers has issued an ultimatum: Disarm your borders and allow foreign inspectors into your nuclear sites, or face a coordinated "intervention."',
@@ -5748,17 +5748,17 @@ const CARDS = {
           },
           {
             tag: 'ACT V', title: 'The Final Ultimatum',
-            get body() {
+            body: gs => {
               return gs.bars.internationalTension < 50 ? 'The coalition has withdrawn. The global heat is cooling, and the guns are silent.' : 'The coalition forces are at the threshold of the capital. In your left hand is a pen to sign the unconditional surrender. In your right hand is the nuclear briefcase.';
             },
-            get choices() {
+            choices: gs => {
               if (gs.bars.internationalTension < 50) return [{ text: "The Peacemaker Ending.", outcome: "You have successfully cooled the fires of global war. The name of your nation will be remembered not for the bombs it dropped, but for the peace it ensured.", nextAct: 999 }];
               return [
                 {
                   text: "WAGE WAR",
                   outcome: gs.bars.publicApproval > 50 ? "ENDING: The Warmonger. The people unite behind your strength. You lead them into a glorious, terrible conflict that reshapes the world in your image." : "ENDING: The Impeached. The military refuses your order. You are dragged from the Oval Office as a criminal as the people cheer your removal.",
                   nextAct: 999,
-                  onSelect: () => { if (gs.bars.publicApproval <= 50) gs.impeached = true; }
+                  onSelect: gs => { if (gs.bars.publicApproval <= 50) gs.impeached = true; }
                 },
                 {
                   text: "STAY PEACEFUL",
@@ -5771,7 +5771,7 @@ const CARDS = {
         ]
       },
       {
-        id: 'the_scandal', name: 'The Scandal', trigger: () => gs.bars.partyLoyalty < 30 && (Math.random() < ((10 + (30 - gs.bars.partyLoyalty)) / 100)), acts: [
+        id: 'the_scandal', name: 'The Scandal', trigger: gs => gs.bars.partyLoyalty < 30 && (Math.random() < ((10 + (30 - gs.bars.partyLoyalty)) / 100)), acts: [
           {
             // ACT INDEX 0 - ACT 1: The Initial Breach
             tag: 'ACT I', title: 'The Initial Breach',
@@ -6426,7 +6426,7 @@ const CARDS = {
         ]
       },
       {
-        id: 'revolution', name: 'The Revolution', trigger: () => ((gs.lowAuthorityTurns >= 3 || gs.bars.stateAuthority < 25) && gs.bars.publicApproval < 55) || (gs.turn > 10 && gs.lowApprovalTurns >= 3), acts: [
+        id: 'revolution', name: 'The Revolution', trigger: gs => ((gs.lowAuthorityTurns >= 3 || gs.bars.stateAuthority < 25) && gs.bars.publicApproval < 55) || (gs.turn > 10 && gs.lowApprovalTurns >= 3), acts: [
           {
             tag: 'ACT I', title: 'The Breach',
             body: 'Protesters have occupied the state media building and are broadcasting a list of demands, starting with your immediate resignation. The capital is at a standstill.',
@@ -6641,7 +6641,7 @@ const CARDS = {
         ]
       },
       {
-        id: 'legacy', name: 'The Permanent Record', trigger: () => gs.turn >= 40, acts: [
+        id: 'legacy', name: 'The Permanent Record', trigger: gs => gs.turn >= 40, acts: [
           {
             tag: 'ACT I', title: 'The Final Address',
             body: 'You are preparing your farewell speech to the nation. How will you define your time in office?',
@@ -6681,73 +6681,73 @@ const CARDS = {
     // ═══════════════════════════════════════════════════════════
     const ENDINGS = [
       { 
-        id: 'impeached', title: 'The Impeached', emoji: '⚖️', check: () => gs.impeached, 
+        id: 'impeached', title: 'The Impeached', emoji: '⚖️', check: gs => gs.impeached, 
         tagline: 'Given the boot.', 
         narrative: 'Your term ended abruptly and in disgrace. The weight of your scandals finally collapsed the government\'s trust, leading to a historic removal from office. You leave behind a legacy of legal battles and a cautionary tale for all who follow.', 
         profile: 'Disgraced'
       },
       {
-        id: 'resigned', title: 'The Resignation', emoji: '🚪', check: () => gs.resigned,
+        id: 'resigned', title: 'The Resignation', emoji: '🚪', check: gs => gs.resigned,
         tagline: 'You chose to walk away.',
         narrative: 'With the city split by barricades, you offered your office to the people, and they took it. You leave with your life and your dignity, but the work you started will be finished, or undone, by someone else.',
         profile: 'The One Who Stepped Aside'
       },
       { 
-        id: 'warmonger', title: 'The Warmonger', emoji: '⚔️', check: () => gs.arcsCompleted.includes('convergence_route') && gs.bars.internationalTension > 50 && gs.bars.publicApproval >= 50, 
+        id: 'warmonger', title: 'The Warmonger', emoji: '⚔️', check: gs => gs.arcsCompleted.includes('convergence_route') && gs.bars.internationalTension > 50 && gs.bars.publicApproval >= 50, 
         tagline: 'Victory at any cost.', 
         narrative: 'You defined your presidency through the barrel of a gun. By prioritizing military dominance and aggressive expansion, you turned the nation into a global fortress. You leave office with a powerful army but a world that watches your borders with fear.', 
         profile: 'The Conqueror' 
       },
       { 
-        id: 'peacemaker', title: 'The Peacemaker', emoji: '🕊️', check: () => gs.arcsCompleted.includes('convergence_route') && gs.bars.internationalTension <= 50, 
+        id: 'peacemaker', title: 'The Peacemaker', emoji: '🕊️', check: gs => gs.arcsCompleted.includes('convergence_route') && gs.bars.internationalTension <= 50, 
         tagline: 'A bridge over troubled waters.', 
         narrative: 'You spent your term mending fractured alliances and de-escalating global threats. By choosing diplomacy over force, you ensured a generation of stability. You leave behind a world that is significantly quieter and safer than the one you inherited.', 
         profile: 'The Architect of Peace' 
       },
       { 
-        id: 'pacifist', title: 'The Pacifist', emoji: '☮️', check: () => gs.arcsCompleted.includes('convergence_route') && gs.bars.internationalTension > 50 && gs.bars.publicApproval < 50, 
+        id: 'pacifist', title: 'The Pacifist', emoji: '☮️', check: gs => gs.arcsCompleted.includes('convergence_route') && gs.bars.internationalTension > 50 && gs.bars.publicApproval < 50, 
         tagline: 'Peace is the only path.', 
         narrative: 'You refused to engage in conflict, even when pressured by your own generals. While some called it weakness, you saved countless lives by keeping the nation out of harm\'s way. You retire with a clean conscience and a nation that has forgotten the sound of war.', 
         profile: 'The Humanitarian' 
       },
       { 
-        id: 'tyrant', title: 'The Tyrant', emoji: '👁️', check: () => gs.bars.stateAuthority > 80, 
+        id: 'tyrant', title: 'The Tyrant', emoji: '👁️', check: gs => gs.bars.stateAuthority > 80, 
         tagline: 'Rule with an iron fist.', 
         narrative: 'You didn\'t lead the nation; you broke it to your will. By dismantling the legislature and silencing dissent, you secured absolute control. You leave behind a country that is orderly, terrified, and entirely yours, even after you\'ve stepped down.', 
         profile: 'The Autocrat' 
       },
       { 
-        id: 'martyr', title: 'The Martyr', emoji: '🔥', check: () => gs.bars.publicApproval > 70 && gs.bars.partyLoyalty < 25, 
+        id: 'martyr', title: 'The Martyr', emoji: '🔥', check: gs => gs.bars.publicApproval > 70 && gs.bars.partyLoyalty < 25, 
         tagline: 'Sacrificed for the truth.', 
         narrative: 'You chose the people over the party and paid the ultimate political price. By exposing deep-seated corruption, you lost your allies and your wealth. You exit the presidency as a man without a country, but with the eternal gratitude of the public.', 
         profile: 'The Reformer' 
       },
       { 
-        id: 'populist', title: 'The Populist', emoji: '📣', check: () => gs.bars.publicApproval > 70 && gs.bars.economicState < 30, 
+        id: 'populist', title: 'The Populist', emoji: '📣', check: gs => gs.bars.publicApproval > 70 && gs.bars.economicState < 30, 
         tagline: 'Voice of the forgotten.', 
         narrative: 'You rode a wave of public anger into the highest office and never let go of the megaphone. By attacking the elites and rewarding your base, you changed the face of politics. You leave behind a fractured establishment and a loyal army of followers.', 
         profile: 'The Agitator' 
       },
       { 
-        id: 'statesman', title: 'The Statesman', emoji: '🏛️', check: () => ['publicApproval', 'internationalTension', 'economicState', 'stateAuthority', 'partyLoyalty'].every(k => gs.bars[k] >= 35 && gs.bars[k] <= 70), 
+        id: 'statesman', title: 'The Statesman', emoji: '🏛️', check: gs => ['publicApproval', 'internationalTension', 'economicState', 'stateAuthority', 'partyLoyalty'].every(k => gs.bars[k] >= 35 && gs.bars[k] <= 70), 
         tagline: 'Dignity in every decree.', 
         narrative: 'You governed with a level of prestige and intellectual honesty rarely seen in the modern era. By putting the institution of the Presidency above your own ego, you restored faith in the government. You retire as the gold standard of leadership for future generations.', 
         profile: 'The Idealist' 
       },
       {
-        id: 'technocrat', title: 'The Technocrat', emoji: '📊', check: () => gs.bars.economicState >= 60 && gs.bars.publicApproval < 45,
+        id: 'technocrat', title: 'The Technocrat', emoji: '📊', check: gs => gs.bars.economicState >= 60 && gs.bars.publicApproval < 45,
         tagline: 'The numbers loved you. The people did not.',
         narrative: 'You ran the nation like a well-tuned machine. Budgets balanced, markets steadied, and the treasury grew, but the people never felt you were on their side. You leave a stronger state and a colder country.',
         profile: 'The Engineer of State'
       },
       {
-        id: 'survivor', title: 'The Survivor', emoji: '🪨', check: () => gs.bars.publicApproval < 30,
+        id: 'survivor', title: 'The Survivor', emoji: '🪨', check: gs => gs.bars.publicApproval < 30,
         tagline: 'Still standing, barely.',
         narrative: 'Every poll said you should have fallen, and every month you were still there. You traded popularity for survival, one hard decision at a time. History will argue about whether that was strength or stubbornness.',
         profile: 'The Last One Standing'
       },
       { 
-        id: 'neutral', title: 'The Neutral', emoji: '🤝', check: () => true, 
+        id: 'neutral', title: 'The Neutral', emoji: '🤝', check: gs => true, 
         tagline: 'A quiet and stable departure.', 
         narrative: 'You did a decent job. Your term passed without major fanfare or scandal. While not a dramatic legacy, you navigated the nation through its challenges safely and handed off a stable administration.', 
         profile: 'The Administrator' 
@@ -6759,6 +6759,30 @@ const CARDS = {
     // MUSIC & SOUNDTRACK SYSTEM
     // ═══════════════════════════════════════════════════════════
     
-root.TheOvalContent = { CARDS, ARCS, ENDINGS };
+// Gift cards: rare rewards drawn instead of a normal card (see giftCard in app/game-core.js).
+const GIFTS = {
+  tension: {
+    title: "The Golden Standard",
+    body: "Your commitment to global peace has made you the 'Golden Standard' of leadership. Several world powers and international bodies have arrived at The Oval with a tribute to your administration. Choose how to accept their gratitude.",
+    choices: [
+      { text: "Accept a multi-nation agreement to lower all tariffs on your exports.", outcome: "The economy surges as your goods flood the global market.", eco: 7, party: 6, tension: 3 },
+      { text: "Accept the highest global honor for peace and use the platform to inspire your citizens.", outcome: "Your approval rating reaches record highs, and your party stands behind your fame.", approval: 12, party: 5, empathy: 5 },
+      { text: "Friendly nations offer to share their high-tech surveillance and police data.", outcome: "Your control over the nation tightens without firing a single shot.", unrest: 8, approval: 3, courage: 5 },
+      { text: "International banks agree to wipe a significant portion of your nation's high-interest loans.", outcome: "Your treasury is suddenly full, giving you massive room to spend in the future.", eco: 11, tension: 3, integrity: 5 }
+    ]
+  },
+  economy: {
+    title: "Historic Wealth",
+    body: "Your nation's coffers are overflowing. The markets have hit an all-time high, and the Treasury reports a massive surplus. As President, how will you reinvest this historic wealth?",
+    choices: [
+      { text: "Issue a direct stimulus check to every citizen.", outcome: "Your popularity skyrockets overnight as families feel the wealth.", approval: 18, eco: -10, empathy: 10, party: -3 },
+      { text: "Funnel the surplus into 'infrastructure projects' in your party leaders' home states.", outcome: "Your party is fiercely loyal to you, securing your power against scandals.", party: 15, unrest: 7, integrity: -10, eco: -10 },
+      { text: "Provide massive low-interest loans to struggling rival nations.", outcome: "You 'buy' peace. Tension drops as they are now financially dependent on you.", tension: -15, eco: -10, courage: 5 },
+      { text: "Don't spend a cent. Move the surplus into a 'Rainy Day' vault for future crises.", outcome: "The economy grows even stronger, and your authority over the budget is absolute.", eco: 9, unrest: 7, integrity: 8, party: -2 }
+    ]
+  }
+};
+
+root.TheOvalContent = { CARDS, ARCS, ENDINGS, GIFTS };
 if (typeof module !== 'undefined' && module.exports) module.exports = root.TheOvalContent;
 })(typeof window !== 'undefined' ? window : (typeof global !== 'undefined' ? global : this));
