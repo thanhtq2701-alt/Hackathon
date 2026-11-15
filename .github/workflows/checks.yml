@@ -1,0 +1,28 @@
+# Runs the same checks as tools\run-checks.cmd on every pull request and every push to main.
+# The job name "checks" is the required status check in the protect-main ruleset.
+name: checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Syntax check
+        run: for f in app/*.js data/*.js server/*.js tests/*.js tools/sim/*.js; do node --check "$f"; done
+      - name: Solo story tests
+        run: node tests/game-core.test.js
+      - name: Fleet Council and server tests
+        run: node tests/world-core.test.js
+      - name: Simulator smoke runs
+        run: |
+          node tools/sim/fleet.js --matches 5 > /dev/null
+          node tools/sim/oval.js --games 5 > /dev/null
