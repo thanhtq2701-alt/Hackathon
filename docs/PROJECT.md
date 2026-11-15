@@ -67,6 +67,7 @@ Cập nhật lần cuối: 15/11/2026. Tài liệu cũ (tháng 10/2026) nằm tr
 | #10 | Gom tài liệu vào `docs/PROJECT.md`, lưu trữ tài liệu cũ vào `old/` |
 | #11 | Công cụ mô phỏng cân bằng có seed cho cả hai chế độ (`tools/sim/`); đo lại số cân bằng |
 | #12 | Số đếm ẩn danh, trang góp ý `feedback.html` + mục "What this game stores"; chốt quyết định dữ liệu người chơi |
+| #13 | Chơi đơn: tách luật sang `game-core.js` (+12 test), chọn độ dài ván 20/30/40, mục "How to play" |
 
 ## 5. Lỗi trong tài liệu cũ — đối chiếu
 
