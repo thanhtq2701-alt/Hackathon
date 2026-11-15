@@ -432,6 +432,70 @@ test('raids pay big spoils, give the loser revenge and the underdog bonus, and r
   assert.ok(second.worlds.nova.gold > goldBefore);
 });
 
+test('the match summary comes from the changes actually applied: turning point, biggest raid, crew records', function () {
+  const match = twoWorldMatch();
+  match.maxTurns = 3;
+  const reports = [];
+  core.startTurn(match);
+  reports.push(core.resolveTurn(match));
+
+  // Turn 2: both crews vote, Aurora raids Nova with both pilots, Nova's pilot sends aid.
+  core.startTurn(match);
+  neutralPoll(match, 'aurora');
+  neutralPoll(match, 'nova');
+  Object.assign(match.worlds.aurora, { ships: 6 });
+  match.worlds.aurora.buildings.shipyard.level = 1;
+  Object.assign(match.worlds.nova, { ships: 1, gold: 60 });
+  core.proposeRaid(match, 'a1', 'nova');
+  core.votePlan(match, 'a2', 'raid', true);
+  core.proposeAid(match, 'n1', 'aurora', 'gold');
+  reports.push(core.resolveTurn(match));
+
+  core.startTurn(match);
+  reports.push(core.resolveTurn(match));
+  assert.equal(match.finished, true);
+  const summary = match.results.summary;
+
+  // Turning point: the poll whose applied change was largest (earliest on a tie), with that applied change.
+  ['aurora', 'nova'].forEach(id => {
+    let best = null;
+    reports.forEach((report, i) => {
+      const r = report.worlds[id];
+      const size = core.effectSize(r.pollDelta);
+      if (size > 0 && (!best || size > best.size)) best = { turn: i + 1, title: r.situationTitle, choice: r.chosenText, delta: r.pollDelta, size };
+    });
+    assert.deepEqual(summary.turningPoints[id], best);
+  });
+
+  // Biggest raid: the loot the attacker actually received.
+  const battle = reports[1].worlds.aurora.battles[0];
+  assert.equal(battle.winner, 'aurora');
+  assert.deepEqual(summary.biggestRaid, {
+    turn: 2, attackerId: 'aurora', defenderId: 'nova', attack: battle.attack, defence: battle.defence,
+    revenge: false, goldLoot: battle.goldLoot, oreLoot: battle.oreLoot
+  });
+
+  // Crew records: votes cast, plans carried out (the raid, the aid), raids joined.
+  const crew = id => summary.crews[id].map(m => [m.name, m.votes, m.plans, m.cards, m.raids]);
+  assert.deepEqual(crew('aurora'), [['A1', 1, 1, 0, 1], ['A2', 1, 0, 0, 1]]);
+  assert.deepEqual(crew('nova'), [['N1', 1, 1, 0, 0]]);
+
+  // A repelled raid is not a "biggest raid".
+  const quiet = twoWorldMatch();
+  quiet.maxTurns = 2;
+  core.startTurn(quiet);
+  core.resolveTurn(quiet);
+  core.startTurn(quiet);
+  Object.assign(quiet.worlds.aurora, { ships: 2 });
+  Object.assign(quiet.worlds.nova, { ships: 6 });
+  quiet.worlds.nova.buildings.shipyard.level = 1;
+  quiet.worlds.nova.buildings.shield.level = 2;
+  core.proposeRaid(quiet, 'a1', 'nova');
+  assert.equal(core.resolveTurn(quiet).worlds.nova.battles[0].winner, 'nova');
+  assert.equal(quiet.results.summary.biggestRaid, null);
+  assert.equal(quiet.results.summary.crews.aurora[0].raids, 1);
+});
+
 test('Fleet Council content and every message of a full bot match read in Vietnamese', function () {
   const i18n = require('../app/i18n.js');
   require('../data/vi-common.js');
@@ -468,8 +532,13 @@ test('Fleet Council content and every message of a full bot match read in Vietna
       } else if (room.phase === 'report') room.beginVote(now);
     }
     room.match.log.forEach(e => check(e.text));
+    Object.values(room.match.results.summary.turningPoints).forEach(tp => { if (tp) { check(tp.title); check(tp.choice); } });
   }
   assert.deepEqual([...missing].slice(0, 8), []);
+  // Match summary lines (end screen and the copied text).
+  assert.equal(i18n.t('Turn 4'), 'Lượt 4');
+  assert.equal(i18n.t('2 votes · 1 plan carried out · 0 cards played · 1 raid joined'), '2 phiếu · 1 kế hoạch được thực hiện · 0 thẻ đã dùng · 1 lần đột kích');
+  assert.equal(i18n.t('Aurora Prime raided Nova Kepler (52 vs 40) and took 45 gold, 38 ore.'), 'Aurora Prime đột kích Nova Kepler (52 so với 40) và lấy được 45 vàng, 38 quặng.');
   assert.equal(i18n.t('Crew votes 2/3'), 'Đội đã bỏ phiếu 2/3');
   assert.equal(i18n.t('Not enough resources.'), 'Không đủ tài nguyên.');
 });

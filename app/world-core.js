@@ -160,8 +160,14 @@
       inventory: [],
       cardTurn: 0,
       cardsUsed: 0,
-      record: { votes: 0, harvested: 0, raidsWon: 0, builds: 0, cards: 0 }
+      // plans: plans this pilot proposed that were carried out; raids: launched raids this pilot voted for.
+      record: { votes: 0, harvested: 0, raidsWon: 0, builds: 0, cards: 0, plans: 0, raids: 0 }
     };
+  }
+
+  // Older saved matches have no plans/raids counters yet.
+  function addRecord(player, key) {
+    if (player) player.record[key] = (player.record[key] || 0) + 1;
   }
 
   function createMatch(options) {
@@ -484,6 +490,7 @@
     if (proposer) {
       proposer.exp += EXP.build;
       proposer.record.builds++;
+      addRecord(proposer, 'plans');
     }
     report.notes.push(`Crew approved ${name} (${tally}): −${option.cost.gold} gold, −${option.cost.ore} ore.`);
   }
@@ -531,6 +538,7 @@
     world.gold -= SHIP_COST.gold * launched;
     world.ore -= SHIP_COST.ore * launched;
     world.ships += launched;
+    addRecord(match.players[plan.by], 'plans');
     const partial = launched < plan.count ? ` Only ${launched} could be paid for.` : '';
     report.notes.push(`Crew approved ${label} (${tally}): ${launched} launched, −${SHIP_COST.gold * launched} gold, −${SHIP_COST.ore * launched} ore.${partial}`);
   }
@@ -595,6 +603,7 @@
     target.pacts[world.id] = match.turn + PACT_TURNS;
     const proposer = match.players[plan.by];
     if (proposer) proposer.exp += EXP.aid;
+    addRecord(proposer, 'plans');
     reports[world.id].notes.push(`Crew approved sending ${label} (${tally}). Goodwill: +${AID_GOODWILL.morale} Morale, +${AID_GOODWILL.economy} Economy. ${target.name} cannot raid you until the end of turn ${match.turn + PACT_TURNS}.`);
     reports[target.id].notes.push(`${world.name} sent you aid: +${AID_RECEIVED} ${plan.resource}. Peace pact: you cannot raid them until the end of turn ${match.turn + PACT_TURNS}.`);
     log(match, `${world.name} sent ${label} (${AID_RECEIVED} arrived) and signed a peace pact.`);
@@ -730,6 +739,8 @@
       return { attackerId: attacker.id, defenderId: defender.id, aborted: true, text: `${defender.name} was already protected; the raid turned back.` };
     }
     addStat(attacker, 'energy', -RAID_ENERGY_COST);
+    addRecord(match.players[attacker.raid.by], 'plans');
+    yesVoters.forEach(id => addRecord(match.players[id], 'raids'));
     const revenge = hasRevenge(match, attacker, defender);
     const odds = raidOdds(match, attacker, defender);
     const attack = Math.round(odds.attack * (0.85 + random(match) * 0.3));
@@ -833,6 +844,7 @@
         battles: []
       };
       world.history.push({ turn, title: situation.title, choice: chosen.text });
+      trackTurningPoint(world, turn, situation, chosen, pollDelta);
     });
 
     // 2. Raids, in a fair random order.
@@ -850,6 +862,7 @@
       const battle = resolveRaid(match, attacker, defender);
       reports[attacker.id].battles.push(battle);
       reports[defender.id].battles.push(battle);
+      trackBiggestRaid(match, turn, battle);
       log(match, battle.text);
     });
 
@@ -909,6 +922,49 @@
     return match.lastReport;
   }
 
+  // ── Match summary ────────────────────────────────────────────────────────
+  // Built only from what was actually applied: poll deltas, raid loot and pilot records.
+
+  // Size of an applied change, weighted like optionValue but counting losses as much as gains.
+  function effectSize(delta) {
+    let size = 0;
+    STAT_KEYS.forEach(key => { size += Math.abs(delta[key] || 0); });
+    size += Math.abs(delta.gold || 0) / 4 + Math.abs(delta.ore || 0) / 4 + Math.abs(delta.ships || 0) * 5;
+    return size;
+  }
+
+  // The council decision that changed the world most (the earliest one on a tie).
+  function trackTurningPoint(world, turn, situation, chosen, pollDelta) {
+    const size = effectSize(pollDelta);
+    if (size > 0 && (!world.turningPoint || size > world.turningPoint.size)) {
+      world.turningPoint = { turn, title: situation.title, choice: chosen.text, delta: pollDelta, size };
+    }
+  }
+
+  // The winning raid that took the most gold and ore (the earliest one on a tie).
+  function trackBiggestRaid(match, turn, battle) {
+    if (battle.aborted || battle.winner !== battle.attackerId) return;
+    const best = match.biggestRaid;
+    if (best && best.goldLoot + best.oreLoot >= battle.goldLoot + battle.oreLoot) return;
+    match.biggestRaid = {
+      turn, attackerId: battle.attackerId, defenderId: battle.defenderId, attack: battle.attack, defence: battle.defence,
+      revenge: battle.revenge, goldLoot: battle.goldLoot, oreLoot: battle.oreLoot
+    };
+  }
+
+  function matchSummary(match) {
+    const turningPoints = {};
+    const crews = {};
+    match.worldOrder.forEach(id => {
+      turningPoints[id] = match.worlds[id].turningPoint || null;
+      crews[id] = membersOf(match, id).map(p => ({
+        id: p.id, name: p.name, bot: p.bot,
+        votes: p.record.votes, plans: p.record.plans || 0, cards: p.record.cards, raids: p.record.raids || 0
+      }));
+    });
+    return { turningPoints, biggestRaid: match.biggestRaid || null, crews };
+  }
+
   function standings(match) {
     return match.worldOrder
       .map(id => ({ id, name: match.worlds[id].name, hue: match.worlds[id].hue, power: worldPower(match.worlds[id]) }))
@@ -930,7 +986,7 @@
       if (winners.includes(p.worldId)) p.exp += EXP.victory;
     });
     match.finished = true;
-    match.results = { winners, worlds, players: playerRanking(match) };
+    match.results = { winners, worlds, players: playerRanking(match), summary: matchSummary(match) };
     log(match, `Match over. ${winners.map(id => match.worlds[id].name).join(' & ')} won.`);
     return match.results;
   }
@@ -939,7 +995,7 @@
     AID_AMOUNT, AID_GOODWILL, AID_RECEIVED, DEFENCE_BOUNTY, EXP, MAX_MEMBERS, MAX_SHIP_ORDER, INVENTORY_CAP, PACT_TURNS,
     PLAN_FIELDS, RAID_ENERGY_COST, RAID_SPOILS, REVENGE_ATTACK, REVENGE_TURNS, SHIP_COST, START_VALUE, STAT_KEYS,
     UNDERDOG_DEFENCE, UNDERDOG_PRODUCTION, UNDERDOG_RATIO, GameError,
-    addPlayer, aidLockReason, applyEffects, averageEffects, buildCost, buildOptions, buildPasses, cancelBuild, cancelPlan,
+    addPlayer, aidLockReason, applyEffects, averageEffects, buildCost, effectSize, matchSummary, buildOptions, buildPasses, cancelBuild, cancelPlan,
     cancelRaid, cardAllowance, cardsLeft, castVote, clamp, createMatch, fleetCap, harvest, largestCrew, membersOf,
     optionLockReason, optionValue, planPasses, playCard, playerLevel, playerRanking, pollOptions, proposeAid, proposeBuild,
     proposeRaid, proposeShips, raidLockReason, raidOdds, raidPasses, random, resolveTurn, shipOrderLockReason, shipUpkeep,

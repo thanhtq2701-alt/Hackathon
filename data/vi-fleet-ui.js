@@ -194,6 +194,14 @@
       'Bạn chơi với tư cách khách nên trận này không vào bảng xếp hạng mọi thời đại. Lần sau hãy thêm PIN để giữ EXP.',
     'Back to lobby with this crew': 'Về phòng chờ với đội này',
     'The host can start another match.': 'Chủ phòng có thể bắt đầu trận mới.',
+    'Match summary': 'Tóm tắt trận',
+    'Copy summary': 'Sao chép tóm tắt',
+    'Turning point': 'Bước ngoặt',
+    'Biggest raid': 'Trận đột kích lớn nhất',
+    'Your crew': 'Đội của bạn',
+    'No council decision changed your world.': 'Không quyết định nào của hội đồng làm thay đổi thế giới của bạn.',
+    'No raid succeeded in this match.': 'Trận này không có cuộc đột kích nào thành công.',
+    'Summary copied. Paste it into your group chat.': 'Đã sao chép tóm tắt. Dán vào nhóm chat nhé.',
 
     // Rules, rooms and server messages
     'Unknown world.': 'Thế giới không tồn tại.',
@@ -311,6 +319,11 @@
     // End of match
     [/^Match over · (\d+) turns$/, m => `Hết trận · ${m[1]} lượt`],
     [/^(.+) (share|takes) the sector$/, m => `${m[1].replace(/ & /g, ' và ')} ${m[2] === 'share' ? 'cùng làm chủ khu vực' : 'làm chủ khu vực'}`],
+    [/^Turn (\d+)$/, m => `Lượt ${m[1]}`],
+    [/^(\d+) votes? · (\d+) plans? carried out · (\d+) cards? played · (\d+) raids? joined$/,
+      m => `${m[1]} phiếu · ${m[2]} kế hoạch được thực hiện · ${m[3]} thẻ đã dùng · ${m[4]} lần đột kích`],
+    [/^(.+) raided (.+) \((\d+) vs (\d+)\) and took (\d+) gold, (\d+) ore\.$/,
+      m => `${m[1]} đột kích ${m[2]} (${m[3]} so với ${m[4]}) và lấy được ${m[5]} vàng, ${m[6]} quặng.`],
     // Toasts
     [/^\+(\d+) (gold|ore) · \+(\d+) EXP( · Found a card: (.+)!)?$/, (m, t) => `+${m[1]} ${res(m[2])} · +${m[3]} EXP` + (m[5] ? ` · Tìm được thẻ: ${t(m[5])}!` : '')],
     [/^Proposed (.+) Lv(\d+)\. Your crew votes until the vote ends\.$/, (m, t) => `Đã đề xuất ${t(m[1])} cấp ${m[2]}. Đội bỏ phiếu cho đến khi hết giờ.`],
