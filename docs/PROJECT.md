@@ -70,6 +70,7 @@ Cập nhật lần cuối: 15/11/2026. Tài liệu cũ (tháng 10/2026) nằm tr
 | #11 | Công cụ mô phỏng cân bằng có seed cho cả hai chế độ (`tools/sim/`); đo lại số cân bằng |
 | #12 | Số đếm ẩn danh, trang góp ý `feedback.html` + mục "What this game stores"; chốt quyết định dữ liệu người chơi |
 | #13 | Chơi đơn: tách luật sang `game-core.js` (+12 test), chọn độ dài ván 20/30/40, mục "How to play" |
+| #14 | Chơi đơn chuyển sang bối cảnh vũ trụ (698 đoạn chữ, số liệu giữ nguyên); hướng dẫn chơi song ngữ Việt/Anh cho cả hai chế độ; chốt: không có kế nhiệm, quy ước branch cân bằng theo chế độ |
 
 ## 5. Lỗi trong tài liệu cũ — đối chiếu
 
