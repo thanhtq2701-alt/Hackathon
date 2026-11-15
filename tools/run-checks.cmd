@@ -15,8 +15,13 @@ node --check server\storage.js || goto :failed
 node --check server\server.js || goto :failed
 node --check tests\game-core.test.js || goto :failed
 node --check tests\world-core.test.js || goto :failed
+node --check tools\sim\fleet.js || goto :failed
+node --check tools\sim\oval.js || goto :failed
 node tests\game-core.test.js || goto :failed
 node tests\world-core.test.js || goto :failed
+rem Quick smoke runs so the simulators keep working when the game code changes.
+node tools\sim\fleet.js --matches 5 >nul || goto :failed
+node tools\sim\oval.js --games 5 >nul || goto :failed
 
 popd
 exit /b 0
