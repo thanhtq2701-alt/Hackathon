@@ -74,6 +74,7 @@ Cập nhật lần cuối: 15/11/2026. Tài liệu cũ (tháng 10/2026) nằm tr
 | #14 | Chơi đơn chuyển sang bối cảnh vũ trụ (698 đoạn chữ, số liệu giữ nguyên); hướng dẫn chơi song ngữ Việt/Anh cho cả hai chế độ; chốt: không có kế nhiệm, quy ước branch cân bằng theo chế độ |
 | #15 | `balance_solo_1`: ván chơi đơn 20/30 lượt có nhịp nhanh hơn (`RUN_PACE`) để vẫn gặp tuyến truyện; ván 40 lượt không đổi |
 | #16 | GitHub Actions chạy toàn bộ checks trên mỗi PR; ghi câu trả lời cho các câu hỏi mở; Nova Kepler không lệch |
+| #17 | Tiếng Việt cho toàn bộ game (mặc định, có nút English); gợi ý ván/trận đầu cho cả hai chế độ |
 
 ## 5. Lỗi trong tài liệu cũ — đối chiếu
 
