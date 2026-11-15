@@ -6504,7 +6504,7 @@ const CARDS = {
             choices: [
               { text: "Build a reconciliation memorial", outcome: "The guns have stopped, but the healing has yet to begin. You have bought time with blood and promises.", empathy: 12, approval: 10, eco: -8, nextAct: 999 },
               { text: "Increase security funding", outcome: "Peace is maintained with a heavy hand. The silence in the corridors is a sign of order, not of trust.", unrest: 10, approval: -8, eco: -10, nextAct: 999 },
-              { text: "Resign in penance", outcome: "Your departure is the first step toward a healing of the colony that you could never lead.", approval: 15, unrest: -20, integrity: 10, nextAct: 999 },
+              { text: "Resign in penance", outcome: "Your departure is the first step toward a healing of the colony that you could never lead.", approval: 15, unrest: -20, integrity: 10, leavesOffice: true, nextAct: 999 },
               { text: "Blame the protesters for the deaths", outcome: "You maintain your seat by fanning the flames of division. The colony is safe, but it is broken.", unrest: 8, approval: -12, ideology: 10, nextAct: 999 }
             ]
           },
@@ -6514,7 +6514,7 @@ const CARDS = {
             choices: [
               { text: "Order a fresh sweep of the capital station", outcome: "The generals now sit at your table. You have order, but you no longer hold the gavel.", unrest: 15, approval: -15, tension: 12, nextAct: 999 },
               { text: "Offer the generals seats in the Cabinet", outcome: "The administration is now a military partnership. Your decisions are checked by the weight of the sword.", party: 12, unrest: -10, integrity: -10, nextAct: 999 },
-              { text: "Resign under military pressure", outcome: "You are the last Commander of the old guard. Your successor will wear a uniform.", approval: 10, unrest: -20, courage: -12, nextAct: 999 },
+              { text: "Resign under military pressure", outcome: "You are the last Commander of the old guard. Your successor will wear a uniform.", approval: 10, unrest: -20, courage: -12, leavesOffice: true, nextAct: 999 },
               { text: "Use the marines to rebuild the habitats", outcome: "The military's energy is channeled into construction. The colony is rebuilding, but the uniform is everywhere.", eco: 12, approval: 8, unrest: -8, nextAct: 999 }
             ]
           },
@@ -6524,8 +6524,8 @@ const CARDS = {
             choices: [
               { text: "Support the new democratic laws", outcome: "The new laws are a testament to your restraint—or your failure. History will decide.", approval: 12, unrest: -15, integrity: 10, nextAct: 999 },
               { text: "Quietly veto the first budget", outcome: "You maintain a final grip on power, but the new parliament is already planning your removal.", unrest: 10, approval: -10, eco: -8, nextAct: 999 },
-              { text: "Resign and run for Parliament", outcome: "You transition from the master of the house to a member of the chorus. Your influence is diminished, but your life is intact.", party: 12, approval: 8, unrest: -20, nextAct: 999 },
-              { text: "Retire from public life", outcome: "You leave the noise behind for a quiet legacy of what-ifs.", approval: 10, integrity: 10, courage: -10, nextAct: 999 }
+              { text: "Resign and run for Parliament", outcome: "You transition from the master of the house to a member of the chorus. Your influence is diminished, but your life is intact.", party: 12, approval: 8, unrest: -20, leavesOffice: true, nextAct: 999 },
+              { text: "Retire from public life", outcome: "You leave the noise behind for a quiet legacy of what-ifs.", approval: 10, integrity: 10, courage: -10, leavesOffice: true, nextAct: 999 }
             ]
           },
           {
@@ -6534,7 +6534,7 @@ const CARDS = {
             choices: [
               { text: "Accept the coalition cabinet", outcome: "The colony is a mess of competing voices, and your own is just one among many.", party: 12, unrest: -12, approval: 8, nextAct: 999 },
               { text: "Sabotage the coalition from within", outcome: "By preserving your power, you have ensured the colony remains paralyzed by gridlock.", unrest: 10, integrity: -12, party: -10, nextAct: 999 },
-              { text: "Resign to let them rule alone", outcome: "You step aside to let the experiment in democracy find its own way, regardless of the outcome.", approval: 12, party: 10, unrest: -15, nextAct: 999 },
+              { text: "Resign to let them rule alone", outcome: "You step aside to let the experiment in democracy find its own way, regardless of the outcome.", approval: 12, party: 10, unrest: -15, leavesOffice: true, nextAct: 999 },
               { text: "Appeal for a snap election", outcome: "One final gamble for a mandate. The people will decide if you are the savior or the problem.", approval: 10, unrest: -10, tension: 8, nextAct: 999 }
             ]
           },
@@ -6545,7 +6545,7 @@ const CARDS = {
               { text: "Put the leaders on trial", outcome: "The brig doors are locked, but you have only postponed the next explosion.", unrest: 15, approval: -15, tension: 12, nextAct: 999 },
               { text: "Offer them exile in a neutral colony", outcome: "The problem is gone, but the cause remains. You are safe, but the corridors are still silent and resentful.", unrest: 10, tension: 10, approval: -10, nextAct: 999 },
               { text: "Claim they were planning a coup", outcome: "The truth is lost in the fog of propaganda. You remain in control, but of a colony that no longer knows what to believe.", integrity: -12, approval: 5, unrest: 8, nextAct: 999 },
-              { text: "Release them and resign", outcome: "You choose the path of most resistance—humility. Your name will be remembered in the new history archives with respect.", approval: 15, unrest: -30, integrity: 15, nextAct: 999 }
+              { text: "Release them and resign", outcome: "You choose the path of most resistance—humility. Your name will be remembered in the new history archives with respect.", approval: 15, unrest: -30, integrity: 15, leavesOffice: true, nextAct: 999 }
             ]
           },
           {
@@ -6554,7 +6554,7 @@ const CARDS = {
             choices: [
               { text: "Call for a Colony Referendum", outcome: "You have won the hearts of some, but the divide in the colony is now a permanent scar.", approval: 12, unrest: -10, integrity: 12, nextAct: 999 },
               { text: "Form a Unity Government", outcome: "A government of strangers. You are safe, but your influence is diluted by the very people who tried to remove you.", party: 12, approval: 8, unrest: -8, nextAct: 999 },
-              { text: "Resign to end the divide in the colony", outcome: "A final act of patriotism. Your departure is the only thing that can bridge the gap you created.", approval: 15, unrest: -20, empathy: 12, nextAct: 999 },
+              { text: "Resign to end the divide in the colony", outcome: "A final act of patriotism. Your departure is the only thing that can bridge the gap you created.", approval: 15, unrest: -20, empathy: 12, leavesOffice: true, nextAct: 999 },
               { text: "Arrest the rival leaders now", outcome: "The crackdown is complete. You rule a colony that is orderly, but utterly broken in spirit.", unrest: 12, approval: -12, tension: 12, nextAct: 999 }
             ]
           },
@@ -6564,7 +6564,7 @@ const CARDS = {
             choices: [
               { text: "Broadcast your own message 24/7", outcome: "Your voice is everywhere, yet no one is listening. You are a ruler in a station of echoes.", unrest: 10, approval: -10, integrity: -8, nextAct: 999 },
               { text: "Return the relays to the unions", outcome: "You hand back the microphone. The first thing they do is call for your immediate removal.", approval: 12, unrest: -12, party: -10, nextAct: 999 },
-              { text: "Resign on the open channel", outcome: "Your final speech is the most honest thing you have said in four years. The colony actually pauses to listen.", approval: 15, unrest: -15, courage: 10, nextAct: 999 },
+              { text: "Resign on the open channel", outcome: "Your final speech is the most honest thing you have said in four years. The colony actually pauses to listen.", approval: 15, unrest: -15, courage: 10, leavesOffice: true, nextAct: 999 },
               { text: "Destroy the transmitters", outcome: "If it's not yours, it's no one's. You rule a colony that is both quiet and deaf.", unrest: 12, eco: -10, approval: -12, nextAct: 999 }
             ]
           },
@@ -6574,7 +6574,7 @@ const CARDS = {
             choices: [
               { text: "Host a broadcast deck-hall meeting", outcome: "The data-net is back, and it is already building the next protest.", approval: 12, integrity: 10, unrest: -10, nextAct: 999 },
               { text: "Use the data-net to track dissent", outcome: "You have restored the network, but only to turn it into a surveillance machine. The people's eyes are now on you.", unrest: 15, approval: -15, integrity: -12, nextAct: 999 },
-              { text: "Resign after your final speech", outcome: "The data-net records your departure in high definition. You are the first Commander to leave with a viral apology.", approval: 15, unrest: -12, courage: 8, nextAct: 999 },
+              { text: "Resign after your final speech", outcome: "The data-net records your departure in high definition. You are the first Commander to leave with a viral apology.", approval: 15, unrest: -12, courage: 8, leavesOffice: true, nextAct: 999 },
               { text: "Limit feed access", outcome: "The network is back, but the walls are higher. You rule an island of sanctioned information.", unrest: 10, approval: -12, ideology: 10, nextAct: 999 }
             ]
           },
@@ -6584,7 +6584,7 @@ const CARDS = {
             choices: [
               { text: "Increase military oversight", outcome: "The factories are humming, but the workers' eyes are filled with a cold, quiet fury.", unrest: 15, eco: -10, empathy: -15, nextAct: 999 },
               { text: "Give in to the union demands", outcome: "You surrender to the workers. The foundries are productive, but you have lost the support of the industrialists.", eco: -12, approval: 12, party: -12, nextAct: 999 },
-              { text: "Resign and let the strike succeed", outcome: "By stepping down, you allow the colony's heart to beat on its own again.", approval: 15, eco: 10, unrest: -25, nextAct: 999 },
+              { text: "Resign and let the strike succeed", outcome: "By stepping down, you allow the colony's heart to beat on its own again.", approval: 15, eco: 10, unrest: -25, leavesOffice: true, nextAct: 999 },
               { text: "Import off-colony labor", outcome: "The economy is stable, but the social tension between the old and new workers is a fuse you cannot extinguish.", eco: 10, approval: -12, tension: 12, nextAct: 999 }
             ]
           },
@@ -6594,7 +6594,7 @@ const CARDS = {
             choices: [
               { text: "Confess and pay a fine", outcome: "You bought your survival with credits, but your integrity was the real currency.", integrity: 12, approval: 8, eco: -10, nextAct: 999 },
               { text: "Deny all bank records", outcome: "The lie works—for now. But trust is a bridge that has been permanently dismantled.", integrity: -15, approval: -10, unrest: 10, nextAct: 999 },
-              { text: "Resign before the leak", outcome: "You choose a quiet exit over a public trial. Your legacy is one of survival, not of strength.", approval: 10, unrest: -15, integrity: 8, nextAct: 999 },
+              { text: "Resign before the leak", outcome: "You choose a quiet exit over a public trial. Your legacy is one of survival, not of strength.", approval: 10, unrest: -15, integrity: 8, leavesOffice: true, nextAct: 999 },
               { text: "Fire the Treasury head as a scapegoat", outcome: "You saved your seat by throwing another in the fire. The administration is safe, but it is lonely at the top.", party: -12, unrest: 8, integrity: -10, nextAct: 999 }
             ]
           },
@@ -6604,7 +6604,7 @@ const CARDS = {
             choices: [
               { text: "Dissolve the Station Council", outcome: "The rivals are gone, but you have turned the command into a fortress of paranoia.", unrest: 15, approval: -20, tension: 15, nextAct: 999 },
               { text: "Form a loyalist-only council", outcome: "You rule an echo chamber. Every decision you make is applauded, while the colony outside is screaming.", party: 15, unrest: 10, integrity: -12, nextAct: 999 },
-              { text: "Resign under fire", outcome: "The experiment in total control ends with a quiet signature and a fast shuttle to the spaceport.", approval: 10, unrest: -15, courage: -10, nextAct: 999 },
+              { text: "Resign under fire", outcome: "The experiment in total control ends with a quiet signature and a fast shuttle to the spaceport.", approval: 10, unrest: -15, courage: -10, leavesOffice: true, nextAct: 999 },
               { text: "Call for an early election", outcome: "One final gamble for truth. You put your fate in the hands of the very people you have been fighting.", approval: 12, unrest: -10, party: -15, nextAct: 999 }
             ]
           },
@@ -6614,7 +6614,7 @@ const CARDS = {
             choices: [
               { text: "Regain influence slowly", outcome: "The Council is the real power now. You are merely the signature on their decrees.", unrest: 10, party: 10, integrity: -8, nextAct: 999 },
               { text: "Sabotage the Deputy’s meetings", outcome: "By trying to regain your seat, you have only ensured that both you and your Deputy will lose the trust of the colony.", unrest: 10, integrity: -12, party: -10, nextAct: 999 },
-              { text: "Resign and endorse the Deputy", outcome: "The most graceful exit possible. You leave the office in better hands than your own.", approval: 12, party: 12, unrest: -15, nextAct: 999 },
+              { text: "Resign and endorse the Deputy", outcome: "The most graceful exit possible. You leave the office in better hands than your own.", approval: 12, party: 12, unrest: -15, leavesOffice: true, nextAct: 999 },
               { text: "Expose the Council’s secrets", outcome: "You tear the house down with you. The truth is out, but there is no one left to lead.", approval: 10, integrity: 10, party: -15, nextAct: 999 }
             ]
           },
@@ -6624,7 +6624,7 @@ const CARDS = {
             choices: [
               { text: "Arrest the Council members", outcome: "You have won the battle, but the civil war that follows will haunt your colony for generations.", unrest: 15, tension: 15, approval: -15, nextAct: 999 },
               { text: "Call for a referendum on your power", outcome: "A democratic solution to a treasonous problem. The people will decide if you are the legitimate leader or a ruler in denial.", approval: 12, unrest: -12, integrity: 12, nextAct: 999 },
-              { text: "Resign to avoid a coup", outcome: "You choose a quiet retreat over a bloody stand. The Oval remains intact, but your legacy is a stack of unfinished chapters.", approval: 15, unrest: -20, party: -10, nextAct: 999 },
+              { text: "Resign to avoid a coup", outcome: "You choose a quiet retreat over a bloody stand. The Oval remains intact, but your legacy is a stack of unfinished chapters.", approval: 15, unrest: -20, party: -10, leavesOffice: true, nextAct: 999 },
               { text: "Form a rival shadow cabinet", outcome: "You rule a mirror-government in a mirror-colony. The colony is now double-visioned and twice as dangerous.", party: 12, unrest: 8, tension: 12, nextAct: 999 }
             ]
           },
@@ -6632,7 +6632,7 @@ const CARDS = {
             tag: 'ACT III', title: 'The Exit Path',
             body: "The protesters have agreed to clear the corridors if you sign the papers in the next hour.",
             choices: [
-              { text: "Sign the papers and go quietly", outcome: "The terms are signed. You will leave the Oval with your head held high, though your legacy is forever scarred by the sirens.", approval: 12, unrest: -25, eco: 8, nextAct: 999 },
+              { text: "Sign the papers and go quietly", outcome: "The terms are signed. You will leave the Oval with your head held high, though your legacy is forever scarred by the sirens.", approval: 12, unrest: -25, eco: 8, leavesOffice: true, nextAct: 999 },
               { text: "Demand legal immunity", outcome: "You save your freedom at the cost of your remaining honor. You are free, but you are a Commander without a colony.", integrity: -15, unrest: -12, approval: 8, nextAct: 999 },
               { text: "Delay the exit for one month", outcome: "You buy one more month in the starlight, while the shadow of your departure grows longer each day.", unrest: -8, approval: -8, party: -8, nextAct: 999 },
               { text: "Change your mind and stay", outcome: "The ultimate betrayal of the truce. The corridors will never be quiet again.", unrest: 15, approval: -15, tension: 15, nextAct: 999 }
