@@ -1,4 +1,4 @@
-// Fleet Council online server.
+// The Oval online server: serves both modes (solo story and Fleet Council) and runs Fleet Council rooms.
 // Zero dependencies: Node's http module serves the static game, a small JSON API,
 // and Server-Sent Events that push each player their own view of the room.
 // Rooms, PIN accounts and the all-time ranking are kept in storage (Upstash Redis or files),
@@ -29,7 +29,7 @@ const FEEDBACK_KEEP = 200;          // newest messages kept
 const FEEDBACK_LENGTH = 500;
 const FEEDBACK_GAP_MS = 30 * 1000;  // per sender, checked in memory only
 const FEEDBACK_GAMES = ['oval', 'fleet', 'other'];
-// Endings The Oval can report; anything else is counted as "Other".
+// Endings the solo story can report; anything else is counted as "Other".
 const OVAL_ENDINGS = new Set(ENDINGS.map(e => e.title).concat(['The Lazarus Protocol']));
 const PUBLIC_DIRS = ['app', 'data', 'web'];
 const PUBLIC_FILES = ['index.html', 'world.html', 'feedback.html'];

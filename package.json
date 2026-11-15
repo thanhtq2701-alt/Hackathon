@@ -2,7 +2,7 @@
   "name": "the-oval",
   "version": "1.5.0",
   "private": true,
-  "description": "The Oval (solo story) and Fleet Council (team multiplayer) - a space governance game.",
+  "description": "The Oval - a space governance game with two modes: a solo story and Fleet Council, a team multiplayer mode.",
   "scripts": {
     "start": "node server/server.js",
     "test": "node tests/game-core.test.js && node tests/world-core.test.js"

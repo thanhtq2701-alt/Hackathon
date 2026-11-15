@@ -9,10 +9,10 @@
 
 ## Project
 
-Two browser games sharing one repo, plain JavaScript, no build step and no npm dependencies.
+One browser game, **The Oval**, with two modes, plain JavaScript, no build step and no npm dependencies. Call them modes of the same game, not separate games.
 
-- **The Oval** (`index.html`): solo card-based governance story. Rules in `app/game-core.js`, UI in `app/client.js`, content in `data/content.js`, styles in `web/styles.css`.
-- **Fleet Council** (`world.html`): team multiplayer. Rules in `app/world-core.js` (pure, seeded), rooms/phases/bots in `app/world-room.js`, art in `app/world-art.js`, UI in `app/world-client.js`, content in `data/world-content.js`, styles in `web/world.css`, server in `server/server.js`.
+- **Solo story** (`index.html`): solo card-based governance story. Rules in `app/game-core.js`, UI in `app/client.js`, content in `data/content.js`, styles in `web/styles.css`.
+- **Fleet Council** (`world.html`): team multiplayer mode. Rules in `app/world-core.js` (pure, seeded), rooms/phases/bots in `app/world-room.js`, art in `app/world-art.js`, UI in `app/world-client.js`, content in `data/world-content.js`, styles in `web/world.css`, server in `server/server.js`.
 
 Browser scripts are classic scripts that attach to `window` (`TheOval*`, `FleetCouncil*`) and also export with `module.exports`, so the same files run in Node tests and on the server.
 
@@ -25,7 +25,7 @@ Browser scripts are classic scripts that attach to `window` (`TheOval*`, `FleetC
 
 ## Deployment (Render, auto-deploy from `main`)
 
-- `https://fleet-council.onrender.com` — the only deployment: Web Service (`npm start`, health check `/healthz`), serving the solo game at `/` and Fleet Council at `/world.html` including online rooms. Free tier: sleeps after 15 minutes idle, no persistent disk, so it relies on Upstash (Singapore) for storage.
+- `https://fleet-council.onrender.com` — the only deployment: Web Service (`npm start`, health check `/healthz`), serving the solo story at `/` and Fleet Council at `/world.html` including online rooms. Free tier: sleeps after 15 minutes idle, no persistent disk, so it relies on Upstash (Singapore) for storage.
 - The Render Static Sites (`hackathon-gu8x`, `hackathon-z00g`) were deleted on 2026-11-14. `ONLINE_URL` in `app/world-client.js` still points static copies (e.g. `start-local.cmd`) to the Web Service.
 
 ## Things to keep in mind

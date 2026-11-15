@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Feedback · The Oval &amp; Fleet Council</title>
-  <meta name="description" content="Send feedback about The Oval and Fleet Council, and see what the game stores about players.">
+  <title>Feedback · The Oval</title>
+  <meta name="description" content="Send feedback about The Oval (solo story and Fleet Council), and see what the game stores about players.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@500;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
@@ -35,8 +35,8 @@
       <form id="feedback-form" class="feedback-form">
         <label class="field">About
           <select id="game">
-            <option value="oval">The Oval (solo story)</option>
-            <option value="fleet">Fleet Council (team game)</option>
+            <option value="oval">Solo story</option>
+            <option value="fleet">Fleet Council (team mode)</option>
             <option value="other">Something else</option>
           </select>
         </label>
@@ -58,7 +58,7 @@
         <li><b>Pilot accounts</b>, only if you choose a PIN in Fleet Council: the pilot name, a scrambled (hashed) form of the PIN (the PIN itself is never stored), when the name was created, and your ranking (EXP, matches, wins, raids won).</li>
         <li><b>Online rooms</b>: the names in the room and the match in progress. A room is removed after two hours without activity.</li>
         <li><b>Anonymous play counters</b>: for example how many runs ended with each ending, after how many turns and roughly how long, and the settings of finished matches. They contain no names, no IDs and no IP addresses.</li>
-        <li><b>Feedback messages</b>: the text, which game it is about and the day it was sent. Only the newest 200 are kept.</li>
+        <li><b>Feedback messages</b>: the text, which mode it is about and the day it was sent. Only the newest 200 are kept.</li>
         <li><b>On your device only</b>: your browser remembers your last pilot name and your offline practice ranking, and, while the tab is open, the room you are in so you can rejoin it.</li>
       </ul>
       <p class="note">Not stored: email, phone number, real name, IP address or location. There are no cookies and no third-party analytics. The Sui wallet and NFT buttons are demos: nothing is sent or recorded. The game runs on Render and keeps its data in Upstash Redis; these hosts may keep short technical logs.</p>

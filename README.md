@@ -73,7 +73,7 @@ Requires [Node.js](https://nodejs.org/) 18 or newer. There are no packages to in
 1. Clone the repository and open its folder in PowerShell or Command Prompt.
 2. Run `npm start` (or `.\tools\start-online.cmd`).
 3. Open `http://localhost:8080/` in a modern browser.
-4. **The Oval (solo):** choose Normal Mode and make decisions. Wallet and NFT actions are demonstrations, not real Sui transactions.
+4. **Solo story:** choose Normal Mode and make decisions. Wallet and NFT actions are demonstrations, not real Sui transactions.
 5. **Fleet Council (team):** choose Fleet Council, enter a name and create a room. Friends join with the 4-letter code or the invite link. The host picks the world count, turns and vote time, adds bots if needed, and launches the match.
 
 Stop the server with `Ctrl+C`. The solo mode and Fleet Council practice also work from any static host (`.\tools\start-local.cmd` serves them on port 8000); online rooms need the Node server.
@@ -115,8 +115,8 @@ Hackathon/
 | `app/world-client.js` | Fleet Council browser UI and online/offline transports. |
 | `server/server.js` | Static files, JSON API, Server-Sent Events, PIN accounts, the all-time ranking and room saving. |
 | `server/storage.js` | Key-value storage: Upstash Redis over HTTPS, or JSON files. |
-| `web/styles.css` | The Oval presentation. |
-| `web/world.css` | Fleet Council presentation. |
+| `web/styles.css` | Solo story presentation. |
+| `web/world.css` | Fleet Council presentation (also used by the feedback page). |
 | `docs/PROJECT.md` | Single living project document (Vietnamese): decisions, current status, PR history, open questions, roadmap. |
 | `old/` | Read-only archive: earlier planning/review documents and the original hackathon script and slides. |
 | `tests/` | Focused checks for game rules and content. |

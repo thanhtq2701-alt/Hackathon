@@ -38,7 +38,7 @@ Cập nhật lần cuối: 15/11/2026. Tài liệu cũ (tháng 10/2026) nằm tr
 
 - **Live:** https://fleet-council.onrender.com — `/` The Oval, `/world.html` Fleet Council (online + luyện tập với bot). Free tier: ngủ sau 15 phút không ai vào (lần mở đầu chờ 30–60 giây).
 - **Lưu trữ:** Upstash Redis (Singapore) — phòng chơi lưu mỗi 15 giây và khi server tắt; tài khoản và bảng xếp hạng lưu vĩnh viễn; số đếm ẩn danh (`stats`) và góp ý (`feedback`) ghi cùng lượt lưu phòng, chỉ khi có thay đổi.
-- **Góp ý & thống kê:** trang `/feedback.html` (link từ cả hai game) — gửi góp ý ẩn danh + mục "What this game stores". Số đếm xem ở `/api/stats`; góp ý đọc trong Upstash (key `fc:feedback`) hoặc `var/feedback.json` khi chạy local. The Oval đếm số ván bắt đầu/kết thúc, màn kết thúc, lượt kết thúc, thời lượng; Fleet Council đếm trận bắt đầu/kết thúc, số world, số lượt, số người thật, thời lượng (chỉ trận online). Trận bỏ dở = bắt đầu − kết thúc.
+- **Góp ý & thống kê:** trang `/feedback.html` (link từ cả hai chế độ) — gửi góp ý ẩn danh + mục "What this game stores". Số đếm xem ở `/api/stats`; góp ý đọc trong Upstash (key `fc:feedback`) hoặc `var/feedback.json` khi chạy local. The Oval đếm số ván bắt đầu/kết thúc, màn kết thúc, lượt kết thúc, thời lượng; Fleet Council đếm trận bắt đầu/kết thúc, số world, số lượt, số người thật, thời lượng (chỉ trận online). Trận bỏ dở = bắt đầu − kết thúc.
 - **Kiểm thử:** 32 test (`tools\run-checks.cmd`): 7 cho The Oval, 25 cho Fleet Council và server.
 - **Công cụ mô phỏng** (`tools/sim/`, chạy lại sau mỗi lần đổi số cân bằng; có seed nên cùng lệnh cho cùng kết quả):
   - `node tools/sim/fleet.js` — Fleet Council bot đấu bot bằng chính bot và luật của phòng thật; kịch bản `4v1`, `2v2`, `3w` (`--scenario`, `--matches`, `--turns`, `--seed`).
@@ -63,7 +63,7 @@ Cập nhật lần cuối: 15/11/2026. Tài liệu cũ (tháng 10/2026) nằm tr
 | #8 | Đặt tàu và viện trợ cần cả đội bỏ phiếu |
 | #9 | Đợt cân bằng lớn cho Fleet Council và The Oval |
 | #10 | Gom tài liệu vào `docs/PROJECT.md`, lưu trữ tài liệu cũ vào `old/` |
-| #11 | Công cụ mô phỏng cân bằng có seed cho cả hai game (`tools/sim/`); đo lại số cân bằng |
+| #11 | Công cụ mô phỏng cân bằng có seed cho cả hai chế độ (`tools/sim/`); đo lại số cân bằng |
 | #12 | Số đếm ẩn danh, trang góp ý `feedback.html` + mục "What this game stores"; chốt quyết định dữ liệu người chơi |
 
 ## 5. Lỗi trong tài liệu cũ — đối chiếu
