@@ -42,7 +42,7 @@ Cập nhật lần cuối: 15/11/2026. Tài liệu cũ (tháng 10/2026) nằm tr
 - **Lưu trữ:** Upstash Redis (Singapore) — phòng chơi lưu mỗi 15 giây và khi server tắt; tài khoản và bảng xếp hạng lưu vĩnh viễn; số đếm ẩn danh (`stats`) và góp ý (`feedback`) ghi cùng lượt lưu phòng, chỉ khi có thay đổi.
 - **Ngôn ngữ:** toàn bộ game (giao diện + nội dung cả hai chế độ, trang góp ý) có tiếng Việt và tiếng Anh; mặc định tiếng Việt, nút Tiếng Việt / English ở màn hình chính chơi đơn, trang chủ Fleet Council và trang góp ý; lựa chọn nhớ trên máy. Cách làm: game vẫn viết bằng tiếng Anh, `app/i18n.js` dịch chữ khi hiện lên trang bằng từ điển `data/vi-*.js` (khoảng 2.100 đoạn nội dung + giao diện + mẫu cho câu có số/tên). Test bắt buộc mọi nội dung và mọi thông báo của trận bot có bản tiếng Việt. Thuật ngữ: thế giới, phi công, đội, đột kích, viện trợ, Sức mạnh, Lõi Chỉ huy; chơi đơn: Chỉ huy trưởng, thuộc địa, Dân ủng hộ, Căng thẳng liên sao, Quyền kiểm soát, Lòng trung thành của Đảng, Lõi năng lượng.
 - **Góp ý & thống kê:** trang `/feedback.html` (link từ cả hai chế độ) — gửi góp ý ẩn danh + mục "What this game stores". Số đếm xem ở `/api/stats`; góp ý đọc trong Upstash (key `fc:feedback`) hoặc `var/feedback.json` khi chạy local. The Oval đếm số ván bắt đầu/kết thúc, màn kết thúc, lượt kết thúc, thời lượng; Fleet Council đếm trận bắt đầu/kết thúc, số world, số lượt, số người thật, thời lượng (chỉ trận online). Trận bỏ dở = bắt đầu − kết thúc.
-- **Kiểm thử:** 44 test (`tools\run-checks.cmd`): 19 cho chế độ chơi đơn, 25 cho Fleet Council và server.
+- **Kiểm thử:** 49 test (`tools\run-checks.cmd`): 23 cho chế độ chơi đơn, 26 cho Fleet Council và server.
 - **Cấu trúc code chế độ chơi đơn:** luật của một ván (áp lựa chọn, sang lượt, khủng hoảng, tuyến truyện, màn kết thúc) nằm trong `app/game-core.js` dưới dạng hàm nhận trạng thái ván; `app/client.js` chỉ hiển thị — giống cách Fleet Council tách `world-core.js` khỏi `world-client.js`.
 - **Công cụ mô phỏng** (`tools/sim/`, chạy lại sau mỗi lần đổi số cân bằng; có seed nên cùng lệnh cho cùng kết quả):
   - `node tools/sim/fleet.js` — Fleet Council bot đấu bot bằng chính bot và luật của phòng thật; kịch bản `4v1`, `2v2`, `3w` (`--scenario`, `--matches`, `--turns`, `--seed`).
@@ -75,6 +75,7 @@ Cập nhật lần cuối: 15/11/2026. Tài liệu cũ (tháng 10/2026) nằm tr
 | #15 | `balance_solo_1`: ván chơi đơn 20/30 lượt có nhịp nhanh hơn (`RUN_PACE`) để vẫn gặp tuyến truyện; ván 40 lượt không đổi |
 | #16 | GitHub Actions chạy toàn bộ checks trên mỗi PR; ghi câu trả lời cho các câu hỏi mở; Nova Kepler không lệch |
 | #17 | Tiếng Việt cho toàn bộ game (mặc định, có nút English); gợi ý ván/trận đầu cho cả hai chế độ |
+| #18 | Sửa tài liệu: số test (49), tên branch cân bằng trong lộ trình |
 
 ## 5. Lỗi trong tài liệu cũ — đối chiếu
 
@@ -121,7 +122,7 @@ Còn mở: lịch và cách tổ chức playtest (số nhóm, có ghi hình khô
 - ~~Hướng dẫn trận đầu tiên~~ — đã làm: phần "Cách chơi" song ngữ ở cả hai chế độ, cộng **gợi ý trong ván/trận đầu** (`app/tips.js`): khung gợi ý ngắn hiện đúng lúc, từng cái một, có "Đã hiểu" / "Tắt gợi ý"; máy nhớ gợi ý đã xem; nút "Xem lại gợi ý" ở màn hình chính chơi đơn và trang chủ Fleet Council. Chơi đơn 5 gợi ý (chỉ số, thẻ đầu, kết quả đầu, cảnh báo khủng hoảng đầu, tuyến truyện đầu); Fleet Council 6 gợi ý (phòng chờ, bỏ phiếu, thu hoạch, kế hoạch đội, báo cáo lượt, đột kích từ lượt 2).
 - ~~Giao diện tiếng Việt~~ — đã làm: cả giao diện lẫn nội dung, hai chế độ (xem mục 3).
 - Tóm tắt sau trận: quyết định bước ngoặt, trận raid lớn, ai đóng góp gì; thẻ chia sẻ.
-- Cân bằng lại theo dữ liệu thật (branch `balance_1`).
+- Cân bằng lại theo dữ liệu thật (branch `balance_solo_N` cho chơi đơn, `balance_multi_N` cho Fleet Council).
 
 **Giai đoạn 2 — Chiều sâu nội dung (1–2 tháng)**
 - Fleet Council: vai trò cho từng pilot (không thêm phiếu); thêm tình huống/khủng hoảng (hiện 31); công trình Lv4–5; ngoại giao có cấu trúc (trao đổi, liên minh).
