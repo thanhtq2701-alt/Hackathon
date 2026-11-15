@@ -17,7 +17,7 @@ Every decision you make ripples through the station's systems, leading to multip
 ## 🎮 Core Features
 
 ### 🛠️ The Decision Engine (Cards & Arcs)
-A run lasts 20, 30 or 40 decisions (pick the length on the title screen, which also has a short How to play). Each choice moves five visible bars and your Energy Core:
+A run lasts 20, 30 or 40 decisions (pick the length on the title screen, which also has a short How to play in Vietnamese and English; Fleet Council's home page has one too). Each choice moves five visible bars and your Energy Core:
 * 📢 **Public Approval:** your standing with the citizens.
 * 🌐 **Interstellar Tension:** how close the sector is to war with rival colonies.
 * 💰 **Economic State:** the financial health of your station.

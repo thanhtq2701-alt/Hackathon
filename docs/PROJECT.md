@@ -91,7 +91,7 @@ Mười lỗi trong `old/THE-OVAL-LOI-HE-THONG-VA-CHU-TRINH-KHAC-PHUC.txt` và `
 ## 6. Câu hỏi còn mở
 
 1. **Mục tiêu chính:** chơi giải trí với bạn bè, nộp dự thi, hay portfolio? → quyết định ưu tiên tính năng mới hay độ hoàn thiện.
-2. **Ngôn ngữ giao diện:** thêm tiếng Việt song song tiếng Anh khi nào? (Hướng dẫn chơi song ngữ đang làm; phần còn lại của giao diện vẫn tiếng Anh.)
+2. **Ngôn ngữ giao diện:** thêm tiếng Việt song song tiếng Anh khi nào? (Đã có hướng dẫn chơi song ngữ cho cả hai chế độ, nút chuyển Tiếng Việt / English, mặc định tiếng Việt; phần còn lại của giao diện vẫn tiếng Anh.)
 3. **Web3 / Sui:** giữ demo, bỏ, hay tích hợp thật sau này?
 4. **Ngân sách:** giữ hoàn toàn miễn phí, hay chấp nhận ~7 USD/tháng để server không ngủ khi có người chơi đều?
 5. **Playtest:** ai chơi thử, bao nhiêu nhóm, khi nào; có ghi hình không (cần người chơi đồng ý).
@@ -109,7 +109,7 @@ Mười lỗi trong `old/THE-OVAL-LOI-HE-THONG-VA-CHU-TRINH-KHAC-PHUC.txt` và `
 
 **Giai đoạn 1 — Playtest & người mới (2–3 tuần)**
 - 3–5 nhóm bạn chơi thử: đo thời gian thật, chỗ khó hiểu, có muốn chơi lại không, trận 1v4 có thấy công bằng không.
-- Hướng dẫn trận đầu tiên (bỏ phiếu, harvest, đề xuất xây, raid). Đã có phần tóm tắt luật cho cả hai chế độ ("How a turn works" ở Fleet Council, "How to play" ở chơi đơn); còn thiếu hướng dẫn từng bước trong trận đầu.
+- Hướng dẫn trận đầu tiên (bỏ phiếu, harvest, đề xuất xây, raid). Đã có phần tóm tắt luật song ngữ Việt/Anh cho cả hai chế độ ("Cách chơi · How a turn works" ở Fleet Council, "Cách chơi · How to play" ở chơi đơn; `app/guide.js` chuyển ngôn ngữ, không lưu gì); còn thiếu hướng dẫn từng bước trong trận đầu.
 - Giao diện tiếng Việt.
 - Tóm tắt sau trận: quyết định bước ngoặt, trận raid lớn, ai đóng góp gì; thẻ chia sẻ.
 - Cân bằng lại theo dữ liệu thật (branch `balance_1`).
