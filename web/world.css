@@ -383,6 +383,13 @@ input:disabled { opacity: .45; cursor: not-allowed; }
 .end-hero.won h1 { color: var(--gold); text-shadow: 0 0 30px rgba(255, 209, 102, .35); }
 .end-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 1rem; align-items: start; }
 .end-actions { display: flex; gap: .75rem; flex-wrap: wrap; }
+.summary-head { display: flex; align-items: center; justify-content: space-between; gap: .75rem; flex-wrap: wrap; margin-bottom: .75rem; }
+.summary-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem 1.5rem; }
+.summary-grid section { display: grid; gap: .3rem; align-content: start; }
+.summary-grid p { margin: 0; }
+.crew-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .4rem; }
+.crew-list li { display: grid; font-size: .85rem; }
+.crew-list li span { color: var(--text-mid); font-size: .8rem; }
 
 /* ── Responsive ──────────────────────────────────────────────────────── */
 @media (max-width: 1200px) {
@@ -390,7 +397,7 @@ input:disabled { opacity: .45; cursor: not-allowed; }
 }
 @media (max-width: 860px) {
   main { padding: 1rem 1rem 4rem; }
-  .hero, .home-grid, .end-grid { grid-template-columns: 1fr; }
+  .hero, .home-grid, .end-grid, .summary-grid { grid-template-columns: 1fr; }
   .hero-art { order: -1; max-width: 420px; margin: 0 auto; }
   /* One column: the poll, then the crew plans to vote on, then the planet, then the tabs. */
   .game-grid { grid-template-columns: minmax(0, 1fr); grid-template-areas: none; }

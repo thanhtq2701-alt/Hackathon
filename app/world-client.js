@@ -900,6 +900,7 @@
         <h1>${esc(winners.join(' & '))} ${winners.length > 1 ? 'share' : 'takes'} the sector</h1>
         <p class="lead">${mineWon ? 'Your world finished on top. Every pilot of the winning world earns +30 EXP.' : 'Your world did not finish first this time. Every pilot still earns +10 EXP for finishing.'}</p>
       </div>
+      ${summaryHtml(s)}
       <div class="end-grid">
         <article class="panel">
           <h2>Worlds</h2>
@@ -917,6 +918,60 @@
         ${s.me.isHost ? '<button class="btn primary" data-act="restart">Back to lobby with this crew</button>' : '<span class="note">The host can start another match.</span>'}
         <button class="btn ghost" data-act="leave">Leave</button>
       </div>`);
+  }
+
+  // Match summary: built by the rules (results.summary) from what was actually applied.
+  function contributionText(m) {
+    const n = (count, word) => `${count} ${word}${count === 1 ? '' : 's'}`;
+    return `${n(m.votes, 'vote')} · ${n(m.plans, 'plan')} carried out · ${n(m.cards, 'card')} played · ${n(m.raids, 'raid')} joined`;
+  }
+
+  function raidText(r) {
+    return `${worldName(r.attackerId)} raided ${worldName(r.defenderId)} (${r.attack} vs ${r.defence}) and took ${r.goldLoot} gold, ${r.oreLoot} ore.`;
+  }
+
+  function summaryHtml(s) {
+    const sum = s.match.results.summary;
+    if (!sum) return '';
+    const tp = sum.turningPoints[s.me.worldId];
+    const raid = sum.biggestRaid;
+    const crew = sum.crews[s.me.worldId] || [];
+    return `<article class="panel match-summary">
+      <div class="summary-head"><h2>Match summary</h2><button class="btn small" data-act="copySummary">Copy summary</button></div>
+      <div class="summary-grid">
+        <section><span class="label">Turning point</span>
+          ${tp ? `<p class="note">Turn ${tp.turn}</p><p><b>“${esc(tp.title)}”</b></p><p>“${esc(tp.choice)}”</p><div class="chips">${chips(tp.delta)}</div>`
+            : '<p class="note">No council decision changed your world.</p>'}
+        </section>
+        <section><span class="label">Biggest raid</span>
+          ${raid ? `<p class="note">Turn ${raid.turn}</p><p>${esc(raidText(raid))}</p>` : '<p class="note">No raid succeeded in this match.</p>'}
+        </section>
+        <section><span class="label">Your crew</span>
+          <ul class="crew-list">${crew.map(m => `<li><b>${esc(m.name)}</b><span>${contributionText(m)}</span></li>`).join('')}</ul>
+        </section>
+      </div>
+    </article>`;
+  }
+
+  // Plain text for group chats, in the language on screen.
+  function summaryText(s) {
+    const tr = text => (window.TheOvalI18n ? window.TheOvalI18n.t(text) : text);
+    const results = s.match.results;
+    const sum = results.summary;
+    const myId = s.me.worldId;
+    const rank = results.worlds.findIndex(w => w.id === myId) + 1;
+    const lines = [
+      `Fleet Council · ${tr(`Match over · ${s.match.maxTurns} turns`)}`,
+      tr(`${results.winners.map(worldName).join(' & ')} ${results.winners.length > 1 ? 'share' : 'takes'} the sector`),
+      `${worldName(myId)}: #${rank}/${results.worlds.length} · ${tr('Power')} ${results.worlds[rank - 1].power}`
+    ];
+    const tp = sum.turningPoints[myId];
+    if (tp) lines.push(`${tr('Turning point')}: ${tr(`Turn ${tp.turn}`)} · “${tr(tp.title)}” → “${tr(tp.choice)}”`);
+    if (sum.biggestRaid) lines.push(`${tr('Biggest raid')}: ${tr(raidText(sum.biggestRaid))}`);
+    const crew = sum.crews[myId] || [];
+    if (crew.length) lines.push(`${tr('Your crew')}: ` + crew.map(m => `${m.name} (${tr(contributionText(m))})`).join('; '));
+    lines.push(ONLINE_URL);
+    return lines.join('\n');
   }
 
   // ── Timer ────────────────────────────────────────────────────────────────
@@ -979,6 +1034,16 @@
           toast(d.link);
         }
         break;
+      case 'copySummary': {
+        const text = summaryText(app.snap);
+        try {
+          await navigator.clipboard.writeText(text);
+          toast('Summary copied. Paste it into your group chat.');
+        } catch (error) {
+          toast(text);
+        }
+        break;
+      }
       case 'leave': leaveToHome(); break;
       default: break;
     }
