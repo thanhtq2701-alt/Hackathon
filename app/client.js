@@ -1126,6 +1126,7 @@ const TheOvalCore = window.TheOvalCore;
           profile: 'The Architect of Peace'
         };
       }
+      sendStat({ event: 'oval_end', ending: ending.title, turn: gs.turn, minutes: (Date.now() - runStartedAt) / 60000 });
       const axes = computeAxes();
       const top5 = gs.definingChoices.slice(-5);
       end.innerHTML = `
@@ -1323,9 +1324,20 @@ const TheOvalCore = window.TheOvalCore;
     // ═══════════════════════════════════════════════════════════
     // GAME FLOW
     // ═══════════════════════════════════════════════════════════
+    // Anonymous play counters (no name or id is sent): see feedback.html#privacy.
+    // Without the online server (file:// or a static copy) nothing is sent.
+    let runStartedAt = 0;
+    function sendStat(body) {
+      if (typeof fetch !== 'function' || !/^https?:$/.test(location.protocol)) return;
+      fetch('api/stats', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), keepalive: true })
+        .catch(() => {});
+    }
+
     function startGame(mode) {
       if (mode !== 'normal') return;
       initState();
+      runStartedAt = Date.now();
+      sendStat({ event: 'oval_start' });
       document.body.classList.add('in-game');
       document.getElementById('title-screen').style.display = 'none';
       const gs_screen = document.getElementById('game-screen');

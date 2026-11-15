@@ -618,6 +618,45 @@ test('the server keeps rooms, accounts and the ranking across a restart', async 
   }
 });
 
+test('anonymous counters and feedback are kept without names and survive a restart', async function () {
+  const storage = tempStorage();
+  const first = await startApp(storage);
+  try {
+    assert.equal((await first.post('/api/stats', { event: 'oval_start' })).status, 200);
+    assert.equal((await first.post('/api/stats', { event: 'oval_end', ending: 'The Tyrant', turn: 40, minutes: 17 })).status, 200);
+    assert.equal((await first.post('/api/stats', { event: 'oval_end', ending: '<b>made up</b>', turn: 'x' })).status, 200);
+    assert.equal((await first.post('/api/stats', { event: 'anything' })).status, 400);
+
+    // A Fleet Council match start is counted by the server itself.
+    const host = await first.post('/api/create', { name: 'Counter' });
+    await first.post('/api/command', { code: host.code, token: host.token, type: 'fillBots' });
+    assert.equal((await first.post('/api/command', { code: host.code, token: host.token, type: 'start' })).ok, true);
+
+    assert.equal((await first.post('/api/feedback', { game: 'oval', text: '   ' })).status, 400);
+    assert.equal((await first.post('/api/feedback', { game: 'oval', text: 'x'.repeat(501) })).status, 400);
+    assert.equal((await first.post('/api/feedback', { game: 'fleet', text: 'Raids feel strong.' })).status, 200);
+    assert.equal((await first.post('/api/feedback', { game: 'fleet', text: 'Again right away' })).status, 429);
+  } finally {
+    await first.app.stop();
+  }
+
+  const second = await startApp(storage);
+  try {
+    const { counts } = await (await fetch(second.base + '/api/stats')).json();
+    assert.deepEqual(counts, {
+      'oval.started': 1, 'oval.finished': 2, 'oval.ending.The Tyrant': 1, 'oval.ending.Other': 1,
+      'oval.turn.31-40': 1, 'oval.minutes.10-20': 1, 'fleet.started': 1
+    });
+    const saved = await storage.get('feedback');
+    assert.equal(saved.length, 1);
+    assert.deepEqual(Object.keys(saved[0]).sort(), ['day', 'game', 'text']);
+    assert.equal(saved[0].text, 'Raids feel strong.');
+    assert.equal((await fetch(second.base + '/feedback.html')).status, 200);
+  } finally {
+    await second.app.stop();
+  }
+});
+
 chain.then(() => {
   if (process.exitCode) process.exit(process.exitCode);
 });

@@ -2,7 +2,8 @@
 // Zero dependencies: Node's http module serves the static game, a small JSON API,
 // and Server-Sent Events that push each player their own view of the room.
 // Rooms, PIN accounts and the all-time ranking are kept in storage (Upstash Redis or files),
-// so a restart or a free-tier spin-down does not lose them.
+// so a restart or a free-tier spin-down does not lose them. Anonymous play counters and feedback
+// messages are stored too; feedback.html lists everything that is kept about players.
 //
 //   node server/server.js            (PORT defaults to 8080)
 //
@@ -13,6 +14,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { Room, cleanName } = require('../app/world-room.js');
+const { ENDINGS } = require('../data/content.js');
 const { createStorage } = require('./storage.js');
 
 const ROOT = path.resolve(__dirname, '..');
@@ -23,8 +25,14 @@ const MAX_BODY = 8 * 1024;
 const PIN_PATTERN = /^\d{4,8}$/;
 const PIN_FAILS_BEFORE_LOCK = 5;
 const PIN_LOCK_MS = 10 * 60 * 1000;
+const FEEDBACK_KEEP = 200;          // newest messages kept
+const FEEDBACK_LENGTH = 500;
+const FEEDBACK_GAP_MS = 30 * 1000;  // per sender, checked in memory only
+const FEEDBACK_GAMES = ['oval', 'fleet', 'other'];
+// Endings The Oval can report; anything else is counted as "Other".
+const OVAL_ENDINGS = new Set(ENDINGS.map(e => e.title).concat(['The Lazarus Protocol']));
 const PUBLIC_DIRS = ['app', 'data', 'web'];
-const PUBLIC_FILES = ['index.html', 'world.html'];
+const PUBLIC_FILES = ['index.html', 'world.html', 'feedback.html'];
 const TYPES = {
   '.html': 'text/html; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8',
@@ -49,8 +57,14 @@ function createApp(options) {
   const streams = new Map(); // room code -> Set of { res, playerId }
   const savedVersions = new Map(); // room code -> version last written to storage
   const pinFailures = new Map(); // account -> { count, lockedUntil }
+  const matchStarts = new Map(); // room code -> time its match started (for the duration counter)
+  const lastFeedback = new Map(); // sender address -> time of their last message, never stored
   let leaderboard = {};
   let accounts = {};
+  let stats = {};      // anonymous counters: "oval.ending.The Tyrant" -> 12
+  let feedback = [];   // { day, game, text }
+  let statsDirty = false;
+  let feedbackDirty = false;
   let savedIndex = '[]';
   let saving = null;
 
@@ -96,8 +110,63 @@ function createApp(options) {
 
   // ── Leaderboard ──────────────────────────────────────────────────────────
 
+  // ── Anonymous counters and feedback ──────────────────────────────────────
+  // Counters hold no names, ids or addresses. They are written with the room save, only when changed.
+
+  function count(key) {
+    stats[key] = (stats[key] || 0) + 1;
+    statsDirty = true;
+  }
+
+  function bucket(value, edges, last) {
+    for (const [limit, label] of edges) if (value <= limit) return label;
+    return last;
+  }
+
+  function countDuration(game, minutes) {
+    if (Number.isFinite(minutes) && minutes >= 0) {
+      count(`${game}.minutes.` + bucket(minutes, [[5, '0-5'], [10, '5-10'], [20, '10-20'], [30, '20-30']], '30+'));
+    }
+  }
+
+  function recordOvalEvent(body) {
+    if (body.event === 'oval_start') {
+      count('oval.started');
+      return;
+    }
+    if (body.event !== 'oval_end') throw new HttpError(400, 'Unknown event.');
+    count('oval.finished');
+    count('oval.ending.' + (OVAL_ENDINGS.has(body.ending) ? body.ending : 'Other'));
+    const turn = Number(body.turn);
+    if (Number.isFinite(turn)) count('oval.turn.' + bucket(turn, [[10, '1-10'], [20, '11-20'], [30, '21-30']], '31-40'));
+    countDuration('oval', Number(body.minutes));
+  }
+
+  function recordMatchCounters(room) {
+    count('fleet.finished');
+    count('fleet.worlds.' + room.settings.worldCount);
+    count('fleet.turns.' + room.settings.maxTurns);
+    count('fleet.humans.' + [...room.players.values()].filter(p => !p.bot).length);
+    if (matchStarts.has(room.code)) countDuration('fleet', (Date.now() - matchStarts.get(room.code)) / 60000);
+    matchStarts.delete(room.code);
+  }
+
+  function addFeedback(body, sender, now) {
+    const text = String(body.text || '').replace(/[\u0000-\u0008\u000b-\u001f\u007f]/g, '').trim();
+    if (!text) throw new HttpError(400, 'Write a message first.');
+    if (text.length > FEEDBACK_LENGTH) throw new HttpError(400, `Keep it under ${FEEDBACK_LENGTH} characters.`);
+    if (now - (lastFeedback.get(sender) || 0) < FEEDBACK_GAP_MS) throw new HttpError(429, 'Thanks! Please wait a moment before sending another message.');
+    if (lastFeedback.size > 1000) lastFeedback.forEach((at, key) => { if (now - at >= FEEDBACK_GAP_MS) lastFeedback.delete(key); });
+    lastFeedback.set(sender, now);
+    const game = FEEDBACK_GAMES.includes(body.game) ? body.game : 'other';
+    feedback.push({ day: new Date(now).toISOString().slice(0, 10), game, text });
+    if (feedback.length > FEEDBACK_KEEP) feedback.splice(0, feedback.length - FEEDBACK_KEEP);
+    feedbackDirty = true;
+  }
+
   // Only PIN-protected pilots are ranked, so nobody can collect EXP under someone else's name.
   function recordMatch(room, results) {
+    recordMatchCounters(room);
     results.players.forEach(p => {
       const seat = room.players.get(p.id);
       if (!seat || !seat.account) return;
@@ -173,6 +242,8 @@ function createApp(options) {
     const now = Date.now();
     leaderboard = (await storage.get('leaderboard')) || {};
     accounts = (await storage.get('accounts')) || {};
+    stats = (await storage.get('stats')) || {};
+    feedback = (await storage.get('feedback')) || [];
     const codes = (await storage.get('rooms')) || [];
     for (const code of codes) {
       const data = await storage.get('room:' + code);
@@ -203,6 +274,14 @@ function createApp(options) {
     if (index !== savedIndex) {
       await storage.set('rooms', JSON.parse(index));
       savedIndex = index;
+    }
+    if (statsDirty) {
+      statsDirty = false;
+      await storage.set('stats', stats).catch(error => { statsDirty = true; throw error; });
+    }
+    if (feedbackDirty) {
+      feedbackDirty = false;
+      await storage.set('feedback', feedback).catch(error => { feedbackDirty = true; throw error; });
     }
   }
 
@@ -286,6 +365,12 @@ function createApp(options) {
       return;
     }
 
+    // Anonymous counters only (served from memory, so reading them costs no storage command).
+    if (req.method === 'GET' && route === '/api/stats') {
+      sendJson(res, 200, { counts: stats });
+      return;
+    }
+
     if (req.method === 'GET' && route === '/api/events') {
       const room = findRoom(url.searchParams.get('code'));
       const player = room && room.playerByToken(url.searchParams.get('token'));
@@ -311,6 +396,19 @@ function createApp(options) {
     if (req.method !== 'POST') throw new HttpError(405, 'Method not allowed.');
     const body = await readBody(req);
     const now = Date.now();
+
+    if (route === '/api/stats') {
+      recordOvalEvent(body);
+      sendJson(res, 200, { ok: true });
+      return;
+    }
+
+    if (route === '/api/feedback') {
+      const sender = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress;
+      addFeedback(body, sender, now);
+      sendJson(res, 200, { ok: true });
+      return;
+    }
 
     if (route === '/api/create') {
       if (rooms.size >= MAX_ROOMS) throw new HttpError(503, 'The server is full. Try again later.');
@@ -355,6 +453,10 @@ function createApp(options) {
         return;
       }
       const outcome = room.command(player.id, String(body.type || ''), body.payload, now);
+      if (outcome.ok && body.type === 'start') {
+        count('fleet.started');
+        matchStarts.set(room.code, now);
+      }
       sendJson(res, outcome.ok ? 200 : 400, outcome);
       return;
     }
