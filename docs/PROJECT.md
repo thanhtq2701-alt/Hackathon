@@ -28,11 +28,13 @@ Cập nhật lần cuối: 15/11/2026. Tài liệu cũ (tháng 10/2026) nằm tr
 | Thời gian | Bỏ phiếu 45 giây (30/45/75), báo cáo 12 giây |
 | Từ chức (The Oval) | "Offer your resignation": Approval < 50 → dân chấp nhận, ván kết thúc (The Resignation); ≥ 50 → ở lại |
 | Phế truất trong cách mạng | Approval ≤ 0 hoặc Economy ≤ 10 trong tuyến Revolution → The Impeached |
-| Chấm dứt nhiệm kỳ | Nghĩa là **ván kết thúc** (chưa có cơ chế kế nhiệm) |
+| Chấm dứt nhiệm kỳ / kế nhiệm (chốt 15/11/2026) | **Không có kế nhiệm**: giống Fleet Council hết lượt là hết trận, ván chơi đơn kết thúc khi hết số lượt hoặc khi bị phế truất/từ chức |
+| Bối cảnh (chốt 15/11/2026) | Cả hai chế độ ở cùng một bối cảnh vũ trụ. Chơi đơn: người chơi là **Commander** của một thuộc địa/trạm vũ trụ, điều hành từ **the Oval** (khoang chỉ huy); quốc gia → colony/station, nước đối thủ → rival colonies, cường quốc → the great stations, Quốc hội → Station Council, Tòa tối cao → High Tribunal, LHQ → Sector Assembly, dầu → fuel, hạt nhân → antimatter, đô la → credits; thanh "International Tension" → "Interstellar Tension". Giữ nguyên thế khó xử của từng tình huống và mọi con số |
+| Nội dung = cả hai chế độ | Khi chủ dự án nói "chỉnh nội dung", hiểu là chỉnh cả chơi đơn (`data/content.js`) và Fleet Council (`data/world-content.js`) |
 | Tài khoản | PIN 4–8 số (tùy chọn) giữ tên; chỉ pilot có PIN được xếp hạng mọi thời đại |
 | Dữ liệu người chơi (chốt 15/11/2026) | Chỉ lưu tối thiểu: tên + PIN đã băm + xếp hạng (pilot có PIN), phòng đang chơi, **số đếm ẩn danh** (không tên/ID/IP) và **góp ý ẩn danh** (giữ 200 tin mới nhất). Trang `feedback.html#privacy` liệt kê mọi thứ được lưu; xóa dữ liệu khi có yêu cầu (chủ dự án xóa tay). Để sau: lịch sử trận/hồ sơ gắn tài khoản chỉ cho pilot có PIN, kèm nút xóa. Không làm: lưu email/số điện thoại/Zalo, công cụ phân tích bên thứ ba (Google Analytics…). Khôi phục PIN bằng **mã khôi phục một lần** hiện khi đăng ký (không cần dữ liệu cá nhân). Ghi hình playtest chỉ khi đã hỏi và được đồng ý. Thêm dữ liệu mới → cập nhật trang `feedback.html#privacy` |
 | Hạ tầng | Miễn phí: Render Web Service (free) + Upstash Redis (free); không mua tên miền |
-| Quy trình | Làm trên branch, commit; **hỏi chủ dự án trước mỗi lần push**; chỉ merge khi chủ dự án xác nhận. Đợt cân bằng sau dùng branch `balance_1`, `balance_2`… (chỉ khi được yêu cầu). `main` được bảo vệ (cấm xóa, cấm force push) |
+| Quy trình | Làm trên branch, commit; **hỏi chủ dự án trước mỗi lần push**; chỉ merge khi chủ dự án xác nhận. Đợt cân bằng dùng branch riêng cho từng chế độ: `balance_solo_1`, `balance_solo_2`… (chơi đơn) và `balance_multi_1`, `balance_multi_2`… (Fleet Council); chỉ push khi chủ dự án nói cân bằng đã ổn. `main` được bảo vệ (cấm xóa, cấm force push) |
 
 ## 3. Trạng thái hiện tại
 
@@ -89,12 +91,11 @@ Mười lỗi trong `old/THE-OVAL-LOI-HE-THONG-VA-CHU-TRINH-KHAC-PHUC.txt` và `
 ## 6. Câu hỏi còn mở
 
 1. **Mục tiêu chính:** chơi giải trí với bạn bè, nộp dự thi, hay portfolio? → quyết định ưu tiên tính năng mới hay độ hoàn thiện.
-2. **Cơ chế kế nhiệm** cho The Oval (người khác lên thay khi hết nhiệm kỳ rồi chơi tiếp) — làm hay không?
-3. **Ngôn ngữ giao diện:** thêm tiếng Việt song song tiếng Anh khi nào?
-4. **Web3 / Sui:** giữ demo, bỏ, hay tích hợp thật sau này?
-5. **Ngân sách:** giữ hoàn toàn miễn phí, hay chấp nhận ~7 USD/tháng để server không ngủ khi có người chơi đều?
-6. **Playtest:** ai chơi thử, bao nhiêu nhóm, khi nào; có ghi hình không (cần người chơi đồng ý).
-7. **Thành viên nhóm Auraa** và đóng góp của từng người (cần nếu dùng cho portfolio).
+2. **Ngôn ngữ giao diện:** thêm tiếng Việt song song tiếng Anh khi nào? (Hướng dẫn chơi song ngữ đang làm; phần còn lại của giao diện vẫn tiếng Anh.)
+3. **Web3 / Sui:** giữ demo, bỏ, hay tích hợp thật sau này?
+4. **Ngân sách:** giữ hoàn toàn miễn phí, hay chấp nhận ~7 USD/tháng để server không ngủ khi có người chơi đều?
+5. **Playtest:** ai chơi thử, bao nhiêu nhóm, khi nào; có ghi hình không (cần người chơi đồng ý).
+6. **Thành viên nhóm Auraa** và đóng góp của từng người (cần nếu dùng cho portfolio).
 
 ## 7. Lộ trình phát triển
 
@@ -115,7 +116,7 @@ Mười lỗi trong `old/THE-OVAL-LOI-HE-THONG-VA-CHU-TRINH-KHAC-PHUC.txt` và `
 
 **Giai đoạn 2 — Chiều sâu nội dung (1–2 tháng)**
 - Fleet Council: vai trò cho từng pilot (không thêm phiếu); thêm tình huống/khủng hoảng (hiện 31); công trình Lv4–5; ngoại giao có cấu trúc (trao đổi, liên minh).
-- The Oval: đồng bộ bối cảnh vũ trụ (nhiều thẻ vẫn là chính trị Trái Đất); cơ chế kế nhiệm (nếu chốt); ~~chọn độ dài ván 20/30/40~~ (đã làm; cân nhắc chỉnh điều kiện tuyến truyện cho ván 20 lượt).
+- Chơi đơn: ~~đồng bộ bối cảnh vũ trụ~~ (đã làm: 698 đoạn chữ viết lại, số liệu giữ nguyên); ~~cơ chế kế nhiệm~~ (chốt: không có); ~~chọn độ dài ván 20/30/40~~ (đã làm; điều kiện tuyến truyện cho ván ngắn chỉnh ở `balance_solo_1`).
 - Kết nối hai chế độ: kết quả The Oval mở khóa danh hiệu/giao diện trong hồ sơ pilot.
 
 **Giai đoạn 3 — Cộng đồng (khi có người chơi đều)**

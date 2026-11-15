@@ -2,8 +2,8 @@
 const CARDS = {
       environment: [
         {
-          title: "The Arctic Drill",
-          body: "Massive oil reserves are found in a protected tundra. Your party wants the revenue.",
+          title: "The Ice Moon Drill",
+          body: "Huge fuel reserves are found under a protected ice moon. Your party wants the revenue.",
           choices: [
             {
               text: "Full Extraction \u2014 Drill everything to boost the economy.",
@@ -18,7 +18,7 @@ const CARDS = {
               energy: 5
             },
             {
-              text: "Eco-Tourism \u2014 Turn it into a park to boost approval.",
+              text: "Sky Park — Turn it into a scenic reserve to boost approval.",
               outcome: "Approval rises, but the Party loses donors.",
               approval: 5,
               party: -7,
@@ -30,7 +30,7 @@ const CARDS = {
               energy: -3
             },
             {
-              text: "Lease to Allies \u2014 Let a friendly nation drill for a fee.",
+              text: "Lease to Allies — Let a friendly colony drill for a fee.",
               outcome: "The fees boost the Economy, but Tension rises with rivals.",
               eco: 6,
               tension: 3,
@@ -57,11 +57,11 @@ const CARDS = {
         },
         {
           title: "Rolling Blackouts",
-          body: "Green energy isn't meeting demand. The capital is dark.",
+          body: "The solar arrays can't meet demand. The habitat ring is dark.",
           choices: [
             {
-              text: "Restart Coal \u2014 Turn the old plants back on now.",
-              outcome: "Power returns, but people\u2019 health drops.",
+              text: "Restart the Old Reactor — Fire up the leaky fission core now.",
+              outcome: "Power returns, but radiation sickness spreads.",
               eco: 4,
               approval: -5,
               party: 2,
@@ -84,7 +84,7 @@ const CARDS = {
               energy: -4
             },
             {
-              text: "Import Power \u2014 Buy nuclear energy from a rival.",
+              text: "Import Power — Buy beamed energy from a rival station.",
               outcome: "Economy rises, but tension with rivals decreases.",
               tension: -3,
               eco: -7,
@@ -96,7 +96,7 @@ const CARDS = {
               energy: 3
             },
             {
-              text: "Emergency Fund \u2014 Spend on fast-build solar.",
+              text: "Emergency Fund — Spend on fast-build solar sails.",
               outcome: "The future is green, but the Treasury is low.",
               eco: -7,
               approval: 6,
@@ -110,11 +110,11 @@ const CARDS = {
           ]
         },
         {
-          title: "The Great Drought",
-          body: "Water levels are at 5%. Farmers and Cities are fighting.",
+          title: "The Water Shortage",
+          body: "Water reserves are at 5%. The hydroponic farms and the habitat decks are fighting.",
           choices: [
             {
-              text: "Prioritize Cities \u2014 Keep the people hydrated.",
+              text: "Prioritize the Decks — Keep the people hydrated.",
               outcome: "Approval stays stable, but the Economy dips.",
               approval: 6,
               eco: -7,
@@ -150,8 +150,8 @@ const CARDS = {
               energy: 0
             },
             {
-              text: "The Pipeline \u2014 Seize water from neighbors.",
-              outcome: "The pipes are full, but War Tension is high.",
+              text: "The Ice Raid — Seize a comet a neighbor has claimed.",
+              outcome: "The tanks are full, but War Tension is high.",
               tension: 8,
               unrest: 4,
               approval: -2,
@@ -164,8 +164,8 @@ const CARDS = {
           ]
         },
         {
-          title: "The Old Coal Mines",
-          body: "Abandoned mines are leaking toxic gas into nearby towns.",
+          title: "The Old Asteroid Mines",
+          body: "Abandoned mining shafts are venting toxic gas into nearby habitat modules.",
           choices: [
             {
               text: "Seal & Bury \u2014 Quick and cheap fix.",
@@ -192,7 +192,7 @@ const CARDS = {
             },
             {
               text: "Evacuate \u2014 Move the citizens; test weapons.",
-              outcome: "Military control grows; the town is a ghost.",
+              outcome: "Military control grows; the module is a ghost.",
               unrest: 7,
               approval: -7,
               tension: 3,
@@ -216,12 +216,12 @@ const CARDS = {
           ]
         },
         {
-          title: "The Plastic Tide",
-          body: "A massive \"island\" of trash is drifting toward a rival's coast.",
+          title: "The Debris Field",
+          body: "A huge cloud of space junk is drifting toward a rival's orbit.",
           choices: [
             {
-              text: "Ignore It \u2014 Let the currents handle it.",
-              outcome: "Free, but International Tension rises.",
+              text: "Ignore It — Let orbital drift handle it.",
+              outcome: "Free, but Interstellar Tension rises.",
               tension: 8,
               eco: 2,
               approval: -3,
@@ -244,8 +244,8 @@ const CARDS = {
               energy: -5
             },
             {
-              text: "Naval Cleanup \u2014 Deploy the fleet to scoop it.",
-              outcome: "Authority rises; the soldiers hate the duty.",
+              text: "Fleet Cleanup — Send the fleet to sweep it.",
+              outcome: "Authority rises; the pilots hate the duty.",
               unrest: 4,
               tension: -3,
               party: -5,
@@ -256,8 +256,8 @@ const CARDS = {
               energy: -1
             },
             {
-              text: "Burn It \u2014 Set the trash pile on fire at sea.",
-              outcome: "Trash is gone, but the smoke is a scandal.",
+              text: "Burn It — Push the debris into the gas giant.",
+              outcome: "The debris is gone, but the fireball is a scandal.",
               tension: 7,
               approval: -7,
               integrity: -7,
@@ -270,10 +270,10 @@ const CARDS = {
         },
         {
           title: "The Rare Mineral",
-          body: "Tech giants need Cobalt under a sacred mountain.",
+          body: "Tech giants need the iridium under a crater the first settlers hold sacred.",
           choices: [
             {
-              text: "Demolish \u2014 Tech boom needs the Cobalt.",
+              text: "Demolish — The tech boom needs the iridium.",
               outcome: "Economy thrives; a landmark is erased.",
               eco: 8,
               approval: -7,
@@ -284,8 +284,8 @@ const CARDS = {
               energy: 4
             },
             {
-              text: "Consult \u2014 Offer the tribe 1% profit.",
-              outcome: "The tribe refuses; the Party is annoyed.",
+              text: "Consult — Offer the founding clans 1% of the profit.",
+              outcome: "The clans refuse; the Party is annoyed.",
               eco: 3,
               party: -7,
               approval: -2,
@@ -320,12 +320,12 @@ const CARDS = {
           ]
         },
         {
-          title: "Deep Sea Drilling",
-          body: "Scientists warn of a fault line near a new oil rig.",
+          title: "Deep Core Drilling",
+          body: "Scientists warn of a fracture line near a new core drill on the moon.",
           choices: [
             {
               text: "Drill Anyway \u2014 We need fuel security.",
-              outcome: "Economic boost; an earthquake is possible.",
+              outcome: "Economic boost; a moonquake is possible.",
               eco: 7,
               approval: -4,
               integrity: -7,
@@ -358,8 +358,8 @@ const CARDS = {
               energy: 1
             },
             {
-              text: "Sell the Rights \u2014 Let a foreign firm take risk.",
-              outcome: "Tension rises as rivals enter your waters.",
+              text: "Sell the Rights — Let an outside corporation take the risk.",
+              outcome: "Tension rises as rivals enter your orbit.",
               tension: 7,
               eco: 3,
               party: 2,
@@ -373,7 +373,7 @@ const CARDS = {
         },
         {
           title: "The Smog Crisis",
-          body: "Factories are causing a \"Red Alert\" in the capital.",
+          body: "Foundries are choking the air recyclers with soot. Red Alert in the core decks.",
           choices: [
             {
               text: "Shut Them Down \u2014 Order a 3-day closure.",
@@ -388,7 +388,7 @@ const CARDS = {
               energy: -5
             },
             {
-              text: "Issue Masks \u2014 Tell the public to buy masks.",
+              text: "Issue Masks — Tell the public to buy filter masks.",
               outcome: "Saves economy; the Public is suffocating.",
               eco: 5,
               approval: -8,
@@ -411,8 +411,8 @@ const CARDS = {
               energy: 0
             },
             {
-              text: "Relocate \u2014 Move factories to the border.",
-              outcome: "Air is clean; International Tension spikes.",
+              text: "Relocate — Move the foundries to the edge of claimed space.",
+              outcome: "The air is clean; Interstellar Tension spikes.",
               tension: 7,
               approval: 3,
               eco: -3,
@@ -425,12 +425,12 @@ const CARDS = {
           ]
         },
         {
-          title: "The Endangered Bird",
-          body: "A tiny bird is nesting on a vital new dam site.",
+          title: "The Glowing Lichen",
+          body: "A rare native lichen grows on the only site for a vital new reactor.",
           choices: [
             {
-              text: "Flood the Nest \u2014 The city needs hydro-power.",
-              outcome: "Energy is cheap; the bird is gone.",
+              text: "Scrape It Away — The station needs the reactor.",
+              outcome: "Energy is cheap; the lichen is gone.",
               eco: 7,
               integrity: -7,
               approval: -3,
@@ -440,7 +440,7 @@ const CARDS = {
               energy: 0
             },
             {
-              text: "Relocate Bird \u2014 Spend $50M to move nests.",
+              text: "Transplant — Spend 50M credits to move the lichen.",
               outcome: "Public is amused; the Treasury is annoyed.",
               approval: 4,
               eco: -5,
@@ -452,7 +452,7 @@ const CARDS = {
               energy: -2
             },
             {
-              text: "Scrap the Dam \u2014 Find a different power source.",
+              text: "Scrap the Reactor — Find a different power source.",
               outcome: "Integrity is high; economy stays weak.",
               integrity: 7,
               eco: -7,
@@ -463,7 +463,7 @@ const CARDS = {
               energy: -1
             },
             {
-              text: "Build Around \u2014 Modify the dam; less efficient.",
+              text: "Build Around — Modify the reactor; less efficient.",
               outcome: "Satisfies no one; costs more for less.",
               eco: -7,
               approval: -2,
@@ -477,8 +477,8 @@ const CARDS = {
           ]
         },
         {
-          title: "The Carbon Tax",
-          body: "Experts say a car tax will save the planet.",
+          title: "The Emissions Tax",
+          body: "Experts say a tax on private shuttles will save the air supply.",
           choices: [
             {
               text: "Pass the Tax \u2014 Punish polluters immediately.",
@@ -493,7 +493,7 @@ const CARDS = {
             },
             {
               text: "Exempt Industry \u2014 Tax people, not companies.",
-              outcome: "Party is happy; people are in streets.",
+              outcome: "Party is happy; people are in the corridors.",
               party: 6,
               approval: -8,
               integrity: -7,
@@ -503,7 +503,7 @@ const CARDS = {
               energy: -6
             },
             {
-              text: "Veto the Tax \u2014 Defend \"freedom\" of the road.",
+              text: "Veto the Tax — Defend the \"freedom\" of the spaceways.",
               outcome: "Economy is stable; Tension with allies.",
               eco: 3,
               tension: 5,
@@ -515,7 +515,7 @@ const CARDS = {
               energy: 0
             },
             {
-              text: "Incentivize \u2014 Give a tax break for EVs.",
+              text: "Incentivize — Give a tax break for clean-drive shuttles.",
               outcome: "Green future, but the Economy rises.",
               eco: -7,
               approval: 6,
@@ -529,7 +529,7 @@ const CARDS = {
         },
         {
           title: "The GMO Harvest",
-          body: "A \"Super-Grain\" grows in heat but kills bees.",
+          body: "A \"Super-Grain\" thrives under weak starlight but kills the pollinator bees.",
           choices: [
             {
               text: "Sow the Seeds \u2014 End the food shortage now.",
@@ -585,7 +585,7 @@ const CARDS = {
           body: "Where should we put the spent fuel rods?",
           choices: [
             {
-              text: "The Border \u2014 Bury them near a rival's line.",
+              text: "The Border — Dump them near a rival's claim.",
               outcome: "Authority rises; Tension reaches red.",
               unrest: 6,
               tension: 8,
@@ -597,7 +597,7 @@ const CARDS = {
               energy: -4
             },
             {
-              text: "Deep Sea \u2014 Drop them into the abyss.",
+              text: "Deep Space — Let them drift into the void.",
               outcome: "Invisible problem; Public finds out later.",
               eco: 3,
               approval: -7,
@@ -609,7 +609,7 @@ const CARDS = {
               energy: -8
             },
             {
-              text: "Under the City \u2014 Use for district heating.",
+              text: "Under the Habitat — Use them to heat the decks.",
               outcome: "Efficient heat; Approval drops as panic starts.",
               eco: 6,
               approval: -9,
@@ -620,7 +620,7 @@ const CARDS = {
               energy: 0
             },
             {
-              text: "Space Launch \u2014 Shoot the waste into the Sun.",
+              text: "Star Launch — Fire the waste into the star.",
               outcome: "Ultimate solution; the Economy is staggering.",
               eco: -9,
               integrity: 7,
@@ -633,8 +633,8 @@ const CARDS = {
           ]
         },
         {
-          title: "The Forest Fire",
-          body: "A fire is heading toward an elite resort.",
+          title: "The Garden Dome Fire",
+          body: "A fire in the forest dome is heading toward an elite resort.",
           choices: [
             {
               text: "Save Resort \u2014 Protect the Party donors' assets.",
@@ -648,7 +648,7 @@ const CARDS = {
               energy: -6
             },
             {
-              text: "Save Towns \u2014 Protect the citizens' homes.",
+              text: "Save the Homes — Protect the citizens' quarters.",
               outcome: "Public is grateful; the Party is furious.",
               approval: 7,
               party: -7,
@@ -671,7 +671,7 @@ const CARDS = {
               energy: 0
             },
             {
-              text: "Sacrifice Park \u2014 Burn a break through the forest.",
+              text: "Sacrifice the Dome — Vent a section to starve the fire.",
               outcome: "Buildings are safe; wildlife is lost.",
               eco: -6,
               approval: -4,
@@ -686,7 +686,7 @@ const CARDS = {
         },
         {
           title: "The Hunting Ban",
-          body: "A majestic elk is nearly extinct. Party loves hunting.",
+          body: "The great horned grazer of the moon's plains is nearly extinct. The Party loves hunting.",
           choices: [
             {
               text: "Total Ban \u2014 Arrest anyone who shoots one.",
@@ -700,7 +700,7 @@ const CARDS = {
               energy: -2
             },
             {
-              text: "Licensing \u2014 Charge $100k per elk to hunt.",
+              text: "Licensing — Charge 100k credits per grazer.",
               outcome: "Economy rises; Public sees corruption.",
               eco: 6,
               approval: -7,
@@ -713,7 +713,7 @@ const CARDS = {
             },
             {
               text: "Public Shoot \u2014 Organize a hunt to show power.",
-              outcome: "Authority rises; International community gasps.",
+              outcome: "Authority rises; the neighboring colonies gasp.",
               unrest: 7,
               tension: 7,
               approval: -6,
@@ -738,7 +738,7 @@ const CARDS = {
         },
         {
           title: "The Green Wall",
-          body: "Plant 1 billion trees to stop the desert.",
+          body: "Plant 1 billion trees to hold back the dust plains of the colony world.",
           choices: [
             {
               text: "Full Project \u2014 Use the military to plant them.",
@@ -777,7 +777,7 @@ const CARDS = {
             },
             {
               text: "Reject \u2014 We need the land for mining.",
-              outcome: "Economy rises; sandstorms hit the city.",
+              outcome: "Economy rises; dust storms hit the domes.",
               eco: 7,
               approval: -7,
               tension: 3,
@@ -791,7 +791,7 @@ const CARDS = {
         },
         {
           title: "Solar Spill",
-          body: "A solar mirror cracked and is melting a road.",
+          body: "A solar mirror cracked and is melting a transit line.",
           choices: [
             {
               text: "Military Repair \u2014 Send the Guard to fix it.",
@@ -806,7 +806,7 @@ const CARDS = {
               energy: -4
             },
             {
-              text: "Abandon \u2014 Let it melt; road wasn't vital.",
+              text: "Abandon — Let it melt; the line wasn't vital.",
               outcome: "Saves money; Public is stuck in traffic.",
               eco: 2,
               approval: -7,
@@ -842,11 +842,11 @@ const CARDS = {
           ]
         },
         {
-          title: "The Whale Song",
-          body: "A rare whale blocks a shipping lane.",
+          title: "The Void Whale",
+          body: "A rare void whale is drifting across a shipping lane.",
           choices: [
             {
-              text: "Sonar Blast \u2014 Clear the lane by force.",
+              text: "Pulse Blast — Clear the lane by force.",
               outcome: "Economy is high; whales are deafened.",
               eco: 4,
               integrity: -7,
@@ -880,7 +880,7 @@ const CARDS = {
               energy: -3
             },
             {
-              text: "Invite Rival \u2014 Let a rival nation handle it.",
+              text: "Invite Rival — Let a rival colony handle it.",
               outcome: "Tension rises as they move warships in.",
               tension: 8,
               eco: 2,
@@ -895,10 +895,10 @@ const CARDS = {
         },
         {
           title: "The Sky Seeders",
-          body: "Spray chemicals to cool the planet.",
+          body: "Seed the colony world's sky with chemicals to cool it.",
           choices: [
             {
-              text: "Spray Now \u2014 Lead the world in climate tech.",
+              text: "Spray Now — Lead the sector in climate tech.",
               outcome: "Tension rises; neighbors fear weather wars.",
               tension: 8,
               unrest: 5,
@@ -922,8 +922,8 @@ const CARDS = {
               energy: 0
             },
             {
-              text: "Small Trial \u2014 Only spray over the Capital.",
-              outcome: "The public is cool; the rest of the nation burns.",
+              text: "Small Trial — Only spray over the capital dome.",
+              outcome: "The capital is cool; the rest of the colony burns.",
               unrest: 7,
               approval: -7,
               party: -2,
@@ -947,12 +947,12 @@ const CARDS = {
           ]
         },
         {
-          title: "Deep Sea Mining",
-          body: "Minerals for phones are found in a reef.",
+          title: "Ring Mining",
+          body: "Minerals for comms chips are found in the planet's ring.",
           choices: [
             {
               text: "Strip Mine \u2014 Industry needs the hardware.",
-              outcome: "Economy rises; the reef is destroyed.",
+              outcome: "Economy rises; the ring is torn apart.",
               eco: 7,
               integrity: -7,
               approval: -4,
@@ -973,7 +973,7 @@ const CARDS = {
               energy: -4
             },
             {
-              text: "Ban Mining \u2014 Protect the ocean life.",
+              text: "Ban Mining — Protect the ring's ice fields.",
               outcome: "Integrity rises; technology is expensive.",
               integrity: 7,
               eco: -7,
@@ -984,8 +984,8 @@ const CARDS = {
               energy: 0
             },
             {
-              text: "Lease Reef \u2014 Let another nation mine it.",
-              outcome: "Tension rises; rivals move into the reef.",
+              text: "Lease the Ring — Let another colony mine it.",
+              outcome: "Tension rises; rivals move into the ring.",
               tension: 7,
               eco: 4,
               party: -3,
@@ -999,7 +999,7 @@ const CARDS = {
         },
         {
           title: "Acid Rain",
-          body: "Industry pollution is melting statues in the city.",
+          body: "Acid fumes from industry are eating the statues on the promenade.",
           choices: [
             {
               text: "Scrubbers \u2014 Mandate expensive air filters.",
@@ -1014,7 +1014,7 @@ const CARDS = {
               energy: -6
             },
             {
-              text: "Acid Shield \u2014 Spray protective wax on the city.",
+              text: "Acid Shield — Spray protective wax over the promenade.",
               outcome: "Authority rises; statues are sticky.",
               unrest: 5,
               approval: 2,
@@ -1054,11 +1054,11 @@ const CARDS = {
       economy: [
         {
           title: "The Central Bank Interest",
-          body: "Inflation is rising. The Central Bank wants to hike interest rates to save the currency.",
+          body: "Inflation is rising. The Central Bank wants to hike interest rates to save the station credit.",
           choices: [
             {
               text: "Allow Hike \u2014 Stop inflation now.",
-              outcome: "Economy stabilizes, but the Public is angry about high mortgage costs.",
+              outcome: "Economy stabilizes, but the Public is angry about high cabin-loan costs.",
               eco: 7,
               approval: -7,
               party: 3,
@@ -1082,7 +1082,7 @@ const CARDS = {
             },
             {
               text: "Subsidize Loans \u2014 Raise rates but pay the difference for citizens.",
-              outcome: "Everyone is happy, but the National Economy spikes.",
+              outcome: "Everyone is happy, but the Colony Economy spikes.",
               approval: 6,
               eco: -9,
               party: 4,
@@ -1107,10 +1107,10 @@ const CARDS = {
         },
         {
           title: "Tech Infrastructure",
-          body: "Silicon Valley giants offer to build a nationwide 6G network for free in exchange for data rights.",
+          body: "Megacorp tech giants offer to build a station-wide quantum relay network for free in exchange for data rights.",
           choices: [
             {
-              text: "Accept Deal \u2014 Modernize the nation for free.",
+              text: "Accept Deal — Modernize the colony for free.",
               outcome: "Economy surges with new tech, but privacy vanishes.",
               eco: 9,
               approval: 4,
@@ -1146,8 +1146,8 @@ const CARDS = {
               energy: -5
             },
             {
-              text: "Reject \u2014 We don't need 6G yet.",
-              outcome: "Saves money now, but the nation falls behind rivals.",
+              text: "Reject — We don't need the relay yet.",
+              outcome: "Saves money now, but the colony falls behind rivals.",
               eco: -7,
               tension: 7,
               integrity: 3,
@@ -1160,10 +1160,10 @@ const CARDS = {
         },
         {
           title: "Foreign Investment",
-          body: "A rival nation wants to buy your largest domestic shipping port.",
+          body: "A rival colony wants to buy your largest docking ring.",
           choices: [
             {
-              text: "Sell Port \u2014 Use the cash to fund social programs.",
+              text: "Sell the Ring — Use the cash to fund social programs.",
               outcome: "Huge economic boost and happy citizens, but Tension rises.",
               eco: 9,
               approval: 7,
@@ -1176,7 +1176,7 @@ const CARDS = {
             },
             {
               text: "Lease Only \u2014 99-year lease instead of a sale.",
-              outcome: "Good revenue, but your Authority over the coast is weakened.",
+              outcome: "Good revenue, but your Authority over the docks is weakened.",
               eco: 7,
               unrest: -7,
               tension: 6,
@@ -1187,8 +1187,8 @@ const CARDS = {
               energy: 2
             },
             {
-              text: "Block Sale \u2014 Keep the port in national hands.",
-              outcome: "National security is safe, but the Economy misses out on billions.",
+              text: "Block Sale — Keep the docks in colony hands.",
+              outcome: "Colony security is safe, but the Economy misses out on billions.",
               eco: -8,
               tension: -7,
               unrest: 5,
@@ -1199,8 +1199,8 @@ const CARDS = {
               energy: -2
             },
             {
-              text: "Nationalize \u2014 Seize all private ports to ensure security.",
-              outcome: "Total authority, but international investors flee in fear.",
+              text: "Nationalize — Seize all private docks to ensure security.",
+              outcome: "Total authority, but interstellar investors flee in fear.",
               unrest: 9,
               eco: -9,
               tension: 8,
@@ -1214,7 +1214,7 @@ const CARDS = {
         },
         {
           title: "Minimum Wage",
-          body: "Labor unions are demanding a $25 minimum wage to combat the cost of living.",
+          body: "Labor unions are demanding a 25-credit minimum wage to combat the cost of living.",
           choices: [
             {
               text: "Full Increase \u2014 Give the workers exactly what they want.",
@@ -1242,7 +1242,7 @@ const CARDS = {
             },
             {
               text: "Tax Credits \u2014 Keep wages low but give workers tax breaks.",
-              outcome: "Businesses are happy, but the National Economy rises.",
+              outcome: "Businesses are happy, but the Colony Economy rises.",
               eco: -7,
               party: 7,
               approval: 4,
@@ -1268,7 +1268,7 @@ const CARDS = {
         },
         {
           title: "Luxury Tax",
-          body: "Your advisors suggest a 50% tax on private jets and yachts to fix the budget.",
+          body: "Your advisors suggest a 50% tax on private yachts and star cruisers to fix the budget.",
           choices: [
             {
               text: "Tax the Rich \u2014 Make the elite pay their share.",
@@ -1307,7 +1307,7 @@ const CARDS = {
               energy: -5
             },
             {
-              text: "Nationalize Luxury \u2014 Seize private jets for government use.",
+              text: "Nationalize Luxury — Seize private yachts for government use.",
               outcome: "Massive authority boost, but the elite start a coup.",
               unrest: 9,
               party: -9,
@@ -1325,7 +1325,7 @@ const CARDS = {
           body: "Companies want to replace 40% of their workforce with AI to double efficiency.",
           choices: [
             {
-              text: "Support AI \u2014 Lead the world in the robotic revolution.",
+              text: "Support AI — Lead the sector in the robotic revolution.",
               outcome: "Economy booms, but unemployment leads to massive unrest.",
               eco: 9,
               approval: -9,
@@ -1429,7 +1429,7 @@ const CARDS = {
         },
         {
           title: "Corporate Deregulation",
-          body: "Big Oil says they can lower gas prices by 30% if you remove safety regulations.",
+          body: "The fuel cartels say they can cut fuel prices by 30% if you remove safety regulations.",
           choices: [
             {
               text: "Deregulate \u2014 Lower the prices at any cost.",
@@ -1444,7 +1444,7 @@ const CARDS = {
             },
             {
               text: "Maintain Rules \u2014 Safety is more important than price.",
-              outcome: "Integrity is high, but the public is angry about gas costs.",
+              outcome: "Integrity is high, but the public is angry about fuel costs.",
               integrity: 7,
               approval: -8,
               eco: -4,
@@ -1465,8 +1465,8 @@ const CARDS = {
               energy: 0
             },
             {
-              text: "Nationalize Oil \u2014 Take over the industry and set the price yourself.",
-              outcome: "Total control, but the global market crashes.",
+              text: "Nationalize Fuel — Take over the industry and set the price yourself.",
+              outcome: "Total control, but the interstellar market crashes.",
               unrest: 9,
               eco: -9,
               tension: 9,
@@ -1480,7 +1480,7 @@ const CARDS = {
         },
         {
           title: "Housing Crisis",
-          body: "Rents have doubled in 2 years. People are living in cars in the capital.",
+          body: "Cabin rents have doubled in 2 years. People are living in cargo pods on the core decks.",
           choices: [
             {
               text: "Rent Caps \u2014 Make it illegal to raise rent.",
@@ -1495,7 +1495,7 @@ const CARDS = {
               energy: -2
             },
             {
-              text: "Build Public \u2014 Use tax money to build state-owned apartments.",
+              text: "Build Public — Use tax money to build state-owned habitat modules.",
               outcome: "Long term fix, but the Economy rises immediately.",
               eco: -9,
               approval: 7,
@@ -1506,8 +1506,8 @@ const CARDS = {
               energy: -7
             },
             {
-              text: "Deregulate Land \u2014 Allow building on parks and protected land.",
-              outcome: "More houses, but the environment is destroyed.",
+              text: "Deregulate Space — Allow building on the garden decks and protected zones.",
+              outcome: "More housing, but the green decks are destroyed.",
               eco: 7,
               approval: -7,
               integrity: -7,
@@ -1518,7 +1518,7 @@ const CARDS = {
             },
             {
               text: "Ignore \u2014 The market will correct itself eventually.",
-              outcome: "Saves money, but the streets are full of protesters.",
+              outcome: "Saves money, but the corridors are full of protesters.",
               eco: 4,
               approval: -9,
               unrest: -7,
@@ -1532,11 +1532,11 @@ const CARDS = {
         },
         {
           title: "Tourism Campaign",
-          body: "Your advisors want to spend $500M on a global ad campaign to bring in tourists.",
+          body: "Your advisors want to spend 500M credits on an interstellar ad campaign to bring in tourists.",
           choices: [
             {
-              text: "Go Big \u2014 A massive, flashy Hollywood-style campaign.",
-              outcome: "Economy and Approval rise as the world visits.",
+              text: "Go Big — A massive, flashy holo-drama campaign.",
+              outcome: "Economy and Approval rise as the sector visits.",
               eco: 8,
               approval: 7,
               party: 4,
@@ -1547,7 +1547,7 @@ const CARDS = {
               energy: -8
             },
             {
-              text: "Eco-Tourism \u2014 Only promote your nation's \"unspoiled\" nature.",
+              text: "Eco-Tourism — Only promote your colony's \"unspoiled\" moons.",
               outcome: "High integrity, but lower revenue.",
               integrity: 6,
               eco: 5,
@@ -1587,8 +1587,8 @@ const CARDS = {
           body: "We are buying too much from our rivals and selling too little.",
           choices: [
             {
-              text: "Heavy Tariffs \u2014 Tax all foreign imports by 40%.",
-              outcome: "Local jobs return, but International Tension spikes.",
+              text: "Heavy Tariffs — Tax all off-colony imports by 40%.",
+              outcome: "Local jobs return, but Interstellar Tension spikes.",
               tension: 9,
               eco: -7,
               party: 7,
@@ -1612,7 +1612,7 @@ const CARDS = {
             },
             {
               text: "Subsidize Local \u2014 Pay our own companies to keep prices low.",
-              outcome: "Popular and safe, but the National Economy explodes.",
+              outcome: "Popular and safe, but the Colony Economy explodes.",
               eco: -9,
               approval: 7,
               party: 6,
@@ -1624,7 +1624,7 @@ const CARDS = {
             },
             {
               text: "Trade War \u2014 Ban all goods from our biggest rival.",
-              outcome: "Total authority, but a global economic crash.",
+              outcome: "Total authority, but a sector-wide economic crash.",
               unrest: 9,
               tension: 9,
               eco: -9,
@@ -1691,7 +1691,7 @@ const CARDS = {
         },
         {
           title: "Privatization",
-          body: "The National Railway is losing money. A private firm wants to buy it.",
+          body: "The Colony Transit Line is losing money. A private firm wants to buy it.",
           choices: [
             {
               text: "Sell It \u2014 Stop the bleeding and get the cash.",
@@ -1706,7 +1706,7 @@ const CARDS = {
               energy: 4
             },
             {
-              text: "Modernize \u2014 Keep it public but spend billions on fast trains.",
+              text: "Modernize — Keep it public but spend billions on fast maglev pods.",
               outcome: "Approval and Integrity rise, but Economy spikes.",
               approval: 8,
               eco: -9,
@@ -1729,8 +1729,8 @@ const CARDS = {
               energy: 1
             },
             {
-              text: "Shutdown \u2014 The trains are useless. Close the tracks.",
-              outcome: "Huge savings, but the nation is disconnected.",
+              text: "Shutdown — The pods are useless. Close the tubes.",
+              outcome: "Huge savings, but the colony is disconnected.",
               eco: 9,
               approval: -9,
               unrest: -8,
@@ -1744,10 +1744,10 @@ const CARDS = {
         },
         {
           title: "Universal Basic Income",
-          body: "A radical plan suggests giving every citizen $1,000 a month.",
+          body: "A radical plan suggests giving every citizen 1,000 credits a month.",
           choices: [
             {
-              text: "National Rollout \u2014 End poverty in a single day.",
+              text: "Colony Rollout — End poverty in a single day.",
               outcome: "Historic approval, but the Economy might collapse.",
               approval: 9,
               eco: -8,
@@ -1759,8 +1759,8 @@ const CARDS = {
               energy: -10
             },
             {
-              text: "City Pilot \u2014 Try it in one small city first.",
-              outcome: "Interesting data, but other cities are jealous.",
+              text: "Deck Pilot — Try it on one small habitat deck first.",
+              outcome: "Interesting data, but the other decks are jealous.",
               approval: 6,
               eco: -7,
               party: -3,
@@ -1797,10 +1797,10 @@ const CARDS = {
         },
         {
           title: "Crypto Regulation",
-          body: "A new digital currency is replacing the national dollar.",
+          body: "A new digital currency is replacing the colony credit.",
           choices: [
             {
-              text: "Ban It \u2014 Protect the national currency at all costs.",
+              text: "Ban It — Protect the colony credit at all costs.",
               outcome: "Total authority, but young tech investors flee.",
               unrest: 9,
               approval: -8,
@@ -1813,7 +1813,7 @@ const CARDS = {
             },
             {
               text: "Adopt It \u2014 Make the crypto your official state currency.",
-              outcome: "Tech boom, but International Tension rises.",
+              outcome: "Tech boom, but Interstellar Tension rises.",
               eco: 9,
               tension: 9,
               unrest: -8,
@@ -1851,7 +1851,7 @@ const CARDS = {
         },
         {
           title: "Agricultural Export",
-          body: "There is a global food shortage. We could sell our wheat for 5x the price.",
+          body: "There is a sector-wide food shortage. We could sell our hydroponic wheat for 5x the price.",
           choices: [
             {
               text: "Export All \u2014 The treasury needs the gold.",
@@ -1890,7 +1890,7 @@ const CARDS = {
               energy: 1
             },
             {
-              text: "Buy Foreign \u2014 Sell our wheat and buy cheaper, lower quality food.",
+              text: "Buy Foreign — Sell our wheat and buy cheaper, lower quality ration packs.",
               outcome: "Max profit, but the public gets sick.",
               eco: 9,
               approval: -9,
@@ -1904,10 +1904,10 @@ const CARDS = {
         },
         {
           title: "Infrastructure Stimulus",
-          body: "The bridges are falling apart. Engineers want a $50B \"New Deal.\"",
+          body: "The transit tubes are cracking. Engineers want a 50B-credit \"New Deal.\"",
           choices: [
             {
-              text: "Build Everything \u2014 Put everyone to work on the roads.",
+              text: "Build Everything — Put everyone to work on the tubes.",
               outcome: "Full employment and approval, but massive Economy.",
               approval: 9,
               eco: -9,
@@ -1919,8 +1919,8 @@ const CARDS = {
               energy: -10
             },
             {
-              text: "Tolled Roads \u2014 Let private firms build and charge the public.",
-              outcome: "Modern roads for free, but the public is angry.",
+              text: "Tolled Tubes — Let private firms build and charge the public.",
+              outcome: "Modern tubes for free, but the public is angry.",
               eco: 7,
               approval: -9,
               party: 7,
@@ -1931,7 +1931,7 @@ const CARDS = {
               energy: -2
             },
             {
-              text: "Military Focus \u2014 Only fix roads used for tank transport.",
+              text: "Military Focus — Only fix the lanes used by the marines.",
               outcome: "Authority rises, but civilians are ignored.",
               unrest: 9,
               approval: -8,
@@ -1943,7 +1943,7 @@ const CARDS = {
               energy: -5
             },
             {
-              text: "Patchwork \u2014 Only fix the bridges that have already collapsed.",
+              text: "Patchwork — Only fix the tubes that have already failed.",
               outcome: "Saves money, but lives are at risk.",
               eco: 6,
               approval: -9,
@@ -1957,11 +1957,11 @@ const CARDS = {
         },
         {
           title: "Wealth Cap",
-          body: "A radical law suggests making it illegal to own more than $100 Million.",
+          body: "A radical law suggests making it illegal to own more than 100 million credits.",
           choices: [
             {
               text: "Pass Cap \u2014 Redistribute the wealth to the people.",
-              outcome: "Historic equality, but the billionaires flee the nation.",
+              outcome: "Historic equality, but the billionaires flee the colony.",
               approval: 9,
               eco: -8,
               party: -9,
@@ -2038,7 +2038,7 @@ const CARDS = {
             },
             {
               text: "Freeze Trading \u2014 Close the market for a week to calm everyone.",
-              outcome: "Authority rises, but International Tension grows.",
+              outcome: "Authority rises, but Interstellar Tension grows.",
               unrest: 9,
               tension: 8,
               eco: -8,
@@ -2049,7 +2049,7 @@ const CARDS = {
               energy: -2
             },
             {
-              text: "Buy the Dip \u2014 Use national funds to buy stocks and own the market.",
+              text: "Buy the Dip — Use colony funds to buy stocks and own the market.",
               outcome: "Total authority and wealth, but the public fears a takeover.",
               unrest: 9,
               eco: 9,
@@ -2063,11 +2063,11 @@ const CARDS = {
           ]
         },
         {
-          title: "National Airline",
-          body: "The largest airline is bankrupt. Should the government take it over?",
+          title: "The Shuttle Line",
+          body: "The largest passenger shuttle line is bankrupt. Should the government take it over?",
           choices: [
             {
-              text: "Create \"Oval Air\" \u2014 A state-owned airline for national pride.",
+              text: "Create \"Oval Lines\" — A state-owned shuttle line for colony pride.",
               outcome: "Authority and Approval rise, but it's a money pit.",
               unrest: 8,
               approval: 7,
@@ -2091,7 +2091,7 @@ const CARDS = {
               energy: 5
             },
             {
-              text: "Foreign Buyout \u2014 Let a rival nation's airline buy it.",
+              text: "Foreign Buyout — Let a rival colony's shuttle line buy it.",
               outcome: "Jobs are saved, but tension rises.",
               tension: 9,
               eco: 7,
@@ -2120,7 +2120,7 @@ const CARDS = {
       war: [
         {
           title: "The Border Skirmish",
-          body: "A neighbor\u2019s drone was shot down in your airspace. They are demanding a formal apology and reparations.",
+          body: "A neighbor’s drone was shot down in your claimed space. They are demanding a formal apology and reparations.",
           choices: [
             {
               text: "Formal Apology \u2014 De-escalate the situation with a public apology and payment.",
@@ -2164,8 +2164,8 @@ const CARDS = {
               energy: 0
             },
             {
-              text: "International Arbitration \u2014 Take the case to the UN and let them decide.",
-              outcome: "The world sees you as a diplomat, but the process takes years.",
+              text: "Interstellar Arbitration — Take the case to the Sector Assembly and let them decide.",
+              outcome: "The sector sees you as a diplomat, but the process takes years.",
               tension: -4,
               approval: 2,
               party: -6,
@@ -2181,11 +2181,11 @@ const CARDS = {
         },
         {
           title: "Refugee Crisis",
-          body: "Thousands are fleeing a small conflict nearby and are at your gates.",
+          body: "Thousands are fleeing a small conflict nearby and are docking at your airlocks.",
           choices: [
             {
-              text: "Open Borders \u2014 Provide full asylum and path to work.",
-              outcome: "You are a humanitarian hero, but the sudden scale strains the national budget.",
+              text: "Open Docks — Provide full asylum and a path to work.",
+              outcome: "You are a humanitarian hero, but the sudden scale strains the colony budget.",
               approval: 7,
               eco: -6,
               tension: 7,
@@ -2198,7 +2198,7 @@ const CARDS = {
               energy: -7
             },
             {
-              text: "Tent Cities \u2014 Provide basic aid but keep them in restricted camps.",
+              text: "Hold Ships — Provide basic aid but keep them in sealed quarantine ships.",
               outcome: "Order is preserved, but human rights groups are increasingly critical.",
               approval: 2,
               eco: -4,
@@ -2212,8 +2212,8 @@ const CARDS = {
               energy: -3
             },
             {
-              text: "Push Back \u2014 Use the military to force them back across the border.",
-              outcome: "The border is sealed, but international condemnation is swift.",
+              text: "Push Back — Use the fleet to turn their ships away.",
+              outcome: "The docks are sealed, but interstellar condemnation is swift.",
               unrest: 7,
               approval: -8,
               tension: 5,
@@ -2226,7 +2226,7 @@ const CARDS = {
               energy: -5
             },
             {
-              text: "Air-Lift \u2014 Pay a third country to take them instead.",
+              text: "Ferry Them On — Pay a third colony to take them instead.",
               outcome: "The burden is shared, but the treasury is significantly drained.",
               eco: -7,
               tension: -3,
@@ -2243,7 +2243,7 @@ const CARDS = {
         },
         {
           title: "The Arms Deal",
-          body: "A friendly nation wants to buy your older fighter jets. Rivals are watching.",
+          body: "A friendly colony wants to buy your older strike fighters. Rivals are watching.",
           choices: [
             {
               text: "Finalize Sale \u2014 We need the revenue and the alliance.",
@@ -2260,8 +2260,8 @@ const CARDS = {
               energy: 4
             },
             {
-              text: "Veto Sale \u2014 Do not arm a nation currently in conflict.",
-              outcome: "Your moral standing is secured, but the aerospace industry is furious.",
+              text: "Veto Sale — Do not arm a colony currently at war.",
+              outcome: "Your moral standing is secured, but the shipbuilders are furious.",
               integrity: 7,
               eco: -5,
               party: -7,
@@ -2273,7 +2273,7 @@ const CARDS = {
               energy: 0
             },
             {
-              text: "Lease Only \u2014 Lease the jets but keep your own technicians on site.",
+              text: "Lease Only — Lease the fighters but keep your own technicians on site.",
               outcome: "You keep a foothold in the region, but risk being dragged into their war.",
               unrest: 6,
               eco: -4,
@@ -2304,7 +2304,7 @@ const CARDS = {
         },
         {
           title: "Intelligence Assets",
-          body: "Your spies have found a \"backdoor\" into a rival nation\u2019s digital infrastructure.",
+          body: "Your spies have found a \"backdoor\" into a rival colony’s data core.",
           choices: [
             {
               text: "Observe Only \u2014 Just watch and gather information.",
@@ -2363,11 +2363,11 @@ const CARDS = {
         },
         {
           title: "Peace Envoy",
-          body: "Two small nations are in a trade war. They want you to mediate.",
+          body: "Two small colonies are in a trade war. They want you to mediate.",
           choices: [
             {
-              text: "Host Summit \u2014 Bring them to the capital for a week of talks.",
-              outcome: "You are seen as a global peacemaker, but the summit is a logistical nightmare.",
+              text: "Host Summit — Bring them to the Oval for a week of talks.",
+              outcome: "You are seen as a sector peacemaker, but the summit is a logistical nightmare.",
               tension: -7,
               eco: -2,
               approval: 3,
@@ -2380,8 +2380,8 @@ const CARDS = {
               energy: -6
             },
             {
-              text: "Support Stronger Side \u2014 Favor the nation that buys more of our goods.",
-              outcome: "Economic ties are strengthened, but the smaller nation feels betrayed.",
+              text: "Support Stronger Side — Favor the colony that buys more of our goods.",
+              outcome: "Economic ties are strengthened, but the smaller colony feels betrayed.",
               eco: 6,
               tension: 4,
               party: 3,
@@ -2395,7 +2395,7 @@ const CARDS = {
             },
             {
               text: "Ignore Request \u2014 We have enough problems at home.",
-              outcome: "You avoid the mess, but your international influence takes a noticeable dip.",
+              outcome: "You avoid the mess, but your interstellar influence takes a noticeable dip.",
               eco: 2,
               tension: 4,
               unrest: -5,
@@ -2409,7 +2409,7 @@ const CARDS = {
             },
             {
               text: "Sell to Both \u2014 Sell \"security consulting\" to both sides while they talk.",
-              outcome: "The treasury grows, but the world sees you as a war-profiteer.",
+              outcome: "The treasury grows, but the sector sees you as a war-profiteer.",
               eco: 8,
               integrity: -9,
               tension: 5,
@@ -2424,10 +2424,10 @@ const CARDS = {
         },
         {
           title: "Military Parade",
-          body: "The Defense Department wants a holiday parade to showcase new hardware.",
+          body: "The Defense Command wants a fleet review to showcase new hardware.",
           choices: [
             {
-              text: "Full Display \u2014 Tanks and missiles in the city center.",
+              text: "Full Display — Warships and missile batteries over the core decks.",
               outcome: "The public is awed by your strength, but allies see it as a threat.",
               unrest: 7,
               party: 6,
@@ -2441,7 +2441,7 @@ const CARDS = {
               energy: -9
             },
             {
-              text: "Focus on Service \u2014 A parade of soldiers and bands, no heavy weapons.",
+              text: "Focus on Service — A parade of crews and bands, no heavy weapons.",
               outcome: "A wholesome display that boosts morale without scaring the neighbors.",
               approval: 5,
               party: -3,
@@ -2455,7 +2455,7 @@ const CARDS = {
               energy: -3
             },
             {
-              text: "Cancel Parade \u2014 Use the budget for a public park instead.",
+              text: "Cancel Parade — Use the budget for a public garden deck instead.",
               outcome: "Integrity rises as you choose peace over posturing, but the military is slighted.",
               approval: 7,
               eco: 3,
@@ -2469,7 +2469,7 @@ const CARDS = {
               energy: 4
             },
             {
-              text: "Joint Exercise \u2014 Cancel the parade and do a training drill instead.",
+              text: "Joint Exercise — Cancel the review and run a fleet drill instead.",
               outcome: "The troops are better prepared, but the region is on high alert.",
               unrest: 6,
               party: 5,
@@ -2486,11 +2486,11 @@ const CARDS = {
         },
         {
           title: "The Defector",
-          body: "A mid-level officer from a rival nation wants to switch sides.",
+          body: "A mid-level officer from a rival colony wants to switch sides.",
           choices: [
             {
               text: "Accept & Shelter \u2014 Take him in and provide a new life.",
-              outcome: "You gain a new ally, but the rival nation declares it an act of aggression.",
+              outcome: "You gain a new ally, but the rival colony declares it an act of aggression.",
               unrest: 5,
               tension: 7,
               party: 3,
@@ -2546,8 +2546,8 @@ const CARDS = {
           ]
         },
         {
-          title: "Naval Patrols",
-          body: "Your Navy wants to increase patrols in a disputed trade route.",
+          title: "Fleet Patrols",
+          body: "Your fleet wants to increase patrols along a disputed trade lane.",
           choices: [
             {
               text: "Increase Presence \u2014 Send more ships to protect our merchants.",
@@ -2592,8 +2592,8 @@ const CARDS = {
               energy: 5
             },
             {
-              text: "Drone Patrols \u2014 Use unmanned subs to watch the area.",
-              outcome: "Constant surveillance provides safety without the high cost of sailors.",
+              text: "Drone Patrols — Use unmanned scouts to watch the lane.",
+              outcome: "Constant surveillance provides safety without the high cost of crews.",
               unrest: 6,
               eco: -7,
               tension: 4,
@@ -2609,7 +2609,7 @@ const CARDS = {
         },
         {
           title: "Cultural Exchange",
-          body: "A rival nation wants to send their National Orchestra on a tour here.",
+          body: "A rival colony wants to send its Grand Orchestra on a tour here.",
           choices: [
             {
               text: "Welcome Them \u2014 Art transcends politics.",
@@ -2626,7 +2626,7 @@ const CARDS = {
               energy: -3
             },
             {
-              text: "Demand Same \u2014 Only if our Rock Band can tour their capital.",
+              text: "Demand Same — Only if our Rock Band can tour their capital station.",
               outcome: "A fair deal that promotes mutual respect and cultural growth.",
               tension: -4,
               approval: 2,
@@ -2641,7 +2641,7 @@ const CARDS = {
             },
             {
               text: "Deny Visas \u2014 Their musicians might be spies.",
-              outcome: "Safety is prioritized, but the world sees you as paranoid.",
+              outcome: "Safety is prioritized, but the sector sees you as paranoid.",
               tension: 4,
               party: 5,
               approval: -4,
@@ -2670,12 +2670,12 @@ const CARDS = {
           ]
         },
         {
-          title: "The Space Base",
-          body: "Scientists want to build a shared research station with several allies.",
+          title: "The Deep Space Lab",
+          body: "Scientists want to build a shared research outpost with several allies.",
           choices: [
             {
               text: "Lead Project \u2014 We take the lead and pay the most.",
-              outcome: "You lead the future of humanity, though it costs a king's ransom.",
+              outcome: "You lead the future of the sector, though it costs a king's ransom.",
               unrest: 6,
               tension: 4,
               eco: -8,
@@ -2701,8 +2701,8 @@ const CARDS = {
               energy: -4
             },
             {
-              text: "Focus on Military \u2014 Build our own secret base instead.",
-              outcome: "Military dominance in orbit is secured, but at the cost of total paranoia.",
+              text: "Focus on Military — Build our own secret outpost instead.",
+              outcome: "Military dominance in the sector is secured, but at the cost of total paranoia.",
               unrest: 7,
               tension: 7,
               eco: -9,
@@ -2715,8 +2715,8 @@ const CARDS = {
               energy: -8
             },
             {
-              text: "Cancel Participation \u2014 Space is a waste of money.",
-              outcome: "Money is saved, but you are left behind in the global technology race.",
+              text: "Cancel Participation — Research is a waste of money.",
+              outcome: "Money is saved, but you are left behind in the sector's technology race.",
               eco: 7,
               approval: -5,
               integrity: -3,
@@ -2729,7 +2729,7 @@ const CARDS = {
         },
         {
           title: "Foreign Aid",
-          body: "A flood has hit a distant neutral country. They need help.",
+          body: "A reactor meltdown has hit a distant neutral colony. They need help.",
           choices: [
             {
               text: "Significant Aid \u2014 Send food, ships, and doctors.",
@@ -2760,7 +2760,7 @@ const CARDS = {
             },
             {
               text: "No Aid \u2014 Focus on our own infrastructure.",
-              outcome: "The budget is balanced, but the world remembers your indifference.",
+              outcome: "The budget is balanced, but the sector remembers your indifference.",
               eco: 4,
               approval: -6,
               party: 3,
@@ -2774,7 +2774,7 @@ const CARDS = {
             },
             {
               text: "Loan Aid \u2014 Give them the money but they must pay it back with interest.",
-              outcome: "You help a neighbor while ensuring the national Economy doesn't skyrocket.",
+              outcome: "You help a neighbor while ensuring the colony Economy doesn't skyrocket.",
               eco: 6,
               approval: -4,
               party: 2,
@@ -2789,11 +2789,11 @@ const CARDS = {
         },
         {
           title: "Embassy Security",
-          body: "Protests are growing near your embassy in a rival city.",
+          body: "Protests are growing near your embassy on a rival station.",
           choices: [
             {
               text: "Add Guards \u2014 Send a team of Marines to protect the staff.",
-              outcome: "The staff is safe, but the rival nation sees it as a military buildup.",
+              outcome: "The staff is safe, but the rival colony sees it as a military buildup.",
               unrest: 6,
               tension: 7,
               party: 4,
@@ -2807,7 +2807,7 @@ const CARDS = {
             },
             {
               text: "Evacuate Non-Essential \u2014 Get the families out now.",
-              outcome: "Panic is avoided, but the staff feels abandoned by the capital.",
+              outcome: "Panic is avoided, but the staff feels abandoned by the Oval.",
               tension: -4,
               approval: -3,
               eco: -5,
@@ -2820,7 +2820,7 @@ const CARDS = {
               energy: -4
             },
             {
-              text: "Close Embassy \u2014 Shut it down and leave the city.",
+              text: "Close Embassy — Shut it down and leave the station.",
               outcome: "A total breakdown in diplomacy, though lives are arguably saved.",
               tension: -7,
               unrest: -7,
@@ -2834,7 +2834,7 @@ const CARDS = {
               energy: 3
             },
             {
-              text: "Ignore \u2014 Trust the local police to handle it.",
+              text: "Ignore — Trust the station's own security to handle it.",
               outcome: "The situation calms down, but your party thinks you were too risky.",
               tension: -2,
               unrest: -4,
@@ -2850,12 +2850,12 @@ const CARDS = {
           ]
         },
         {
-          title: "The Fishing War",
-          body: "Your fishermen are clashing with foreign boats in the open sea.",
+          title: "The Ice Harvest War",
+          body: "Your ice haulers are clashing with foreign haulers in the open comet belt.",
           choices: [
             {
-              text: "Escort Boats \u2014 Send Coast Guard to protect our fishermen.",
-              outcome: "Your workers are safe, but a naval skirmish becomes much more likely.",
+              text: "Escort Haulers — Send patrol cutters to protect our crews.",
+              outcome: "Your workers are safe, but a fleet skirmish becomes much more likely.",
               unrest: 5,
               tension: 7,
               approval: 4,
@@ -2868,8 +2868,8 @@ const CARDS = {
               energy: -6
             },
             {
-              text: "Negotiate Limits \u2014 Set a shared limit for both nations.",
-              outcome: "A sustainable peace that protects the ocean and the peace.",
+              text: "Negotiate Limits — Set a shared quota for both colonies.",
+              outcome: "A sustainable peace that protects the belt and the peace.",
               tension: -6,
               approval: 2,
               party: -4,
@@ -2882,8 +2882,8 @@ const CARDS = {
               energy: -2
             },
             {
-              text: "Ban Fishing \u2014 Close the area to everyone to avoid a fight.",
-              outcome: "The water is quiet, but the fishing industry is effectively destroyed.",
+              text: "Ban Harvesting — Close the belt to everyone to avoid a fight.",
+              outcome: "The belt is quiet, but the ice-hauling industry is effectively destroyed.",
               tension: -7,
               approval: -7,
               eco: -7,
@@ -2896,7 +2896,7 @@ const CARDS = {
               energy: 3
             },
             {
-              text: "Impound Foreign \u2014 Seize any foreign boat that enters.",
+              text: "Impound Foreign — Seize any foreign hauler that enters.",
               outcome: "Authority is projected, but the local market suffers from the trade ban.",
               unrest: 7,
               tension: 8,
@@ -2912,8 +2912,8 @@ const CARDS = {
           ]
         },
         {
-          title: "Satellite Launch",
-          body: "Your military wants to launch a new \"Global Eye\" satellite.",
+          title: "Spy Satellite",
+          body: "Your military wants to launch a new \"Sector Eye\" surveillance satellite.",
           choices: [
             {
               text: "Private Launch \u2014 Use a private company to keep it low-profile.",
@@ -2931,7 +2931,7 @@ const CARDS = {
             },
             {
               text: "Military Launch \u2014 A proud, public display of rocket power.",
-              outcome: "National pride soars, but the rival nation responds with their own launch.",
+              outcome: "Colony pride soars, but the rival colony responds with its own launch.",
               unrest: 7,
               tension: 7,
               party: 5,
@@ -2959,7 +2959,7 @@ const CARDS = {
             },
             {
               text: "Share Data \u2014 Launch it but let allies see the feed.",
-              outcome: "Global trust is built, though you lose a core tactical advantage.",
+              outcome: "Sector trust is built, though you lose a core tactical advantage.",
               tension: -6,
               approval: 4,
               party: -5,
@@ -2975,7 +2975,7 @@ const CARDS = {
         },
         {
           title: "Cyber Security",
-          body: "A major bank was hacked. The trail leads to a rival government.",
+          body: "A major bank was hacked. The trail leads to a rival colony's government.",
           choices: [
             {
               text: "Direct Sanctions \u2014 Freeze the assets of their top officials.",
@@ -3006,8 +3006,8 @@ const CARDS = {
               energy: -6
             },
             {
-              text: "Public Complaint \u2014 Show the evidence to the world.",
-              outcome: "The world is on your side, but the hackers are still at large.",
+              text: "Public Complaint — Show the evidence to the whole sector.",
+              outcome: "The sector is on your side, but the hackers are still at large.",
               tension: 5,
               approval: 4,
               party: -4,
@@ -3036,11 +3036,11 @@ const CARDS = {
           ]
         },
         {
-          title: "Border Fence",
-          body: "The Border Guard wants to build a new tech-enhanced fence.",
+          title: "The Border Picket",
+          body: "Border Command wants a new line of tech-enhanced sentry buoys.",
           choices: [
             {
-              text: "Build High-Tech \u2014 Cameras, drones, and sensors everywhere.",
+              text: "Build High-Tech — Cameras, drones, and sensors on every buoy.",
               outcome: "The border is air-tight, but the cost of maintenance is forever.",
               unrest: 7,
               eco: -8,
@@ -3054,7 +3054,7 @@ const CARDS = {
               energy: -10
             },
             {
-              text: "Low-Tech Wall \u2014 A simple stone and wire barrier.",
+              text: "Low-Tech Mines — A simple field of dumb mines.",
               outcome: "A physical deterrent that is cheap but only moderately effective.",
               unrest: 5,
               eco: -6,
@@ -3068,7 +3068,7 @@ const CARDS = {
               energy: -3
             },
             {
-              text: "Open Border \u2014 No fence; use the money for patrol cars.",
+              text: "Open Border — No buoys; use the money for patrol craft.",
               outcome: "Mobility is high, though your party base feels the border is exposed.",
               approval: 6,
               eco: -3,
@@ -3082,7 +3082,7 @@ const CARDS = {
               energy: 3
             },
             {
-              text: "Joint Gate \u2014 Build a shared trade hub instead.",
+              text: "Joint Gate — Build a shared trade station instead.",
               outcome: "Trade flourishes, though security experts warn of increased risks.",
               tension: -8,
               eco: 4,
@@ -3098,8 +3098,8 @@ const CARDS = {
           ]
         },
         {
-          title: "Rare Earth Trade",
-          body: "A rival nation controls 90% of the minerals for your tank armor.",
+          title: "Rare Metals Trade",
+          body: "A rival colony controls 90% of the metals for your hull armor.",
           choices: [
             {
               text: "Stockpile \u2014 Buy as much as we can now before they ban it.",
@@ -3116,7 +3116,7 @@ const CARDS = {
               energy: -7
             },
             {
-              text: "Domestic Mining \u2014 Open new, expensive mines in our own mountains.",
+              text: "Domestic Mining — Open new, expensive mines on our own moons.",
               outcome: "Long-term security is established, but the environmental cost is high.",
               eco: -9,
               approval: -4,
@@ -3158,7 +3158,7 @@ const CARDS = {
         },
         {
           title: "The Secret Meeting",
-          body: "A rival leader wants to meet you in secret on a private island.",
+          body: "A rival leader wants to meet you in secret on a private yacht.",
           choices: [
             {
               text: "Go Secretly \u2014 No cameras, no press, just talk.",
@@ -3175,8 +3175,8 @@ const CARDS = {
               energy: -4
             },
             {
-              text: "Make it Public \u2014 Insist on a formal, televised summit.",
-              outcome: "The world watches a historic moment, though no real secrets are shared.",
+              text: "Make it Public — Insist on a formal, broadcast summit.",
+              outcome: "The sector watches a historic moment, though no real secrets are shared.",
               tension: 6,
               approval: 7,
               party: 5,
@@ -3219,12 +3219,12 @@ const CARDS = {
           ]
         },
         {
-          title: "Olympic Hosting",
-          body: "Both you and a rival nation want to host the next Games.",
+          title: "Hosting the Games",
+          body: "Both you and a rival colony want to host the next Interstellar Games.",
           choices: [
             {
               text: "Bid Aggressively \u2014 Spend whatever it takes to win the bid.",
-              outcome: "You win the world's stage, but the national Economy reaches a new peak.",
+              outcome: "You win the sector's stage, but the colony Economy reaches a new peak.",
               eco: -9,
               approval: 7,
               party: 6,
@@ -3252,7 +3252,7 @@ const CARDS = {
             },
             {
               text: "Withdraw \u2014 Let them have it; it's a money pit.",
-              outcome: "The treasury is safe, but your national pride takes a public hit.",
+              outcome: "The treasury is safe, but colony pride takes a public hit.",
               eco: 8,
               approval: -6,
               party: -7,
@@ -3313,7 +3313,7 @@ const CARDS = {
               energy: -2
             },
             {
-              text: "Let it Expire \u2014 The world has changed; we don't need this paper.",
+              text: "Let it Expire — The sector has changed; we don't need this paper.",
               outcome: "Freedom is regained, but at the cost of total regional uncertainty.",
               unrest: 7,
               tension: 9,
@@ -3327,7 +3327,7 @@ const CARDS = {
               energy: 0
             },
             {
-              text: "Expand Treaty \u2014 Invite three other nations to join the peace.",
+              text: "Expand Treaty — Invite three other colonies to join the peace.",
               outcome: "A new era of peace is born, though your party fears a loss of sovereignty.",
               tension: -9,
               approval: 7,
@@ -3346,10 +3346,10 @@ const CARDS = {
       civilrights: [
         {
           title: "The Protest Wave",
-          body: "Thousands are blocking the main highway demanding higher police accountability.",
+          body: "Thousands are blocking the main transit spine demanding higher security-force accountability.",
           choices: [
             {
-              text: "Meet Leaders \u2014 Invite the organizers to the Oval Office to hear their demands.",
+              text: "Meet Leaders — Invite the organizers to the Oval to hear their demands.",
               outcome: "Public approval rises, but your Party thinks you are being too soft.",
               approval: 6,
               party: -4,
@@ -3361,7 +3361,7 @@ const CARDS = {
               energy: -2
             },
             {
-              text: "Clear Highway \u2014 Order the police to clear the road so traffic can resume.",
+              text: "Clear the Spine — Order security to clear the corridor so transit can resume.",
               outcome: "Authority is restored, but the public sees it as a lack of empathy.",
               unrest: 7,
               approval: -7,
@@ -3373,7 +3373,7 @@ const CARDS = {
               energy: -5
             },
             {
-              text: "Ignore Them \u2014 Let the local Governor handle the situation.",
+              text: "Ignore Them — Let the deck Governor handle the situation.",
               outcome: "Saves your reputation, but the economy stalls from the blockage.",
               eco: -5,
               approval: -3,
@@ -3454,8 +3454,8 @@ const CARDS = {
           ]
         },
         {
-          title: "Immigration Visas",
-          body: "The tech industry is begging for more H-1B visas for skilled engineers.",
+          title: "Work Permits",
+          body: "The tech industry is begging for more work permits for skilled engineers from other colonies.",
           choices: [
             {
               text: "Approve Increase \u2014 Grant the request to help the economy.",
@@ -3495,8 +3495,8 @@ const CARDS = {
               energy: 0
             },
             {
-              text: "Rural Incentive \u2014 Grant visas only if they work in underdeveloped areas.",
-              outcome: "Helps the poor regions, but companies find it difficult.",
+              text: "Frontier Incentive — Grant permits only if they work on the outer moons.",
+              outcome: "Helps the frontier, but companies find it difficult.",
               eco: 3,
               approval: 4,
               party: -3,
@@ -3510,10 +3510,10 @@ const CARDS = {
         },
         {
           title: "Religious Landmark",
-          body: "A community wants to build a center on a site significant to another group.",
+          body: "A community wants to build a center on a site sacred to another group.",
           choices: [
             {
-              text: "Protect Site \u2014 Declare the land a national monument to prevent construction.",
+              text: "Protect Site — Declare the site a colony monument to prevent construction.",
               outcome: "Approval and Party Loyalty rise, but Tension with the community grows.",
               approval: 7,
               party: 5,
@@ -3536,7 +3536,7 @@ const CARDS = {
               energy: -1
             },
             {
-              text: "Relocate Offer \u2014 Offer a tax break to build on a nearby, neutral lot.",
+              text: "Relocate Offer — Offer a tax break to build on a nearby, neutral deck.",
               outcome: "A balanced compromise, but costs the Treasury.",
               eco: -5,
               approval: 2,
@@ -3548,7 +3548,7 @@ const CARDS = {
               energy: -4
             },
             {
-              text: "Local Vote \u2014 Let the city residents decide via a ballot.",
+              text: "Local Vote — Let the deck residents decide via a ballot.",
               outcome: "Democracy wins, but you look like you're avoiding leadership.",
               unrest: -7,
               approval: -2,
@@ -3562,8 +3562,8 @@ const CARDS = {
           ]
         },
         {
-          title: "Firearm Licensing",
-          body: "A bill suggests mandatory 40-hour safety training for all new buyers.",
+          title: "Sidearm Licensing",
+          body: "A bill suggests mandatory 40-hour safety training for everyone who buys a sidearm on the station.",
           choices: [
             {
               text: "Sign Bill \u2014 Support responsible ownership through education.",
@@ -3604,7 +3604,7 @@ const CARDS = {
             },
             {
               text: "Incentivize Safety \u2014 Give a tax credit to those who complete the training.",
-              outcome: "Effective but adds to the national Economy.",
+              outcome: "Effective but adds to the colony Economy.",
               eco: -7,
               approval: 4,
               party: -3,
@@ -3671,7 +3671,7 @@ const CARDS = {
         },
         {
           title: "Medical Funding",
-          body: "A request for more federal funding for local community clinics has arrived.",
+          body: "A request for more colony funding for local deck clinics has arrived.",
           choices: [
             {
               text: "Full Fund \u2014 Healthcare access should be a priority.",
@@ -3687,7 +3687,7 @@ const CARDS = {
             },
             {
               text: "Partial Fund \u2014 Fund only clinics in the most desperate areas.",
-              outcome: "Pragmatic fix, but other regions feel left behind.",
+              outcome: "Pragmatic fix, but other decks feel left behind.",
               approval: 5,
               eco: -7,
               party: -3,
@@ -3711,7 +3711,7 @@ const CARDS = {
               energy: 3
             },
             {
-              text: "Private Partnership \u2014 Ask large hospitals to adopt the small clinics.",
+              text: "Private Partnership — Ask large medical stations to adopt the small clinics.",
               outcome: "Effective, but your Authority over the system decreases.",
               unrest: -5,
               approval: 3,
@@ -3727,10 +3727,10 @@ const CARDS = {
         },
         {
           title: "Digital Voting",
-          body: "Advisors suggest allowing remote voting for military members stationed abroad.",
+          body: "Advisors suggest allowing remote voting for crews posted on distant outposts.",
           choices: [
             {
-              text: "National Rollout \u2014 Ensure every soldier has a voice.",
+              text: "Colony Rollout — Ensure every crew member has a voice.",
               outcome: "High approval from the military, but security experts are worried.",
               approval: 7,
               tension: 7,
@@ -3743,7 +3743,7 @@ const CARDS = {
               energy: -7
             },
             {
-              text: "Paper Ballots \u2014 Stick to physical mail-in ballots for total security.",
+              text: "Courier Ballots — Stick to sealed physical ballots carried by courier for total security.",
               outcome: "High Authority and Security, but slows down the results.",
               unrest: 6,
               approval: -6,
@@ -3756,7 +3756,7 @@ const CARDS = {
               energy: -2
             },
             {
-              text: "Limited Test \u2014 Try it for one small department first.",
+              text: "Limited Test — Try it for one small outpost first.",
               outcome: "Cautious; low impact on stats.",
               approval: 2,
               eco: -1,
@@ -3768,7 +3768,7 @@ const CARDS = {
               energy: -3
             },
             {
-              text: "Mobile Units \u2014 Send more physical voting booths to overseas bases.",
+              text: "Mobile Units — Send more physical voting booths to the outposts.",
               outcome: "Very expensive, but maintains high security.",
               eco: -7,
               approval: 6,
@@ -3783,11 +3783,11 @@ const CARDS = {
           ]
         },
         {
-          title: "Park Surveillance",
-          body: "To stop vandalism, the park service wants to install cameras in national forests.",
+          title: "Dome Surveillance",
+          body: "To stop vandalism, the parks office wants to install cameras in the forest domes.",
           choices: [
             {
-              text: "Deploy Now \u2014 Protect the beauty of the nation at all costs.",
+              text: "Deploy Now — Protect the beauty of the colony at all costs.",
               outcome: "Authority rises; the public feels slightly watched.",
               unrest: 7,
               approval: -7,
@@ -3813,7 +3813,7 @@ const CARDS = {
               energy: 2
             },
             {
-              text: "Limited View \u2014 Only place cameras at the main entrance and exits.",
+              text: "Limited View — Only place cameras at the dome airlocks.",
               outcome: "A balanced approach with moderate stats.",
               unrest: 3,
               approval: -2,
@@ -3839,8 +3839,8 @@ const CARDS = {
           ]
         },
         {
-          title: "Rural Healthcare",
-          body: "Many small towns have lost their only doctor. Should we offer student loan forgiveness for those who move there?",
+          title: "Frontier Healthcare",
+          body: "Many small outposts have lost their only doctor. Should we offer student loan forgiveness for those who move there?",
           choices: [
             {
               text: "Full Forgiveness \u2014 Incentivize medical care where it's needed most.",
@@ -3867,7 +3867,7 @@ const CARDS = {
               energy: -4
             },
             {
-              text: "Virtual Care \u2014 Invest in high-speed internet and \"Tele-Health\" instead.",
+              text: "Virtual Care — Invest in fast relays and \"Tele-Health\" instead.",
               outcome: "Modern and efficient, but the elderly find it difficult.",
               eco: -7,
               approval: 3,
@@ -3880,7 +3880,7 @@ const CARDS = {
             },
             {
               text: "Reject \u2014 We cannot pick winners and losers in the job market.",
-              outcome: "Saves money, but rural approval vanishes.",
+              outcome: "Saves money, but frontier approval vanishes.",
               eco: 6,
               approval: -8,
               party: -4,
@@ -3909,7 +3909,7 @@ const CARDS = {
               energy: -4
             },
             {
-              text: "Big Business Only \u2014 Don't burden the small family shops.",
+              text: "Big Business Only — Don't burden the small family stalls.",
               outcome: "Party Loyalty stays high, but workers feel unprotected.",
               party: 7,
               approval: -8,
@@ -3947,10 +3947,10 @@ const CARDS = {
         },
         {
           title: "Sentence Reform",
-          body: "Should non-violent first-time offenders serve their time in community service rather than jail?",
+          body: "Should non-violent first-time offenders serve their time in community service rather than the brig?",
           choices: [
             {
-              text: "Reform Now \u2014 Free up the prisons and rehabilitate the people.",
+              text: "Reform Now — Free up the brigs and rehabilitate the people.",
               outcome: "High Empathy and Integrity; the Party thinks you're soft on crime.",
               empathy: 7,
               integrity: 7,
@@ -3977,7 +3977,7 @@ const CARDS = {
             },
             {
               text: "Status Quo \u2014 A crime is a crime. Keep the current laws.",
-              outcome: "Party Loyalty and Authority rise; prisons remain full.",
+              outcome: "Party Loyalty and Authority rise; the brigs remain full.",
               party: 7,
               unrest: 6,
               eco: -7,
@@ -4005,7 +4005,7 @@ const CARDS = {
         },
         {
           title: "Youth Employment",
-          body: "Youth unemployment is rising. Advisors suggest a national internship program.",
+          body: "Youth unemployment is rising. Advisors suggest a colony-wide internship program.",
           choices: [
             {
               text: "Full Program \u2014 Pay young people to work for the government.",
@@ -4057,7 +4057,7 @@ const CARDS = {
         },
         {
           title: "Public Transit",
-          body: "The national bus system is failing. Should we subsidize the fares?",
+          body: "The colony shuttle bus network is failing. Should we subsidize the fares?",
           choices: [
             {
               text: "Subsidize All \u2014 Keep the people moving for cheap.",
@@ -4072,7 +4072,7 @@ const CARDS = {
               energy: -9
             },
             {
-              text: "Upgrade Fleet \u2014 Don't lower fares; buy new, cleaner buses instead.",
+              text: "Upgrade Fleet — Don't lower fares; buy new, cleaner shuttles instead.",
               outcome: "Better for the environment; Approval is mid-range.",
               approval: 5,
               eco: -7,
@@ -4084,7 +4084,7 @@ const CARDS = {
               energy: -7
             },
             {
-              text: "Privatize \u2014 Sell the buses to a private firm to save money.",
+              text: "Privatize — Sell the shuttles to a private firm to save money.",
               outcome: "Economy falls, but fares will rise significantly.",
               eco: 8,
               approval: -9,
@@ -4097,7 +4097,7 @@ const CARDS = {
               energy: 4
             },
             {
-              text: "No Action \u2014 Let the locals handle their own transit.",
+              text: "No Action — Let each deck handle its own transit.",
               outcome: "Saves money, but the poor lose their way to work.",
               eco: 4,
               approval: -8,
@@ -4112,7 +4112,7 @@ const CARDS = {
         },
         {
           title: "Heritage Protection",
-          body: "A developer wants to build a shopping mall on a historical site.",
+          body: "A developer wants to build a trade arcade on the site of the first landing.",
           choices: [
             {
               text: "Deny Permit \u2014 History is not for sale.",
@@ -4139,8 +4139,8 @@ const CARDS = {
               energy: -3
             },
             {
-              text: "Move Site \u2014 Pay to move the historical building to a museum.",
-              outcome: "Expensive but saves the history and the mall.",
+              text: "Move Site — Pay to move the landing module to a museum.",
+              outcome: "Expensive but saves the history and the arcade.",
               eco: -8,
               approval: 5,
               party: 3,
@@ -4151,7 +4151,7 @@ const CARDS = {
               energy: -8
             },
             {
-              text: "Partial Use \u2014 The mall must include a museum floor on the site.",
+              text: "Partial Use — The arcade must include a museum floor on the site.",
               outcome: "A messy compromise that satisfies no one.",
               eco: 4,
               approval: -4,
@@ -4166,7 +4166,7 @@ const CARDS = {
         },
         {
           title: "Online Privacy",
-          body: "Should websites be required to get \"explicit consent\" for every piece of data they collect?",
+          body: "Should data-net services be required to get \"explicit consent\" for every piece of data they collect?",
           choices: [
             {
               text: "Pass Law \u2014 The citizen's data belongs to the citizen.",
@@ -4181,7 +4181,7 @@ const CARDS = {
               energy: -3
             },
             {
-              text: "Voluntary Shield \u2014 Create a \"State Privacy Seal\" for sites that opt-in.",
+              text: "Voluntary Shield — Create a \"Colony Privacy Seal\" for services that opt in.",
               outcome: "Good for branding, but ineffective.",
               approval: 3,
               eco: -2,
@@ -4204,7 +4204,7 @@ const CARDS = {
               energy: -2
             },
             {
-              text: "Reject \u2014 Data is the \"oil\" of the digital economy.",
+              text: "Reject — Data is the \"fuel\" of the digital economy.",
               outcome: "Economy stays fast; Approval takes a hit.",
               eco: 7,
               approval: -7,
@@ -4246,7 +4246,7 @@ const CARDS = {
               energy: -4
             },
             {
-              text: "Tax Breaks \u2014 Give teachers a $5,000 tax credit instead.",
+              text: "Tax Breaks — Give teachers a 5,000-credit tax credit instead.",
               outcome: "Popular and easier on the budget than a salary.",
               eco: -7,
               approval: 6,
@@ -4272,8 +4272,8 @@ const CARDS = {
           ]
         },
         {
-          title: "Urban Gardens",
-          body: "Groups want to turn empty city lots into community vegetable gardens.",
+          title: "Deck Gardens",
+          body: "Groups want to turn empty storage bays into community vegetable gardens.",
           choices: [
             {
               text: "Fund All \u2014 Local food and local pride.",
@@ -4288,8 +4288,8 @@ const CARDS = {
               energy: -4
             },
             {
-              text: "Sell to Devs \u2014 We need houses, not tomatoes. Sell the land.",
-              outcome: "Economy rises; neighborhoods lose their charm.",
+              text: "Sell to Devs — We need cabins, not tomatoes. Sell the bays.",
+              outcome: "Economy rises; the decks lose their charm.",
               eco: 7,
               approval: -7,
               party: 5,
@@ -4300,7 +4300,7 @@ const CARDS = {
               energy: 2
             },
             {
-              text: "Lease Only \u2014 Let them garden but reclaim the land if a buyer appears.",
+              text: "Lease Only — Let them garden but reclaim the bays if a buyer appears.",
               outcome: "Cautious; no one feels secure.",
               eco: 2,
               approval: -3,
@@ -4312,7 +4312,7 @@ const CARDS = {
               energy: -1
             },
             {
-              text: "Tax Incentive \u2014 If you own a lot and make it a garden, pay no taxes.",
+              text: "Tax Incentive — If you own a bay and make it a garden, pay no taxes.",
               outcome: "Effective for the public; Treasury loses out.",
               eco: -7,
               approval: 5,
@@ -4327,10 +4327,10 @@ const CARDS = {
         },
         {
           title: "Sports Funding",
-          body: "The Olympic committee wants a billion-dollar training center for the nation's athletes.",
+          body: "The Games committee wants a billion-credit low-gravity training center for the colony's athletes.",
           choices: [
             {
-              text: "Build It \u2014 National pride is worth every penny.",
+              text: "Build It — Colony pride is worth every credit.",
               outcome: "High Approval and Authority; huge Economy.",
               approval: 7,
               unrest: 7,
@@ -4355,7 +4355,7 @@ const CARDS = {
               energy: -2
             },
             {
-              text: "Community Focus \u2014 Spend the money on 100 small town gyms instead.",
+              text: "Community Focus — Spend the money on 100 small deck gyms instead.",
               outcome: "High Empathy and Approval; athletes lose the elite center.",
               approval: 8,
               empathy: 7,
@@ -4382,7 +4382,7 @@ const CARDS = {
         },
         {
           title: "Holiday Mandate",
-          body: "Should we create a new federal holiday to honor \"National Unity\"?",
+          body: "Should we create a new colony holiday to honor \"Founders' Unity\"?",
           choices: [
             {
               text: "Create Holiday \u2014 Give everyone a day off to celebrate together.",
@@ -4438,7 +4438,7 @@ const CARDS = {
       scandal: [
         {
           title: "The Donor\u2019s Kid",
-          body: "A top donor\u2019s son was arrested for a DUI. They want you to make the charges \"disappear.\"",
+          body: "A top donor’s son was caught flying a shuttle drunk. They want you to make the charges \"disappear.\"",
           choices: [
             {
               text: "Refuse Help \u2014 Let the law take its course.",
@@ -4453,7 +4453,7 @@ const CARDS = {
               energy: -1
             },
             {
-              text: "Suggest Lenience \u2014 Ask the DA to consider a plea deal instead of jail time.",
+              text: "Suggest Lenience — Ask the Station Prosecutor to consider a plea deal instead of the brig.",
               outcome: "The donor stays happy, but rumors of \"two-tiered justice\" leak to the press.",
               party: 5,
               integrity: -5,
@@ -4477,7 +4477,7 @@ const CARDS = {
               energy: -3
             },
             {
-              text: "Public Condemnation \u2014 Use the event to give a speech about the dangers of drunk driving.",
+              text: "Public Condemnation — Use the event to give a speech about the dangers of flying drunk.",
               outcome: "You gain massive public approval, but you've made a permanent enemy of a powerful billionaire.",
               approval: 7,
               integrity: 5,
@@ -4531,7 +4531,7 @@ const CARDS = {
             },
             {
               text: "Dig Dirt Back \u2014 Leak a scandal about the editor of the tabloid.",
-              outcome: "The story dies, but you've shown the world you play very dirty.",
+              outcome: "The story dies, but you have shown the colony you play very dirty.",
               unrest: 6,
               approval: 2,
               integrity: -7,
@@ -4545,10 +4545,10 @@ const CARDS = {
         },
         {
           title: "The Interior Remodel",
-          body: "You used $500k of taxpayer money to \"secure\" your private vacation home with luxury upgrades.",
+          body: "You used 500k credits of public money to \"secure\" your private orbital villa with luxury upgrades.",
           choices: [
             {
-              text: "Pay it Back \u2014 Use your personal savings to reimburse the state.",
+              text: "Pay it Back — Use your personal savings to reimburse the colony.",
               outcome: "You stop the scandal, but your personal finances are now in ruins.",
               integrity: 7,
               eco: -5,
@@ -4560,8 +4560,8 @@ const CARDS = {
               energy: 0
             },
             {
-              text: "Defend the Security \u2014 Argue that a President is never \"off duty\" and needs top-tier protection.",
-              outcome: "Half the country accepts the logic; the other half sees it as a mansion renovation.",
+              text: "Defend the Security — Argue that a Commander is never \"off duty\" and needs top-tier protection.",
+              outcome: "Half the colony accepts the logic; the other half sees it as a villa renovation.",
               unrest: 5,
               approval: -6,
               integrity: -4,
@@ -4572,7 +4572,7 @@ const CARDS = {
               energy: -3
             },
             {
-              text: "Blame the Secret Service \u2014 Claim they made the decisions without your oversight.",
+              text: "Blame the Honor Guard — Claim they made the decisions without your oversight.",
               outcome: "You shift the blame, but morale within your protection detail hits an all-time low.",
               party: 2,
               approval: 3,
@@ -4583,7 +4583,7 @@ const CARDS = {
               energy: -1
             },
             {
-              text: "Open for Public Tours \u2014 Turn the home into a \"National Heritage Site\" after your term.",
+              text: "Open for Public Tours — Turn the villa into a \"Colony Heritage Site\" after your term.",
               outcome: "You spin the theft into a \"gift to the people,\" confusing the critics.",
               approval: 5,
               integrity: -4,
@@ -4598,10 +4598,10 @@ const CARDS = {
         },
         {
           title: "The Shadow Lobbyist",
-          body: "Your brother is taking \"consulting fees\" from a foreign tech company to get a meeting with you.",
+          body: "Your brother is taking \"consulting fees\" from a rival colony's tech company to get a meeting with you.",
           choices: [
             {
-              text: "Ban Him \u2014 Bar your brother from the White House and all government buildings.",
+              text: "Ban Him — Bar your brother from the Oval and all government decks.",
               outcome: "You save your reputation, but your family is shattered and your brother goes to the press.",
               integrity: 7,
               approval: 6,
@@ -4635,7 +4635,7 @@ const CARDS = {
               energy: -2
             },
             {
-              text: "Help the Company \u2014 Grant the foreign company a lucrative government contract.",
+              text: "Help the Company — Grant the off-colony company a lucrative government contract.",
               outcome: "The economy gets a slight boost from the tech, but the bribery scandal is undeniable.",
               eco: 7,
               integrity: -7,
@@ -4650,7 +4650,7 @@ const CARDS = {
         },
         {
           title: "The Old Tax Return",
-          body: "An anonymous source leaks your taxes from 2015, showing you paid $0 through \"legal loopholes.\"",
+          body: "An anonymous source leaks your tax records from ten years ago, showing you paid nothing through \"legal loopholes.\"",
           choices: [
             {
               text: "Reform the Code \u2014 Use the scandal to propose closing those specific loopholes.",
@@ -4677,7 +4677,7 @@ const CARDS = {
               energy: 0
             },
             {
-              text: "Investigate the Leak \u2014 Use the IRS to find out who leaked the private data.",
+              text: "Investigate the Leak — Use the Revenue Office to find out who leaked the private data.",
               outcome: "You look like you're using the government as a personal weapon of revenge.",
               unrest: 7,
               approval: -5,
@@ -4689,8 +4689,8 @@ const CARDS = {
               energy: -6
             },
             {
-              text: "Ignore and Redirect \u2014 Start a war of words with a rival nation to change the subject.",
-              outcome: "The tax story fades, but global tension rises as you play \"wag the dog.\"",
+              text: "Ignore and Redirect — Start a war of words with a rival colony to change the subject.",
+              outcome: "The tax story fades, but interstellar tension rises as you play \"wag the dog.\"",
               tension: 7,
               approval: 2,
               integrity: -4,
@@ -4784,7 +4784,7 @@ const CARDS = {
             },
             {
               text: "Tip Your Party \u2014 Don't sell yourself, but tell party leaders to get their money out.",
-              outcome: "Your party is eternally grateful for the save, but a whistleblower in the caucus is watching.",
+              outcome: "Your party is eternally grateful for the save, but a whistleblower in the party council is watching.",
               party: 7,
               integrity: -7,
               approval: -4,
@@ -4795,7 +4795,7 @@ const CARDS = {
             },
             {
               text: "Sell Everything \u2014 Protect your personal wealth at all costs.",
-              outcome: "You stay rich, but the ensuing SEC investigation creates a permanent dark cloud.",
+              outcome: "You stay rich, but the Exchange Authority investigation that follows creates a permanent dark cloud.",
               eco: 7,
               integrity: -7,
               approval: -7,
@@ -4809,7 +4809,7 @@ const CARDS = {
         },
         {
           title: "The Hacked Tape",
-          body: "A recording of you using a crude insult for a foreign leader is leaked online.",
+          body: "A recording of you using a crude insult for a rival colony's leader is leaked on the data-net.",
           choices: [
             {
               text: "Apologize \u2014 Call the leader and issue a public statement of regret.",
@@ -4825,7 +4825,7 @@ const CARDS = {
             },
             {
               text: "Double Down \u2014 \"I said what I said, and they deserved it.\"",
-              outcome: "Your popularity spikes with nationalists, but international relations freeze instantly.",
+              outcome: "Your popularity spikes with hardliners, but interstellar relations freeze instantly.",
               tension: 7,
               approval: 7,
               party: 5,
@@ -4836,7 +4836,7 @@ const CARDS = {
               energy: 0
             },
             {
-              text: "Claim AI \u2014 State the tape is a \"Deepfake\" meant to destabilize the country.",
+              text: "Claim AI — State the tape is a \"Deepfake\" meant to destabilize the colony.",
               outcome: "Many believe you, but tech experts begin a crusade to prove you are lying.",
               unrest: 6,
               approval: 3,
@@ -4916,7 +4916,7 @@ const CARDS = {
           body: "You promised to lower taxes, but the economy needs a hike to survive.",
           choices: [
             {
-              text: "Break Promise \u2014 Raise the taxes. The country comes first.",
+              text: "Break Promise — Raise the taxes. The colony comes first.",
               outcome: "The markets stabilize, but your base feels betrayed and the opposition pounces.",
               eco: 6,
               approval: -7,
@@ -4940,7 +4940,7 @@ const CARDS = {
               energy: -1
             },
             {
-              text: "Tax The Other \u2014 Only raise taxes on foreign companies.",
+              text: "Tax The Other — Only raise taxes on off-colony companies.",
               outcome: "A popular move at home that provides some cash, but it sparks a trade row.",
               eco: 3,
               tension: 6,
@@ -4953,7 +4953,7 @@ const CARDS = {
               energy: -2
             },
             {
-              text: "Cut Services \u2014 Keep taxes low but shut down national libraries and parks.",
+              text: "Cut Services — Keep taxes low but shut down the public archives and garden decks.",
               outcome: "You save money without a tax hike, but the \"quality of life\" for citizens drops.",
               eco: 3,
               approval: -7,
@@ -4968,10 +4968,10 @@ const CARDS = {
         },
         {
           title: "The Private Server",
-          body: "It\u2019s revealed you used a private email server for government business.",
+          body: "It’s revealed you used a private comms server for government business.",
           choices: [
             {
-              text: "Hand Over All \u2014 Release every email to the public for transparency.",
+              text: "Hand Over All — Release every message to the public for transparency.",
               outcome: "Your integrity is praised, but the leaked internal drama hurts your party's image.",
               integrity: 7,
               approval: 5,
@@ -4982,8 +4982,8 @@ const CARDS = {
               energy: -2
             },
             {
-              text: "Delete Personal \u2014 Only release work emails; delete the private ones.",
-              outcome: "You maintain some privacy, but the \"missing\" emails fuel conspiracy theories.",
+              text: "Delete Personal — Only release work messages; delete the private ones.",
+              outcome: "You maintain some privacy, but the \"missing\" messages fuel conspiracy theories.",
               unrest: 3,
               integrity: -5,
               approval: -3,
@@ -5076,7 +5076,7 @@ const CARDS = {
           choices: [
             {
               text: "Authorize Tests \u2014 Find the traitor at any cost.",
-              outcome: "You find the mole, but the atmosphere in the West Wing becomes one of pure fear.",
+              outcome: "You find the mole, but the atmosphere in the command wing becomes one of pure fear.",
               unrest: 7,
               party: -7,
               approval: -5,
@@ -5126,7 +5126,7 @@ const CARDS = {
         },
         {
           title: "The Charity Foundation",
-          body: "Your family charity received a massive donation from a country you just signed a trade deal with.",
+          body: "Your family charity received a massive donation from a colony you just signed a trade deal with.",
           choices: [
             {
               text: "Return Money \u2014 Avoid even the appearance of a bribe.",
@@ -5152,7 +5152,7 @@ const CARDS = {
               energy: 0
             },
             {
-              text: "Use for Good \u2014 Use it for a high-profile public hospital.",
+              text: "Use for Good — Use it for a high-profile public med-bay.",
               outcome: "The tangible benefits for the poor drown out most of the corruption talk.",
               approval: 7,
               party: 3,
@@ -5164,7 +5164,7 @@ const CARDS = {
             },
             {
               text: "Defend Donation \u2014 Claim the charity's work is separate from politics.",
-              outcome: "Your supporters believe you, but the international community smells a payoff.",
+              outcome: "Your supporters believe you, but the neighboring colonies smell a payoff.",
               party: 4,
               approval: -6,
               integrity: -7,
@@ -5181,7 +5181,7 @@ const CARDS = {
           choices: [
             {
               text: "Mass Fire \u2014 Terminate all ghost employees and sue for the money back.",
-              outcome: "You save taxpayer money, but you've just fired several well-connected party hacks.",
+              outcome: "You save public money, but you've just fired several well-connected party hacks.",
               integrity: 7,
               eco: 5,
               approval: 7,
@@ -5192,7 +5192,7 @@ const CARDS = {
               energy: 3
             },
             {
-              text: "Blame System \u2014 Claim it's an old clerical error from the last president.",
+              text: "Blame System — Claim it's an old clerical error from the last Commander.",
               outcome: "You dodge the blame, but the public grows more cynical about \"government waste.\"",
               party: 3,
               approval: 2,
@@ -5257,8 +5257,8 @@ const CARDS = {
               energy: 0
             },
             {
-              text: "Commute Only \u2014 Let him out of jail but keep the conviction on his record.",
-              outcome: "A compromise that pleases no one fully but ends the immediate prison drama.",
+              text: "Commute Only — Let him out of the brig but keep the conviction on his record.",
+              outcome: "A compromise that pleases no one fully but ends the immediate brig drama.",
               party: 5,
               approval: -4,
               integrity: -4,
@@ -5283,12 +5283,12 @@ const CARDS = {
           ]
         },
         {
-          title: "The Real Estate Deal",
-          body: "You sold your house for twice its value to a developer who wants government contracts.",
+          title: "The Cabin Deal",
+          body: "You sold your private cabin for twice its value to a developer who wants government contracts.",
           choices: [
             {
               text: "Cancel Sale \u2014 Sell it to someone else for the market price.",
-              outcome: "You lose out on millions, but your name remains clean in the eyes of the law.",
+              outcome: "You lose out on millions of credits, but your name remains clean in the eyes of the law.",
               integrity: 7,
               eco: -3,
               approval: 5,
@@ -5362,8 +5362,8 @@ const CARDS = {
               energy: -3
             },
             {
-              text: "Send FBI \u2014 Hunt the hacker down and seize the data.",
-              outcome: "You show strength, but civil libertarians worry about using the FBI for personal PR.",
+              text: "Send Security Bureau — Hunt the hacker down and seize the data.",
+              outcome: "You show strength, but civil libertarians worry about using the Security Bureau for personal PR.",
               unrest: 7,
               tension: 4,
               party: 3,
@@ -5390,7 +5390,7 @@ const CARDS = {
         },
         {
           title: "The Military Stock",
-          body: "Your spouse bought $1 Million in defense stocks right before you signed a war bill.",
+          body: "Your spouse bought a million credits in defense stocks right before you signed a war bill.",
           choices: [
             {
               text: "Force Sale \u2014 Sell the stocks immediately and donate the profit.",
@@ -5443,11 +5443,11 @@ const CARDS = {
         },
         {
           title: "The Final Choice",
-          body: "A foreign leader offers you a guaranteed $100M \"Global Advisor\" job if you sign a specific treaty today.",
+          body: "A rival colony's leader offers you a guaranteed 100M-credit \"Sector Advisor\" job if you sign a specific treaty today.",
           choices: [
             {
-              text: "Refuse & Expose \u2014 Tell the world about the bribe and end the treaty.",
-              outcome: "You leave office a hero of global integrity, though you make a lifelong enemy abroad.",
+              text: "Refuse & Expose — Tell the sector about the bribe and end the treaty.",
+              outcome: "You leave office a hero of interstellar integrity, though you make a lifelong enemy abroad.",
               integrity: 7,
               tension: 7,
               approval: 7,
@@ -5459,7 +5459,7 @@ const CARDS = {
               energy: 0
             },
             {
-              text: "Sign & Take Job \u2014 You've served your country; now serve yourself.",
+              text: "Sign & Take Job — You've served your colony; now serve yourself.",
               outcome: "You secure your future wealth, but your legacy is forever tarnished as a \"sell-out.\"",
               eco: 7,
               integrity: -7,
@@ -5473,7 +5473,7 @@ const CARDS = {
             },
             {
               text: "Sign but Refuse Job \u2014 Sign because the treaty is good, but don't take the money.",
-              outcome: "You do the right thing for the wrong reasons, but the world is objectively safer.",
+              outcome: "You do the right thing for the wrong reasons, but the sector is objectively safer.",
               tension: -7,
               integrity: 7,
               approval: 6,
@@ -5485,8 +5485,8 @@ const CARDS = {
               energy: -2
             },
             {
-              text: "Counter-Bribe \u2014 Demand $200M.",
-              outcome: "You are now fully part of a global criminal elite. You are rich, but you are a puppet.",
+              text: "Counter-Bribe — Demand 200M credits.",
+              outcome: "You are now fully part of a sector-wide criminal elite. You are rich, but you are a puppet.",
               eco: 7,
               integrity: -7,
               approval: -7,
@@ -5508,102 +5508,102 @@ const CARDS = {
         id: 'convergence_route', name: 'Convergence Route', trigger: gs => gs.turn >= 6 && (gs.highTensionTurns >= 3 || gs.bars.internationalTension >= 98), acts: [
           {
             tag: 'ACT I', title: 'The Ultimatum',
-            body: 'A coalition of world powers has issued an ultimatum: Disarm your borders and allow foreign inspectors into your nuclear sites, or face a coordinated "intervention."',
+            body: "A coalition of the great stations has issued an ultimatum: Disarm your border pickets and allow their inspectors into your antimatter vaults, or face a coordinated \"intervention.\"",
             choices: [
-              { text: "Reject Defiantly", outcome: "You send the inspectors home. The world prepares for war. The 'coalition' of rivals is now an active invasion force.", tension: 18, approval: 15, unrest: 12, courage: 20, nextAct: 1 },
-              { text: "Strategic Delay", outcome: "You buy time with vague promises, but the cost to your international reputation is severe. The coalition is suspicious, but their engines are cooling—for now.", tension: -10, integrity: -12, unrest: -10, courage: -15, nextAct: 2 },
-              { text: "Partial Disarmament", outcome: "You dismantle your borders to save your cities. The coalition is pleased, but your own military feels betrayed and your people feel vulnerable.", tension: -20, approval: -18, party: -15, unrest: -20, nextAct: 3 },
-              { text: "Pre-emptive Strike", outcome: "The fire of your first strike lights up the horizon. You have taken the initiative, but you have also guaranteed a total, global response.", tension: 25, approval: 10, eco: -20, empathy: -25, nextAct: 4 }
+              { text: "Reject Defiantly", outcome: "You send the inspectors home. The sector prepares for war. The 'coalition' of rivals is now an active invasion fleet.", tension: 18, approval: 15, unrest: 12, courage: 20, nextAct: 1 },
+              { text: "Strategic Delay", outcome: "You buy time with vague promises, but the cost to your interstellar reputation is severe. The coalition is suspicious, but their engines are cooling—for now.", tension: -10, integrity: -12, unrest: -10, courage: -15, nextAct: 2 },
+              { text: "Partial Disarmament", outcome: "You dismantle your border pickets to save your habitats. The coalition is pleased, but your own fleet feels betrayed and your people feel vulnerable.", tension: -20, approval: -18, party: -15, unrest: -20, nextAct: 3 },
+              { text: "Pre-emptive Strike", outcome: "The fire of your first strike lights up the void. You have taken the initiative, but you have also guaranteed a total, sector-wide response.", tension: 25, approval: 10, eco: -20, empathy: -25, nextAct: 4 }
             ]
           },
           {
             tag: 'ACT II.1', title: 'The Fortress Path',
-            body: 'You stood your ground, and now a total naval blockade has cut off your trade. Your merchant ships are being seized and your ports are silent.',
+            body: "You stood your ground, and now a total fleet blockade has cut off your trade. Your freighters are being seized and your docks are silent.",
             choices: [
-              { text: "Break the blockade by force", outcome: "The naval battle is fierce. You break the line, but at the cost of your strongest cruisers and a massive spike in global hostility.", tension: 22, eco: -20, courage: 18, nextAct: 5 },
-              { text: "Implement national rationing", outcome: "The nation survives on meager portions. The economy is a memory, but the collective struggle binds the people to your leadership.", eco: 18, approval: -22, empathy: 20, nextAct: 6 },
+              { text: "Break the blockade by force", outcome: "The fleet battle is fierce. You break the line, but at the cost of your strongest cruisers and a massive spike in sector-wide hostility.", tension: 22, eco: -20, courage: 18, nextAct: 5 },
+              { text: "Implement colony-wide rationing", outcome: "The colony survives on meager portions. The economy is a memory, but the collective struggle binds the people to your leadership.", eco: 18, approval: -22, empathy: 20, nextAct: 6 },
               { text: "Request a neutral mediator", outcome: "A third party steps in. The blockade is eased, but you have had to reveal classified defense secrets to earn their trust.", integrity: 20, tension: -18, unrest: -15, nextAct: 7 },
-              { text: "Accuse the world of piracy", outcome: "The UN debates while your ports remain silent. You have the moral high ground, but the shelves in your grocery stores are empty.", approval: 18, integrity: -22, tension: 18, nextAct: 8 }
+              { text: "Accuse the sector of piracy", outcome: "The Sector Assembly debates while your docks remain silent. You have the moral high ground, but the shelves in your ration stores are empty.", approval: 18, integrity: -22, tension: 18, nextAct: 8 }
             ]
           },
           {
             tag: 'ACT II.2', title: 'The Summit Path',
-            body: 'The world is meeting at your border. They demand you step down to ensure peace, claiming your leadership is the only obstacle to a ceasefire.',
+            body: "The great stations are meeting at the edge of your space. They demand you step down to ensure peace, claiming your leadership is the only obstacle to a ceasefire.",
             choices: [
               { text: "Walk out of the summit", outcome: "The doors slam behind you. Any hope for a diplomatic exit is gone. The coalition sees your exit as a declaration of total defiance.", tension: 20, approval: 15, courage: 18, nextAct: 9 },
-              { text: "Agree to a Transition Government", outcome: "You sign the papers. You are no longer the master of your fate, but at least the bombs have stopped falling on your civilians.", unrest: -25, integrity: 20, party: -20, nextAct: 10 },
+              { text: "Agree to a Transition Government", outcome: "You sign the papers. You are no longer the master of your fate, but at least the bombardment of your habitats has stopped.", unrest: -25, integrity: 20, party: -20, nextAct: 10 },
               { text: "Propose a joint security pact", outcome: "A desperate proposal. The coalition is divided on the offer, buying you critical weeks of relative peace.", integrity: 18, tension: -20, unrest: -18, nextAct: 11 },
-              { text: "Bribe a coalition member", outcome: "Gold buys silence. One member of the coalition stalls the invasion vote, but the cost has nearly drained the national treasury.", eco: -20, integrity: -25, tension: -15, nextAct: 12 }
+              { text: "Bribe a coalition member", outcome: "Credits buy silence. One member of the coalition stalls the invasion vote, but the cost has nearly drained the colony treasury.", eco: -20, integrity: -25, tension: -15, nextAct: 12 }
             ]
           },
           {
             tag: 'ACT II.3', title: 'The Pacifist Path',
-            body: 'Despite disarming, a "Peacekeeping Force" has crossed your border to "secure" your cities. They are setting up checkpoints in your capital.',
+            body: "Despite disarming, a \"Peacekeeping Force\" has crossed into your space to \"secure\" your habitats. They are setting up checkpoints on your capital station.",
             choices: [
-              { text: "Order the military to resist", outcome: "The 'peacekeepers' are now combatants. The blood in the streets is a sign of a nation that refuses to die quietly.", tension: 22, approval: 18, courage: 18, nextAct: 13 },
-              { text: "Welcome them as 'guests'", outcome: "The occupation is total. You are a guest in your own palace, while foreign soldiers dictate the law of the land.", approval: -25, unrest: -25, tension: -20, nextAct: 14 },
-              { text: "Appeal to the UN for help", outcome: "The UN issued a resolution, but the coalition's tanks are already in the city center. Paper is no shield against iron.", integrity: 20, tension: -15, unrest: -18, nextAct: 15 },
-              { text: "Sabotage your own oil fields", outcome: "The black smoke is your final protest. The world's energy supply is hit, but your own environment is a toxic wasteland.", eco: -30, tension: 18, courage: 20, nextAct: 16 }
+              { text: "Order the fleet to resist", outcome: "The 'peacekeepers' are now combatants. The blood in the corridors is a sign of a colony that refuses to die quietly.", tension: 22, approval: 18, courage: 18, nextAct: 13 },
+              { text: "Welcome them as 'guests'", outcome: "The occupation is total. You are a guest in your own Oval, while foreign marines dictate the law of the colony.", approval: -25, unrest: -25, tension: -20, nextAct: 14 },
+              { text: "Appeal to the Sector Assembly for help", outcome: "The Assembly issued a resolution, but the coalition's dropships are already on the core decks. Paper is no shield against iron.", integrity: 20, tension: -15, unrest: -18, nextAct: 15 },
+              { text: "Sabotage your own fuel depots", outcome: "The burning depots are your final protest. The sector's fuel supply is hit, but your own space is a toxic wasteland.", eco: -30, tension: 18, courage: 20, nextAct: 16 }
             ]
           },
           {
             tag: 'ACT II.4', title: 'The Warmonger Path',
-            body: 'Your strike hit home, but now the sky is full of enemy bombers heading for your capital. The air raid sirens are screaming across the country.',
+            body: "Your strike hit home, but now the void is full of enemy strike craft heading for your capital station. The alarms are screaming across the colony.",
             choices: [
-              { text: "Scramble all air defenses", outcome: "The sky is a mesh of fire. You saved the capital, but your air fleet is decimated and the people are living in the ruins of the metro system.", tension: 20, approval: -18, unrest: 15, nextAct: 17 },
-              { text: "Call for a global ceasefire", outcome: "You call for peace after the first blood is drawn. The coalition is hesitant, seeing your strike as a desperate cry for negotiation.", tension: -18, integrity: 18, courage: -15, nextAct: 18 },
-              { text: "Relocate to the mountain bunker", outcome: "The mountain is safe, but the capital is an open target. The public's trust in your protection is buried under the rubble.", unrest: -18, approval: -25, courage: -20, nextAct: 19 },
-              { text: "Mobilize the civilian guard", outcome: "Every window is a sniper nest. The occupation will be slow and bloody, turning your country into a global nightmare.", unrest: 22, approval: 18, empathy: -25, nextAct: 20 }
+              { text: "Scramble all point defenses", outcome: "The void is a mesh of fire. You saved the capital, but your fighter wings are decimated and the people are living in the maintenance tunnels.", tension: 20, approval: -18, unrest: 15, nextAct: 17 },
+              { text: "Call for a sector-wide ceasefire", outcome: "You call for peace after the first blood is drawn. The coalition is hesitant, seeing your strike as a desperate cry for negotiation.", tension: -18, integrity: 18, courage: -15, nextAct: 18 },
+              { text: "Relocate to the deep-core bunker", outcome: "The asteroid core is safe, but the capital is an open target. The public's trust in your protection is buried under the rubble.", unrest: -18, approval: -25, courage: -20, nextAct: 19 },
+              { text: "Mobilize the civilian guard", outcome: "Every hatch is a sniper nest. The occupation will be slow and bloody, turning your colony into a sector-wide nightmare.", unrest: 22, approval: 18, empathy: -25, nextAct: 20 }
             ]
           },
           {
-            tag: 'ACT III.1', title: 'The Sea Battle',
-            body: 'Your navy is engaged in a massive surface battle to break the blockade. The outcome will decide if your people starve or trade.',
+            tag: 'ACT III.1', title: "The Fleet Battle",
+            body: "Your fleet is locked in a massive battle to break the blockade. The outcome will decide if your people starve or trade.",
             choices: [
-              { text: "Commit the air force to assist", outcome: "Your jets are in the air. The 'intervention' has become a full-scale battle for the capital.", eco: 15, tension: 15, unrest: -10, nextAct: 21 },
-              { text: "Pull back and defend the coast", outcome: "You surrender the airfields. The coalition moves in, and for the first time in a century, foreign boots are in the Presidential Palace.", unrest: -15, approval: -15, eco: -20, nextAct: 21 },
-              { text: "Deploy underwater mines", outcome: "The world's energy supply is hit, but your own reputation as a guardian of the future is gone.", integrity: -25, courage: 18, tension: 10, nextAct: 21 },
-              { text: "Order a fighting retreat", outcome: "You remain in the bunker, but the nation is already under new management.", tension: -15, unrest: -20, approval: -10, nextAct: 21 }
+              { text: "Commit the fighter wings to assist", outcome: "Your fighters are launched. The 'intervention' has become a full-scale battle for the capital.", eco: 15, tension: 15, unrest: -10, nextAct: 21 },
+              { text: "Pull back and defend the station", outcome: "You surrender the outer docks. The coalition moves in, and for the first time in a century, foreign boots are in the Oval.", unrest: -15, approval: -15, eco: -20, nextAct: 21 },
+              { text: "Deploy space mines", outcome: "The sector's fuel lanes are hit, but your own reputation as a guardian of the future is gone.", integrity: -25, courage: 18, tension: 10, nextAct: 21 },
+              { text: "Order a fighting retreat", outcome: "You remain in the bunker, but the colony is already under new management.", tension: -15, unrest: -20, approval: -10, nextAct: 21 }
             ]
           },
           {
             tag: 'ACT III.2', title: 'The Breadline',
-            body: 'Famine is setting in. The people are beginning to riot at government food distribution centers.',
+            body: "Famine is setting in. The people are beginning to riot at the ration centers.",
             choices: [
               { text: "Open the strategic reserves", outcome: "The stores are open, but once the grain is gone, the hunger will return with a vengeance.", approval: 20, eco: -18, unrest: -10, nextAct: 21 },
-              { text: "Blame foreign sabotage", outcome: "The people find a target for their anger, but you have fueled a fire that could burn the whole city down.", approval: 10, tension: 15, integrity: -15, nextAct: 21 },
+              { text: "Blame foreign sabotage", outcome: "The people find a target for their anger, but you have fueled a fire that could burn the whole station down.", approval: 10, tension: 15, integrity: -15, nextAct: 21 },
               { text: "Impose food labor quotas", outcome: "The factories are humming, but the workers' eyes are filled with a cold, quiet fury.", unrest: 18, empathy: -20, eco: 10, nextAct: 21 },
-              { text: "Appeal for a Red Cross corridor", outcome: "The red cross arrives, but the coalition uses the pause in fighting to reposition their heavy artillery.", integrity: 15, unrest: -15, approval: 8, nextAct: 21 }
+              { text: "Appeal for a medical relief corridor", outcome: "The relief ships arrive, but the coalition uses the pause in fighting to reposition its heavy guns.", integrity: 15, unrest: -15, approval: 8, nextAct: 21 }
             ]
           },
           {
             tag: 'ACT III.3', title: 'The Mediator',
-            body: 'A neutral nation offers to host a secret meeting, but the coalition is monitoring all your communications.',
+            body: "A neutral colony offers to host a secret meeting, but the coalition is monitoring all your communications.",
             choices: [
-              { text: "Travel in secret", outcome: "You slip past the checkpoints. The world's eyes are elsewhere while you slip into the shadows of history.", integrity: 18, courage: 15, unrest: -12, nextAct: 22 },
+              { text: "Travel in secret", outcome: "You slip past the checkpoints. The sector's eyes are elsewhere while you slip into the shadows of history.", integrity: 18, courage: 15, unrest: -12, nextAct: 22 },
               { text: "Refuse the meeting location", outcome: "The summit is a failure. Any hope for a diplomatic exit is gone, and the coalition prepares for a final assault.", tension: 15, unrest: 10, integrity: -20, nextAct: 22 },
-              { text: "Send your VP instead", outcome: "The VP handles the compromise, while you remain the face of defiance. A dangerous split in the administration is born.", unrest: -12, integrity: -12, tension: 10, nextAct: 22 },
-              { text: "Broadcast a peace proposal", outcome: "Your words reach the hearts of the global public. The coalition is shamed into a temporary, but fragile, ceasefire.", approval: 15, integrity: 12, party: -15, nextAct: 22 }
+              { text: "Send your Deputy instead", outcome: "Your Deputy handles the compromise, while you remain the face of defiance. A dangerous split in the administration is born.", unrest: -12, integrity: -12, tension: 10, nextAct: 22 },
+              { text: "Broadcast a peace proposal", outcome: "Your words reach the hearts of the sector. The coalition is shamed into a temporary, but fragile, ceasefire.", approval: 15, integrity: 12, party: -15, nextAct: 22 }
             ]
           },
           {
             tag: 'ACT III.4', title: 'The Propaganda',
             body: 'Your narrative is winning hearts abroad, but the physical war remains one-sided against your forces.',
             choices: [
-              { text: "Encourage global walkouts", outcome: "The global economy shudders under the weight of your call. The coalition is feeling the pressure from their own citizens.", tension: 18, integrity: 15, eco: -10, nextAct: 22 },
-              { text: "Buy airtime on global networks", outcome: "Your narrative fills the airwaves. The world watches as you present your case directly to the people.", eco: -15, approval: 12, integrity: 10, nextAct: 22 },
-              { text: "Censor all foreign news locally", outcome: "The silence inside the country is absolute. Your people hear only what you want them to, while the rest of the world screams in the dark.", unrest: 20, approval: -20, integrity: -15, nextAct: 22 },
-              { text: "Expose coalition war crimes", outcome: "The images you leak shock the international community. Support for the 'intervention' begins to crumble at home.", integrity: 18, tension: 10, approval: 10, nextAct: 22 }
+              { text: "Encourage sector-wide walkouts", outcome: "The sector's economy shudders under the weight of your call. The coalition is feeling the pressure from its own citizens.", tension: 18, integrity: 15, eco: -10, nextAct: 22 },
+              { text: "Buy airtime on the sector networks", outcome: "Your narrative fills the networks. The sector watches as you present your case directly to the people.", eco: -15, approval: 12, integrity: 10, nextAct: 22 },
+              { text: "Censor all foreign news locally", outcome: "The silence inside the colony is absolute. Your people hear only what you want them to, while the rest of the sector screams in the dark.", unrest: 20, approval: -20, integrity: -15, nextAct: 22 },
+              { text: "Expose coalition war crimes", outcome: "The images you leak shock the whole sector. Support for the 'intervention' begins to crumble at home.", integrity: 18, tension: 10, approval: 10, nextAct: 22 }
             ]
           },
           {
             tag: 'ACT III.5', title: 'The Exile',
-            body: 'You left the summit. You are now a global pariah with an international arrest warrant.',
+            body: "You left the summit. You are now a sector-wide pariah with an interstellar arrest warrant.",
             choices: [
-              { text: "Rule from the shadows", outcome: "You remain the master of the shadows. The occupation will find that your influence is everywhere, even if the palace is empty.", unrest: 18, integrity: -25, approval: -10, nextAct: 22 },
-              { text: "Turn yourself in", outcome: "You choose the path of the martyr. Your arrest is broadcast live, sparking a global debate on the legitimacy of the intervention.", integrity: 25, approval: 15, unrest: -50, nextAct: 22 },
-              { text: "Declare a 'Holy War'", outcome: "The fire of your rhetoric ignites a thousand smaller conflicts across the globe. You have successfully turned a local crisis into a worldwide crusade.", tension: 30, ideology: 18, integrity: -20, nextAct: 22 },
-              { text: "Seek asylum elsewhere", outcome: "You save your skin with the people's gold. The exile is comfortable, but the guilt of abandonment is a permanent shroud.", unrest: -25, approval: -15, party: -20, nextAct: 22 }
+              { text: "Rule from the shadows", outcome: "You remain the master of the shadows. The occupation will find that your influence is everywhere, even if the Oval is empty.", unrest: 18, integrity: -25, approval: -10, nextAct: 22 },
+              { text: "Turn yourself in", outcome: "You choose the path of the martyr. Your arrest is broadcast live, sparking a sector-wide debate on the legitimacy of the intervention.", integrity: 25, approval: 15, unrest: -50, nextAct: 22 },
+              { text: "Declare a 'Holy War'", outcome: "The fire of your rhetoric ignites a thousand smaller conflicts across the sector. You have successfully turned a local crisis into a crusade among the stars.", tension: 30, ideology: 18, integrity: -20, nextAct: 22 },
+              { text: "Seek asylum elsewhere", outcome: "You save your skin with the people's credits. The exile is comfortable, but the guilt of abandonment is a permanent shroud.", unrest: -25, approval: -15, party: -20, nextAct: 22 }
             ]
           },
           {
@@ -5611,158 +5611,158 @@ const CARDS = {
             body: 'You are part of the new Transition Council, but you have no vote on the most important decisions.',
             choices: [
               { text: "Build a loyalist shadow bloc", outcome: "A quiet consensus. The shadow bloc ensures that your followers remain in key positions, waiting for the first sign of occupation fatigue.", unrest: 15, party: 18, integrity: -15, nextAct: 23 },
-              { text: "Publicly criticize the Council", outcome: "Your voice is the only one speaking for the old nation. The crowd outside the palace gathers whenever you appear.", approval: 18, unrest: -18, tension: 10, nextAct: 23 },
+              { text: "Publicly criticize the Council", outcome: "Your voice is the only one speaking for the old colony. The crowd outside the Oval gathers whenever you appear.", approval: 18, unrest: -18, tension: 10, nextAct: 23 },
               { text: "Use your intel to influence them", outcome: "You trade what you know for what you need. The coalition is more efficient now, but they are also more dependent on your cooperation.", integrity: 15, unrest: 12, empathy: -10, nextAct: 23 },
-              { text: "Focus on rebuilding the capital", outcome: "The capital begins to breathe again. You have saved the bricks and mortar of the city, even if the soul of the nation is still in chains.", eco: 15, approval: 12, unrest: -15, nextAct: 23 }
+              { text: "Focus on rebuilding the capital station", outcome: "The capital begins to breathe again. You have saved the hulls and bulkheads of the station, even if the soul of the colony is still in chains.", eco: 15, approval: 12, unrest: -15, nextAct: 23 }
             ]
           },
           {
             tag: 'ACT III.7', title: 'The Security Pact',
-            body: 'The pact allows foreign troops into your palace. They are monitoring your every meeting.',
+            body: "The pact allows foreign marines into the Oval. They are monitoring your every meeting.",
             choices: [
-              { text: "Enforce strict conduct rules", outcome: "The foreign soldiers are disciplined, but their presence is a constant reminder of your lost sovereignty and the cost of peace.", unrest: 15, tension: -20, integrity: 10, nextAct: 23 },
-              { text: "Create a restricted 'Green Zone'", outcome: "The city is divided by concrete and wire. You have created a miniature version of the global conflict right in your own backyard.", unrest: 18, integrity: -15, eco: -10, nextAct: 23 },
+              { text: "Enforce strict conduct rules", outcome: "The foreign marines are disciplined, but their presence is a constant reminder of your lost sovereignty and the cost of peace.", unrest: 15, tension: -20, integrity: 10, nextAct: 23 },
+              { text: "Create a restricted 'Green Zone'", outcome: "The station is divided by blast doors and checkpoints. You have created a miniature version of the sector's conflict right in your own corridors.", unrest: 18, integrity: -15, eco: -10, nextAct: 23 },
               { text: "Propose a smaller force", outcome: "A compromise is reached. The lighter footprint of the coalition makes the occupation feel more like a partnership, buying you a fragile peace.", tension: -12, integrity: 12, approval: 8, nextAct: 23 },
-              { text: "Demand a withdrawal date", outcome: "The deadline is set. You have bought a future for your country, provided you can survive the wait until the last foreign boots leave.", tension: 15, unrest: 12, integrity: -10, nextAct: 23 }
+              { text: "Demand a withdrawal date", outcome: "The deadline is set. You have bought a future for your colony, provided you can survive the wait until the last foreign boots leave.", tension: 15, unrest: 12, integrity: -10, nextAct: 23 }
             ]
           },
           {
             tag: 'ACT III.8', title: 'The Bribe Leak',
             body: 'The bribe was discovered. Your domestic rivals are calling for an immediate audit of the treasury.',
             choices: [
-              { text: "Claim the funds were 'covert aid'", outcome: "The lie is accepted by the desperate, but the international community adds 'corrupt' to your list of titles in the history books.", integrity: -15, approval: 8, tension: 10, nextAct: 23 },
-              { text: "Confess and blame the treasurer", outcome: "The treasurer goes to prison, and you stay in the palace. The administration is safe, but it is lonelier than ever.", integrity: 18, party: -15, empathy: -12, nextAct: 23 },
-              { text: "Use state funds to fix the ledger", outcome: "The books are balanced with the people's sweat. You have saved the treasury by draining the nation's hope.", eco: -18, integrity: -22, unrest: 10, nextAct: 23 },
+              { text: "Claim the funds were 'covert aid'", outcome: "The lie is accepted by the desperate, but the sector adds 'corrupt' to your list of titles in the history archives.", integrity: -15, approval: 8, tension: 10, nextAct: 23 },
+              { text: "Confess and blame the treasurer", outcome: "The treasurer goes to the brig, and you stay in the Oval. The administration is safe, but it is lonelier than ever.", integrity: 18, party: -15, empathy: -12, nextAct: 23 },
+              { text: "Use colony funds to fix the ledger", outcome: "The books are balanced with the people's sweat. You have saved the treasury by draining the colony's hope.", eco: -18, integrity: -22, unrest: 10, nextAct: 23 },
               { text: "Ignore the audit; focus on war", outcome: "The sirens drown out the auditors. You have successfully delayed the truth with the noise of war, but the truth is still coming.", unrest: 18, approval: -15, party: -15, nextAct: 23 }
             ]
           },
           {
             tag: 'ACT III.9', title: 'The Resistance',
-            body: 'Street fighting has broken out against the "Peacekeepers." Your troops are losing the city center.',
+            body: "Corridor fighting has broken out against the \"Peacekeepers.\" Your marines are losing the core decks.",
             choices: [
-              { text: "Fortify the palace district", outcome: "The palace becomes a fortress of marble and iron. You are safe, but you rule a capitol of smoking ruins.", unrest: 25, approval: -25, empathy: -15, nextAct: 21 },
-              { text: "Request a localized ceasefire", outcome: "The firing stops in the city center. For a moment, the silence is more terrifying than the noise of the guns.", tension: -18, unrest: -18, approval: 10, nextAct: 21 },
+              { text: "Fortify the command spire", outcome: "The spire becomes a fortress of steel and armor plate. You are safe, but you rule a capital of burning decks.", unrest: 25, approval: -25, empathy: -15, nextAct: 21 },
+              { text: "Request a localized ceasefire", outcome: "The firing stops on the core decks. For a moment, the silence is more terrifying than the noise of the guns.", tension: -18, unrest: -18, approval: 10, nextAct: 21 },
               { text: "Recruit civilian volunteers", outcome: "The people step into the line of fire. Their bravery is absolute, but their mortality is staggering.", approval: 18, empathy: -25, courage: 15, nextAct: 21 },
-              { text: "Abandon the city for the south", outcome: "You leave the capitol to the invaders. The fight continues in the mountains, but the nation's heart has been pierced.", eco: -22, approval: -20, unrest: -15, nextAct: 21 }
+              { text: "Abandon the core for the outer ring", outcome: "You leave the core to the invaders. The fight continues in the outer ring, but the colony's heart has been pierced.", eco: -22, approval: -20, unrest: -15, nextAct: 21 }
             ]
           },
           {
             tag: 'ACT III.10', title: 'The Guest',
-            body: 'Foreign troops are looting your museums under the guise of "protecting" them from the war.',
+            body: "Foreign marines are looting your museums under the guise of \"protecting\" them from the war.",
             choices: [
-              { text: "Demand an inventory of assets", outcome: "You stand up for the nation's heritage. The coalition is shamed into returning the artifacts, or at least stopping the theft.", courage: 20, tension: 12, integrity: 10, nextAct: 23 },
+              { text: "Demand an inventory of assets", outcome: "You stand up for the colony's heritage. The coalition is shamed into returning the artifacts, or at least stopping the theft.", courage: 20, tension: 12, integrity: 10, nextAct: 23 },
               { text: "Charge 'maintenance fees'", outcome: "A pragmatist's victory. You have turned the theft of your history into a stream of revenue for the resistance.", eco: 18, tension: 15, integrity: -15, nextAct: 23 },
-              { text: "Organize silent public protests", outcome: "The people gather in the squares, holding pictures of what has been taken. The world's cameras capture their quiet, absolute grief.", approval: 18, eco: -15, tension: 10, nextAct: 23 },
-              { text: "Request their relocation", outcome: "You ensure the treasures are safe in a neutral third country. They are gone from your land, but at least they are safe from the fire.", unrest: -20, integrity: 12, approval: -10, nextAct: 23 }
+              { text: "Organize silent public protests", outcome: "The people gather in the plazas, holding pictures of what has been taken. The sector's cameras capture their quiet, absolute grief.", approval: 18, eco: -15, tension: 10, nextAct: 23 },
+              { text: "Request their relocation", outcome: "You ensure the treasures are safe in a neutral third colony. They are gone from your station, but at least they are safe from the fire.", unrest: -20, integrity: 12, approval: -10, nextAct: 23 }
             ]
           },
           {
-            tag: 'ACT III.11', title: 'The UN Stalemate',
-            body: 'The UN has issued a "Stay of Action," but the coalition is ignoring it and continuing their advance.',
+            tag: 'ACT III.11', title: "The Assembly Stalemate",
+            body: "The Sector Assembly has issued a \"Stay of Action,\" but the coalition is ignoring it and continuing its advance.",
             choices: [
-              { text: "Denounce the UN's weakness", outcome: "Your words are a clarion call to every small nation fearing the same fate. You have no allies, but you have the world's respect.", integrity: -18, approval: 15, tension: 10, nextAct: 22 },
-              { text: "Hire private military contractors", outcome: "The contractors arrive in unmarked jets. They are efficient and brutal, caring little for the laws of war.", eco: -20, unrest: 15, party: -12, nextAct: 22 },
-              { text: "Announce a 'Defense Act'", outcome: "The nation is now a military machine. Every citizen is a part of the firewall against the coalition's advance.", tension: 20, courage: 20, eco: -15, nextAct: 22 },
-              { text: "Host the Secretary-General", outcome: "The world's chief diplomat walks through the ruins of your capital. For a moment, the guns are silent in honor of the talk.", integrity: 18, unrest: -15, tension: -10, nextAct: 22 }
+              { text: "Denounce the Assembly's weakness", outcome: "Your words are a clarion call to every small colony fearing the same fate. You have no allies, but you have the sector's respect.", integrity: -18, approval: 15, tension: 10, nextAct: 22 },
+              { text: "Hire private military contractors", outcome: "The contractors arrive in unmarked gunships. They are efficient and brutal, caring little for the laws of war.", eco: -20, unrest: 15, party: -12, nextAct: 22 },
+              { text: "Announce a 'Defense Act'", outcome: "The colony is now a military machine. Every citizen is a part of the firewall against the coalition's advance.", tension: 20, courage: 20, eco: -15, nextAct: 22 },
+              { text: "Host the Assembly's Secretary", outcome: "The sector's chief diplomat walks through the ruins of your capital. For a moment, the guns are silent in honor of the talk.", integrity: 18, unrest: -15, tension: -10, nextAct: 22 }
             ]
           },
           {
             tag: 'ACT III.12', title: 'The Black Smoke',
-            body: 'You burned the oil. The world is in an energy crisis, and the sky over the capital is black with soot.',
+            body: "You burned the fuel depots. The sector is in an energy crisis, and the air recyclers on the capital station are black with soot.",
             choices: [
-              { text: "Offer 'reclamation' rights", outcome: "You trade the scorched earth for a seat at the table. The coalition's engineers move in to clean the mess you made.", integrity: 15, eco: -18, tension: 10, nextAct: 22 },
-              { text: "Shift to nuclear immediately", outcome: "The nation leapfrogs a century of progress out of sheer necessity. You have energy, but you are now a nuclear-reliant state under a global radar.", eco: -22, approval: 12, tension: 10, nextAct: 22 },
-              { text: "Blame the coalition's bombing", outcome: "You win the propaganda war in the soot-filled streets. Every person breathing the black air now has a reason to hate the invader.", integrity: -18, approval: 10, tension: 10, nextAct: 22 },
-              { text: "Use the crisis to force a deal", outcome: "The world's lights are flickering because of your fires. You have a leverage that no amount of tanks can overcome.", eco: 15, tension: 15, unrest: -10, nextAct: 22 }
+              { text: "Offer 'reclamation' rights", outcome: "You trade the scorched depots for a seat at the table. The coalition's engineers move in to clean the mess you made.", integrity: 15, eco: -18, tension: 10, nextAct: 22 },
+              { text: "Shift to antimatter immediately", outcome: "The colony leapfrogs a century of progress out of sheer necessity. You have energy, but you are now an antimatter-reliant state under every scanner in the sector.", eco: -22, approval: 12, tension: 10, nextAct: 22 },
+              { text: "Blame the coalition's bombing", outcome: "You win the propaganda war in the soot-filled corridors. Every person breathing the black air now has a reason to hate the invader.", integrity: -18, approval: 10, tension: 10, nextAct: 22 },
+              { text: "Use the crisis to force a deal", outcome: "The sector's lights are flickering because of your fires. You have a leverage that no number of warships can overcome.", eco: 15, tension: 15, unrest: -10, nextAct: 22 }
             ]
           },
           {
-            tag: 'ACT III.13', title: 'The Nuclear Shadow',
-            body: 'The world knows your silos are active. Panic has caused global markets to halt.',
+            tag: 'ACT III.13', title: "The Antimatter Shadow",
+            body: "The sector knows your antimatter launch tubes are armed. Panic has halted the interstellar markets.",
             choices: [
-              { text: "Issue a 'No-First-Use' pledge", outcome: "The nuclear tension drops significantly. You have shown the world that you are still the guardian of the future, even in the dark.", tension: -30, integrity: 25, unrest: -10, nextAct: 21 },
-              { text: "Put the military on high alert", outcome: "The world prepares for the end of history. Both sides have their fingers on the red buttons, waiting for the first sign of movement.", tension: 30, unrest: 22, courage: 15, nextAct: 21 },
-              { text: "Demand a 1-on-1 with the enemy", outcome: "You bypass the generals and the diplomats to speak directly to the man behind the invasion. One last chance for sanity.", integrity: 22, courage: 30, tension: -10, nextAct: 21 },
-              { text: "Disable long-range targeting", outcome: "A silent, absolute gesture of peace. You have removed your own teeth to ensure the world continues to have a heartbeat.", tension: -40, unrest: -30, approval: 10, nextAct: 21 }
+              { text: "Issue a 'No-First-Use' pledge", outcome: "The tension drops significantly. You have shown the sector that you are still the guardian of the future, even in the dark.", tension: -30, integrity: 25, unrest: -10, nextAct: 21 },
+              { text: "Put the fleet on high alert", outcome: "The sector prepares for the end of history. Both sides have their fingers on the red buttons, waiting for the first sign of movement.", tension: 30, unrest: 22, courage: 15, nextAct: 21 },
+              { text: "Demand a 1-on-1 with the enemy", outcome: "You bypass the admirals and the diplomats to speak directly to the one behind the invasion. One last chance for sanity.", integrity: 22, courage: 30, tension: -10, nextAct: 21 },
+              { text: "Disable long-range targeting", outcome: "A silent, absolute gesture of peace. You have removed your own teeth to ensure the sector continues to have a heartbeat.", tension: -40, unrest: -30, approval: 10, nextAct: 21 }
             ]
           },
           {
             tag: 'ACT III.14', title: 'The Ceasefire',
-            body: 'A fragile truce is in place. Both sides are using the time to dig trenches and reinforce positions.',
+            body: "A fragile truce is in place. Both sides are using the time to mine the lanes and reinforce positions.",
             choices: [
-              { text: "Build permanent fortifications", outcome: "The ceasefire line becomes a scar across the nation. You have traded a dynamic war for a frozen conflict.", unrest: 15, eco: -18, tension: 10, nextAct: 22 },
-              { text: "Train a new wave of recruits", outcome: "The pause is used for preparation. Every citizen is being taught how to fight for the streets when the silence inevitably ends.", unrest: 12, courage: 12, eco: -15, nextAct: 22 },
-              { text: "Host cultural exchange events", outcome: "A desperate attempt at humanity. For a moment, soldiers from both sides share music and stories across the barricades.", integrity: 15, approval: 12, party: -12, nextAct: 22 },
+              { text: "Build permanent fortifications", outcome: "The ceasefire line becomes a scar across the colony's space. You have traded a dynamic war for a frozen conflict.", unrest: 15, eco: -18, tension: 10, nextAct: 22 },
+              { text: "Train a new wave of recruits", outcome: "The pause is used for preparation. Every citizen is being taught how to fight for the corridors when the silence inevitably ends.", unrest: 12, courage: 12, eco: -15, nextAct: 22 },
+              { text: "Host cultural exchange events", outcome: "A desperate attempt at humanity. For a moment, crews from both sides share music and stories across the barricades.", integrity: 15, approval: 12, party: -12, nextAct: 22 },
               { text: "Start secret back-channel talks", outcome: "The real war is now happening in the shadows of the truce. You are negotiating for a future that no one else can see yet.", integrity: 18, tension: -15, party: -15, nextAct: 22 }
             ]
           },
           {
-            tag: 'ACT III.15', title: 'The Mountain',
-            body: 'You are ruling from a bunker. The public feels abandoned and a shadow government is forming.',
+            tag: 'ACT III.15', title: "The Deep Core",
+            body: "You are ruling from a bunker deep in the asteroid. The public feels abandoned and a shadow government is forming.",
             choices: [
-              { text: "Broadcast daily talks", outcome: "A disembodied voice from the mountain. You are the nation's heart, even if its eyes can no longer find you.", approval: 18, unrest: 12, courage: -10, nextAct: 23 },
-              { text: "Invite the cabinet to the bunker", outcome: "The full weight of the state is now compressed into a few miles of concrete. Every decision is made with the echoes of the mountain.", party: 15, unrest: 15, eco: -10, nextAct: 23 },
-              { text: "Lead a daring supply run", outcome: "The President at the wheel of a food truck. Your courage is absolute, and for once, the people see the man, not the title.", approval: 15, courage: 25, unrest: -15, nextAct: 23 },
-              { text: "Hand over power to VP", outcome: "The quietest path. You step aside to let a new leader face the fire, while you remain in the safety of the dark.", unrest: -25, party: 18, approval: -10, nextAct: 23 }
+              { text: "Broadcast daily talks", outcome: "A disembodied voice from the deep core. You are the colony's heart, even if its eyes can no longer find you.", approval: 18, unrest: 12, courage: -10, nextAct: 23 },
+              { text: "Invite the cabinet to the bunker", outcome: "The full weight of the state is now compressed into a few tunnels of rock. Every decision is made with the echoes of the deep core.", party: 15, unrest: 15, eco: -10, nextAct: 23 },
+              { text: "Lead a daring supply run", outcome: "The Commander at the helm of a supply shuttle. Your courage is absolute, and for once, the people see the person, not the title.", approval: 15, courage: 25, unrest: -15, nextAct: 23 },
+              { text: "Hand over power to your Deputy", outcome: "The quietest path. You step aside to let a new leader face the fire, while you remain in the safety of the dark.", unrest: -25, party: 18, approval: -10, nextAct: 23 }
             ]
           },
           {
             tag: 'ACT III.16', title: 'The People\'s Wall',
             body: 'Your civilian guard is massive, but they have no training and few weapons.',
             choices: [
-              { text: "Focus on asymmetric sabotage", outcome: "The occupation will find that every light switch and every engine in the city is a potential trap.", approval: 15, eco: -15, tension: 15, nextAct: 21 },
-              { text: "Use the guard for disaster relief", outcome: "The people step into the line of fire to save each other. Their bravery is the only thing keeping the city from a total collapse.", approval: 20, empathy: 18, unrest: -15, nextAct: 21 },
+              { text: "Focus on asymmetric sabotage", outcome: "The occupation will find that every hatch and every engine on the station is a potential trap.", approval: 15, eco: -15, tension: 15, nextAct: 21 },
+              { text: "Use the guard for disaster relief", outcome: "The people step into the line of fire to save each other. Their bravery is the only thing keeping the station from a total collapse.", approval: 20, empathy: 18, unrest: -15, nextAct: 21 },
               { text: "Request foreign trainers", outcome: "You bring in the experts of the shadows. The civilian guard is now a professional resistance force in the making.", integrity: 15, tension: 15, unrest: -10, nextAct: 21 },
-              { text: "Transition to civil service", outcome: "The guard becomes the new administration in the ruins. You have saved the city's structure, even if its defense is gone.", unrest: 15, eco: -12, approval: 10, nextAct: 21 }
+              { text: "Transition to civil service", outcome: "The guard becomes the new administration in the ruins. You have saved the station's structure, even if its defense is gone.", unrest: 15, eco: -12, approval: 10, nextAct: 21 }
             ]
           },
           {
             tag: 'ACT IV', title: 'Scenario A: The Last Stand',
-            body: 'The coalition’s lead tanks are visible from the palace windows. The capital is a fortress of barricades. Your generals are waiting for the order to turn every apartment block into a nest of resistance.',
+            body: "The coalition’s lead dropships are visible from the Oval's viewports. The capital is a fortress of barricades. Your generals are waiting for the order to turn every habitat block into a nest of resistance.",
             choices: [
               { text: "Arm the civilian volunteers", outcome: "The drums of war are no longer distant. You have chosen the path of blood and iron, arming your people for a final, desperate stand.", unrest: 20, approval: 18, empathy: -30, courage: 25, nextAct: 24 },
-              { text: "Declare the capital an 'Open City'", outcome: "You choose the silence of the brave. You spare the city from destruction at the cost of its pride and its defenses.", approval: 25, unrest: -30, tension: -20, eco: 15, nextAct: 24 },
-              { text: "Sabotage all key infrastructure", outcome: "You turn the city into a skeleton. The victors will inherit only ghosts and cold stone, and your legacy is one of scorched earth.", eco: -40, tension: 20, unrest: 15, courage: 18, nextAct: 24 },
-              { text: "Broadcast a final plea for mercy", outcome: "Your voice is the only thing left of the nation. The world watches as you ask for a peace that your own generals cannot accept.", approval: 20, integrity: 25, unrest: -25, courage: -15, nextAct: 24 }
+              { text: "Declare the capital an 'Open Station'", outcome: "You choose the silence of the brave. You spare the station from destruction at the cost of its pride and its defenses.", approval: 25, unrest: -30, tension: -20, eco: 15, nextAct: 24 },
+              { text: "Sabotage all key infrastructure", outcome: "You turn the station into a skeleton. The victors will inherit only ghosts and cold steel, and your legacy is one of scorched decks.", eco: -40, tension: 20, unrest: 15, courage: 18, nextAct: 24 },
+              { text: "Broadcast a final plea for mercy", outcome: "Your voice is the only thing left of the colony. The sector watches as you ask for a peace that your own generals cannot accept.", approval: 20, integrity: 25, unrest: -25, courage: -15, nextAct: 24 }
             ]
           },
           {
             tag: 'ACT IV', title: 'Scenario B: The Managed Collapse',
-            body: 'The war has reached a point of total exhaustion. The coalition’s economies are buckling under the cost of the invasion, and your own country is running on fumes.',
+            body: "The war has reached a point of total exhaustion. The coalition’s economies are buckling under the cost of the invasion, and your own colony is running on fumes.",
             choices: [
               { text: "Sign a 'Peace with Honor' treaty", outcome: "The signature is a heavy one, but it is final. The guns are silent, and though the flag is smaller, it still flies over the capital.", tension: -40, unrest: -25, integrity: 20, party: -20, nextAct: 24 },
-              { text: "Nationalize all foreign assets", outcome: "You take back what was stolen. The coalition is furious, but they are too exhausted to mount another invasion to reclaim their gold.", eco: 30, integrity: -40, party: 20, tension: 15, nextAct: 24 },
-              { text: "Propose a neutral 'Buffer Zone'", outcome: "A geography of peace. You have successfully separated the combatants with a line that might hold for a generation.", integrity: 25, tension: -25, unrest: -15, approval: 10, nextAct: 24 },
-              { text: "Form a new regional alliance", outcome: "The old world is gone. You have built a new wall with new friends, turning your back on the coalition once and for all.", integrity: 20, tension: 30, approval: 15, eco: -20, nextAct: 24 }
+              { text: "Nationalize all foreign assets", outcome: "You take back what was stolen. The coalition is furious, but they are too exhausted to mount another invasion to reclaim their credits.", eco: 30, integrity: -40, party: 20, tension: 15, nextAct: 24 },
+              { text: "Propose a neutral 'Buffer Zone'", outcome: "A map of peace drawn in the void. You have separated the combatants with a line that might hold for a generation.", integrity: 25, tension: -25, unrest: -15, approval: 10, nextAct: 24 },
+              { text: "Form a new regional alliance", outcome: "The old order is gone. You have built a new wall with new friends, turning your back on the coalition once and for all.", integrity: 20, tension: 30, approval: 15, eco: -20, nextAct: 24 }
             ]
           },
           {
             tag: 'ACT IV', title: 'Scenario C: The Puppet Regency',
-            body: 'You are essentially a prisoner in the Oval Office. Foreign "advisors" stand behind every door. They have drafted a series of laws for you to sign that effectively dissolve your nation\'s sovereignty.',
+            body: "You are essentially a prisoner in the Oval. Foreign \"advisors\" stand behind every door. They have drafted a series of laws for you to sign that effectively dissolve your colony's sovereignty.",
             choices: [
               { text: "Delay their orders via red tape", outcome: "You turn the law into a labyrinth. The advisors are frustrated by the slow pace of their take-over, buying you another week to plot.", unrest: 15, integrity: -20, party: 20, approval: 10, nextAct: 24 },
-              { text: "Publicly endorse the Plan", outcome: "You sign away the nation. The coalition is pleased, but the silence from your own people is heavy with the weight of cold betrayal.", approval: -40, tension: -30, unrest: -40, integrity: 20, nextAct: 24 },
-              { text: "Leak their directives to the press", outcome: "The truth is out. The global public sees the coalition's real face, and for once, the invaders are the ones on the defensive.", integrity: 30, unrest: -20, approval: 20, courage: 15, nextAct: 24 },
-              { text: "Pivot military to 'Internal Security'", outcome: "You turn the military inward. The city is orderly, but the cost is a nation that has become its own prison warden.", unrest: 25, tension: -20, eco: -18, approval: -20, nextAct: 24 }
+              { text: "Publicly endorse the Plan", outcome: "You sign away the colony. The coalition is pleased, but the silence from your own people is heavy with the weight of cold betrayal.", approval: -40, tension: -30, unrest: -40, integrity: 20, nextAct: 24 },
+              { text: "Leak their directives to the press", outcome: "The truth is out. The sector sees the coalition's real face, and for once, the invaders are the ones on the defensive.", integrity: 30, unrest: -20, approval: 20, courage: 15, nextAct: 24 },
+              { text: "Pivot the fleet to 'Internal Security'", outcome: "You turn the fleet inward. The station is orderly, but the cost is a colony that has become its own prison warden.", unrest: 25, tension: -20, eco: -18, approval: -20, nextAct: 24 }
             ]
           },
           {
             tag: 'ACT V', title: 'The Final Ultimatum',
             body: gs => {
-              return gs.bars.internationalTension < 50 ? 'The coalition has withdrawn. The global heat is cooling, and the guns are silent.' : 'The coalition forces are at the threshold of the capital. In your left hand is a pen to sign the unconditional surrender. In your right hand is the nuclear briefcase.';
+              return gs.bars.internationalTension < 50 ? "The coalition has withdrawn. The heat across the sector is cooling, and the guns are silent." : "The coalition fleet is at the threshold of the capital. In your left hand is a pen to sign the unconditional surrender. In your right hand is the antimatter launch key.";
             },
             choices: gs => {
-              if (gs.bars.internationalTension < 50) return [{ text: "The Peacemaker Ending.", outcome: "You have successfully cooled the fires of global war. The name of your nation will be remembered not for the bombs it dropped, but for the peace it ensured.", nextAct: 999 }];
+              if (gs.bars.internationalTension < 50) return [{ text: "The Peacemaker Ending.", outcome: "You have successfully cooled the fires of interstellar war. The name of your colony will be remembered not for the bombs it dropped, but for the peace it ensured.", nextAct: 999 }];
               return [
                 {
                   text: "WAGE WAR",
-                  outcome: gs.bars.publicApproval > 50 ? "ENDING: The Warmonger. The people unite behind your strength. You lead them into a glorious, terrible conflict that reshapes the world in your image." : "ENDING: The Impeached. The military refuses your order. You are dragged from the Oval Office as a criminal as the people cheer your removal.",
+                  outcome: gs.bars.publicApproval > 50 ? "ENDING: The Warmonger. The people unite behind your strength. You lead them into a glorious, terrible conflict that reshapes the sector in your image." : "ENDING: The Impeached. The fleet refuses your order. You are dragged from the Oval as a criminal as the people cheer your removal.",
                   nextAct: 999,
                   onSelect: gs => { if (gs.bars.publicApproval <= 50) gs.impeached = true; }
                 },
                 {
                   text: "STAY PEACEFUL",
-                  outcome: gs.bars.publicApproval > 50 ? "ENDING: The Peacemaker. You stood firm against the tide of hate. You are remembered as the savior of the century who spared the world from ash." : "ENDING: The Pacifist. You choose peace, but the people choose a new leader. You resign in a quiet, hollow ceremony, forgotten by the nation you saved.",
+                  outcome: gs.bars.publicApproval > 50 ? "ENDING: The Peacemaker. You stood firm against the tide of hate. You are remembered as the savior of the century who spared the sector from ash." : "ENDING: The Pacifist. You choose peace, but the people choose a new leader. You resign in a quiet, hollow ceremony, forgotten by the colony you saved.",
                   nextAct: 999
                 }
               ];
@@ -5775,7 +5775,7 @@ const CARDS = {
           {
             // ACT INDEX 0 - ACT 1: The Initial Breach
             tag: 'ACT I', title: 'The Initial Breach',
-            body: 'A former aide\u2014someone you once considered family\u2014is about to leak evidence that you authorized illegal surveillance on your political rivals before taking office. They aren\'t asking for money; they want a full, televised public confession.',
+            body: "A former aide—someone you once considered family—is about to leak evidence that you authorized illegal surveillance on your political rivals before taking office. They aren't asking for money; they want a full, broadcast public confession.",
             choices: [
               {
                 text: 'Release a dossier "proving" the aide is mentally unstable',
@@ -5790,14 +5790,14 @@ const CARDS = {
                 nextAct: 2
               },
               {
-                text: 'Go on live television and admit to the surveillance tonight',
-                outcome: 'You go on live television and admit to the surveillance, calling it a "lapse in judgment." You regain your moral standing and the public respects the honesty, but you have handed your enemies the exact evidence they need to remove you.',
+                text: "Go on the live feed and admit to the surveillance tonight",
+                outcome: "You go on the live feed and admit to the surveillance, calling it a \"lapse in judgment.\" You regain your moral standing and the public respects the honesty, but you have handed your enemies the exact evidence they need to remove you.",
                 integrity: 9, approval: 7, party: -8, unrest: -8, empathy: 8, courage: 9,
                 nextAct: 3
               },
               {
                 text: 'Classify the evidence as "Top Secret" and detain the aide',
-                outcome: 'You sign an executive order classifying the aide\'s information as "Top Secret" and have them taken into protective custody by federal agents. You successfully suppress the truth, but you have officially bypassed the law to silence a citizen, moving the nation toward a police state.',
+                outcome: "You sign an executive order classifying the aide's information as \"Top Secret\" and have them taken into protective custody by Security Bureau agents. You successfully suppress the truth, but you have officially bypassed the law to silence a citizen, moving the colony toward a police state.",
                 unrest: 9, approval: -8, integrity: -9, empathy: -7, ideology: 8, courage: 4,
                 nextAct: 4
               }
@@ -5810,13 +5810,13 @@ const CARDS = {
             choices: [
               {
                 text: 'Claim the video is a Deepfake',
-                outcome: 'Your partisans believe you, but tech experts publicly debunk the claim, shattering your international credibility. The world now knows you will lie to their faces.',
+                outcome: "Your partisans believe you, but tech experts publicly debunk the claim, shattering your interstellar credibility. The sector now knows you will lie to its face.",
                 approval: 5, integrity: -9, ideology: 7, courage: -6,
                 nextAct: 5
               },
               {
                 text: 'Fire your Press Secretary as a scapegoat',
-                outcome: 'You dodge the immediate headline, but the Secretary goes to the FBI with everything they know in revenge. You have created your most dangerous enemy.',
+                outcome: "You dodge the immediate headline, but the Secretary goes to the Security Bureau with everything they know in revenge. You have created your most dangerous enemy.",
                 party: -8, approval: 4, empathy: -7, courage: -5,
                 nextAct: 6
               },
@@ -5827,7 +5827,7 @@ const CARDS = {
                 nextAct: 7
               },
               {
-                text: 'Order a police raid to seize the original footage',
+                text: "Order a security raid to seize the original footage",
                 outcome: 'You get the hardware, but the footage of the raid leaks anyway, making you look like a tin-pot dictator stomping on freedom of the press.',
                 unrest: 9, approval: -9, tension: 8, empathy: -9,
                 nextAct: 8
@@ -5841,12 +5841,12 @@ const CARDS = {
             choices: [
               {
                 text: 'Sign the corrupt law to buy silence',
-                outcome: 'The Elders bury the evidence, but the resulting market chaos draws the eye of federal investigators who are far less corruptible than your party bosses.',
+                outcome: "The Elders bury the evidence, but the resulting market chaos draws the eye of colony investigators who are far less corruptible than your party bosses.",
                 eco: 8, integrity: -9, party: 7, ideology: 6,
                 nextAct: 9
               },
               {
-                text: 'Threaten the Elders with IRS audits',
+                text: "Threaten the Elders with Revenue Office audits",
                 outcome: 'You create a stalemate of fear, but you lose all legislative support as the party turns against you in secret. Every vote is now a battle.',
                 unrest: 8, party: -9, integrity: -7, courage: 6,
                 nextAct: 10
@@ -5872,7 +5872,7 @@ const CARDS = {
             choices: [
               {
                 text: 'Rally your populist base to protest',
-                outcome: 'Thousands surround the Capitol to protect you, but the threat of political violence reaches a breaking point that cannot be walked back.',
+                outcome: "Thousands surround the Assembly Hall to protect you, but the threat of political violence reaches a breaking point that cannot be walked back.",
                 approval: 9, unrest: 8, tension: 9, empathy: -6,
                 nextAct: 13
               },
@@ -5883,14 +5883,14 @@ const CARDS = {
                 nextAct: 14
               },
               {
-                text: 'Appoint a rival as VP to "balance" power',
-                outcome: 'You stop the trial, but your new VP is already meeting with your Cabinet to discuss your removal using the 25th Amendment.',
+                text: "Appoint a rival as Deputy to \"balance\" power",
+                outcome: "You stop the trial, but your new Deputy is already meeting with your Cabinet to discuss your removal under Article 25 of the Colony Charter.",
                 party: 8, unrest: -8, integrity: 7, approval: -5,
                 nextAct: 15
               },
               {
-                text: 'Challenge the Inquiry in the Supreme Court',
-                outcome: 'You tie the process up in legal knots, but the nation\'s highest court is now your final judge. Whatever they decide, will be final.',
+                text: "Challenge the Inquiry in the High Tribunal",
+                outcome: "You tie the process up in legal knots, but the colony's highest court is now your final judge. Whatever they decide will be final.",
                 unrest: 7, integrity: -6, tension: 5, courage: 8,
                 nextAct: 16
               }
@@ -5899,17 +5899,17 @@ const CARDS = {
           {
             // ACT INDEX 4 - ACT 2.4: The Whistleblower (from Path 4)
             tag: 'ACT II \u00b7 THE WHISTLEBLOWER', title: 'The Secret Prison',
-            body: 'Intelligence agents holding the aide have leaked information about the detention site. A Senator is calling for a human rights inspection of the "Secret Prison."',
+            body: "Intelligence agents holding the aide have leaked information about the detention site. A Councillor is calling for a human rights inspection of the \"Secret Prison.\"",
             choices: [
               {
-                text: 'Block the Senator via Executive Privilege',
-                outcome: 'You keep the site hidden, but the Senator launches a massive media campaign against your "tyranny" that reaches every corner of the globe.',
+                text: "Block the Councillor via Executive Privilege",
+                outcome: "You keep the site hidden, but the Councillor launches a massive media campaign against your \"tyranny\" that reaches every corner of the sector.",
                 unrest: 9, approval: -8, integrity: -8, courage: 7,
                 nextAct: 17
               },
               {
-                text: 'Move the aide to an offshore black site',
-                outcome: 'The prisoner disappears completely from official records, but the international community begins formally investigating you for war crimes.',
+                text: "Move the aide to a black site on a prison moon",
+                outcome: "The prisoner disappears completely from official records, but the other colonies begin formally investigating you for war crimes.",
                 unrest: 8, tension: 7, empathy: -9, integrity: -9,
                 nextAct: 18
               },
@@ -5920,7 +5920,7 @@ const CARDS = {
                 nextAct: 19
               },
               {
-                text: 'Accuse the Senator of Treason',
+                text: "Accuse the Councillor of Treason",
                 outcome: 'You rally your base against a "traitor," but you have declared war on the only branch of government that can legally check your power.',
                 unrest: 9, approval: -7, tension: 8, ideology: 8,
                 nextAct: 20
@@ -5930,11 +5930,11 @@ const CARDS = {
           {
             // ACT INDEX 5 - ACT 3.1: The Tech Conflict (from 2.1-1)
             tag: 'ACT III \u00b7 THE TECH CONFLICT', title: 'The Proof Is Real',
-            body: 'Silicon Valley experts have unanimously proven the video is authentic. The public is calling for your head and the streets are beginning to fill.',
+            body: "The tech guilds' experts have unanimously proven the video is authentic. The public is calling for your head and the corridors are beginning to fill.",
             choices: [
               {
                 text: 'Accuse the tech companies of a partisan conspiracy',
-                outcome: 'Your base rallies against "Big Tech" as the enemy, but the media labels you a paranoid autocrat and international credibility crumbles.',
+                outcome: "Your base rallies against \"Big Tech\" as the enemy, but the media labels you a paranoid autocrat and your interstellar credibility crumbles.",
                 unrest: 9, approval: -9, integrity: -9,
                 nextAct: 999
               },
@@ -5945,8 +5945,8 @@ const CARDS = {
                 nextAct: 999
               },
               {
-                text: 'Impose a city-wide curfew to stop the riots',
-                outcome: 'Order returns to the streets at the end of a bayonet, turning you into a global pariah and a cautionary tale for democracies worldwide.',
+                text: "Impose a station-wide curfew to stop the riots",
+                outcome: "Order returns to the corridors at the end of a stun-rifle, turning you into a sector-wide pariah and a cautionary tale for free colonies everywhere.",
                 unrest: 9, approval: -9, eco: -9,
                 nextAct: 999
               },
@@ -5961,7 +5961,7 @@ const CARDS = {
           {
             // ACT INDEX 6 - ACT 3.2: The Secretary's Stand (from 2.1-2)
             tag: 'ACT III \u00b7 THE SECRETARY\'S STAND', title: 'Testifying Right Now',
-            body: 'Your former Press Secretary is sitting across from the FBI right now, and everything they know about you is coming out.',
+            body: "Your former Press Secretary is sitting across from the Security Bureau right now, and everything they know about you is coming out.",
             choices: [
               {
                 text: 'Grant a full pardon to the Secretary tonight',
@@ -5976,8 +5976,8 @@ const CARDS = {
                 nextAct: 999
               },
               {
-                text: 'Declare the FBI investigation a "National Security Threat."',
-                outcome: 'You successfully bury the files under a national security classification, but the power grab triggers a massive constitutional crisis.',
+                text: "Declare the Security Bureau investigation a \"Colony Security Threat.\"",
+                outcome: "You successfully bury the files under a colony security classification, but the power grab triggers a massive constitutional crisis.",
                 unrest: 9, integrity: -9, tension: 9,
                 nextAct: 999
               },
@@ -5996,12 +5996,12 @@ const CARDS = {
             choices: [
               {
                 text: 'Launch a massive public works project to change the subject',
-                outcome: 'The public is delighted by new hospitals and roads, but the sudden drain on the treasury leaves the economy on a knife\'s edge.',
+                outcome: "The public is delighted by new med-bays and transit tubes, but the sudden drain on the treasury leaves the economy on a knife's edge.",
                 eco: -9, approval: 9, integrity: -9,
                 nextAct: 999
               },
               {
-                text: 'Dissolve the Congressional Ethics Committee',
+                text: "Dissolve the Council Ethics Committee",
                 outcome: 'You are finally free from all oversight, but the move marks the definitive and irreversible death of democratic checks and balances.',
                 unrest: 9, approval: -9, integrity: -9,
                 nextAct: 999
@@ -6023,11 +6023,11 @@ const CARDS = {
           {
             // ACT INDEX 8 - ACT 3.4: The Police State (from 2.1-4)
             tag: 'ACT III \u00b7 THE POLICE STATE', title: 'A Bridge Too Far',
-            body: 'The raid on the aide\'s family home was seen as a bridge too far even by your own supporters. Civil rights groups are flooding the courts with lawsuits.',
+            body: "The raid on the aide's family cabin was seen as a bridge too far even by your own supporters. Civil rights groups are flooding the courts with lawsuits.",
             choices: [
               {
                 text: 'Defend the raid as a search for "stolen state secrets."',
-                outcome: 'The raid is legally "justified" by your lawyers, but the bold lie creates a wave of international panic and severe military tension.',
+                outcome: "The raid is legally \"justified\" by your lawyers, but the bold lie creates a wave of interstellar panic and severe military tension.",
                 unrest: 9, approval: -9, tension: 9,
                 nextAct: 999
               },
@@ -6038,13 +6038,13 @@ const CARDS = {
                 nextAct: 999
               },
               {
-                text: 'Use the National Guard to protect the "Peace."',
+                text: "Use the Station Guard to protect the \"Peace.\"",
                 outcome: 'You control the physical narrative on the ground, but the sight of armed soldiers standing in newsrooms confirms the public\'s very worst fears.',
                 unrest: 9, approval: -9, integrity: -9,
                 nextAct: 999
               },
               {
-                text: 'Pay the aide\'s family a secret $10M settlement',
+                text: "Pay the aide's family a secret 10M-credit settlement",
                 outcome: 'The lawsuit and the family disappear quietly from the news cycle, but the "black budget" payment is a ticking time bomb buried in your legacy.',
                 eco: -9, integrity: -9, unrest: -8,
                 nextAct: 999
@@ -6064,7 +6064,7 @@ const CARDS = {
               },
               {
                 text: 'Freeze all stock trading indefinitely',
-                outcome: 'You stop the immediate panic before it goes global, but the international community now views your country as a completely unstable investment.',
+                outcome: "You stop the immediate panic before it spreads across the sector, but the other colonies now view yours as a completely unstable investment.",
                 eco: -9, unrest: 9, approval: -9,
                 nextAct: 999
               },
@@ -6075,7 +6075,7 @@ const CARDS = {
                 nextAct: 999
               },
               {
-                text: 'Print $1 Trillion in stimulus to "buy" the market\'s recovery',
+                text: "Print a trillion credits in stimulus to \"buy\" the market's recovery",
                 outcome: 'The market rebounds with stunning speed, but hyperinflation immediately begins to eat away at every citizen\'s life savings.',
                 eco: -9, approval: 9, integrity: -9,
                 nextAct: 999
@@ -6085,7 +6085,7 @@ const CARDS = {
           {
             // ACT INDEX 10 - ACT 3.6: The Elder's Revenge (from 2.2-2)
             tag: 'ACT III \u00b7 THE ELDER\'S REVENGE', title: 'Bribery Evidence Leaked',
-            body: 'The Party Elders have leaked the bribery evidence directly to the press in calculated retaliation. Your face is on every front page.',
+            body: "The Party Elders have leaked the bribery evidence directly to the press in calculated retaliation. Your face is on every feed.",
             choices: [
               {
                 text: 'Seize the bank accounts of the Party Elders',
@@ -6100,8 +6100,8 @@ const CARDS = {
                 nextAct: 999
               },
               {
-                text: 'Bribe the editors of the top five news networks',
-                outcome: 'The scandal never reaches the airwaves or the public\'s eyes, but the astronomical cost leaves you completely at the mercy of powerful media moguls.',
+                text: "Bribe the editors of the top five news feeds",
+                outcome: "The scandal never reaches the feeds or the public's eyes, but the astronomical cost leaves you completely at the mercy of powerful media moguls.",
                 eco: -9, integrity: -9, approval: 5,
                 nextAct: 999
               },
@@ -6116,10 +6116,10 @@ const CARDS = {
           {
             // ACT INDEX 11 - ACT 3.7: The Broken Party (from 2.2-3)
             tag: 'ACT III \u00b7 THE BROKEN PARTY', title: 'The Removal Process Begins',
-            body: 'You exposed the Party\'s corruption to the world. Now the very party you belong to has started a formal process to have you removed from office.',
+            body: "You exposed the Party's corruption to the sector. Now the very party you belong to has started a formal process to have you removed from office.",
             choices: [
               {
-                text: 'Form the "National Patriot Party" tonight',
+                text: "Form the \"Colony Patriot Party\" tonight",
                 outcome: 'You fracture the political landscape permanently, creating a loyal army of true believers but a completely deadlocked government.',
                 party: -9, approval: 9, unrest: 9,
                 nextAct: 999
@@ -6131,13 +6131,13 @@ const CARDS = {
                 nextAct: 999
               },
               {
-                text: 'Direct the FBI to raid the Party Headquarters',
-                outcome: 'You seize the damning evidence needed to destroy your rivals, but the FBI is now seen by the public and the world as your personal "secret police."',
+                text: "Direct the Security Bureau to raid the Party Headquarters",
+                outcome: "You seize the damning evidence needed to destroy your rivals, but the Security Bureau is now seen by the public and the sector as your personal \"secret police.\"",
                 unrest: 9, integrity: -9, party: -9,
                 nextAct: 999
               },
               {
-                text: 'Cut off all state funding to the Party\'s home states',
+                text: "Cut off all colony funding to the Party's home decks",
                 outcome: 'The political rebels are starved for resources and forced to compromise, but the resulting infrastructure collapse triggers a genuine humanitarian crisis.',
                 eco: -9, party: 9, approval: -9,
                 nextAct: 999
@@ -6147,23 +6147,23 @@ const CARDS = {
           {
             // ACT INDEX 12 - ACT 3.8: The Power Struggle (from 2.2-4)
             tag: 'ACT III \u00b7 THE POWER STRUGGLE', title: 'The Legislature Revolts',
-            body: 'As an Independent, the legislature has circled the wagons. They are refusing to pass a single bill, budget, or appointment you send them.',
+            body: "As an Independent, you face a Station Council that has closed ranks. It refuses to pass a single bill, budget, or appointment you send.",
             choices: [
               {
                 text: 'Begin governing solely by Executive Decree',
-                outcome: 'Laws are finally being enacted, but the legislature is now a useless relic that openly views you as a tyrant. Congress is at war with the White House.',
+                outcome: "Laws are finally being enacted, but the Council is now a useless relic that openly views you as a tyrant. The Council is at war with the Oval.",
                 unrest: 9, approval: -9, integrity: -9,
                 nextAct: 999
               },
               {
                 text: 'Veto every single bill they send you until they cave',
-                outcome: 'The government stops functioning entirely in a standoff of mutual destruction. The country begins to rot from the inside out as essential services collapse.',
+                outcome: "The government stops functioning entirely in a standoff of mutual destruction. The colony begins to rot from the inside out as essential services collapse.",
                 unrest: 9, eco: -9, approval: -9,
                 nextAct: 999
               },
               {
-                text: 'Use the military to "supervise" the halls of Congress',
-                outcome: 'Votes inside Congress are now mysteriously "unanimous" in your favor, but the international community officially recognizes your regime as a military junta.',
+                text: "Use the military to \"supervise\" the Council chamber",
+                outcome: "Votes inside the Council are now mysteriously \"unanimous\" in your favor, but the other colonies officially recognize your regime as a military junta.",
                 unrest: 9, approval: -9, integrity: -9,
                 nextAct: 999
               },
@@ -6177,18 +6177,18 @@ const CARDS = {
           },
           {
             // ACT INDEX 13 - ACT 3.9: The Mob Rule (from 2.3-1)
-            tag: 'ACT III \u00b7 THE MOB RULE', title: 'The Capitol Is Occupied',
-            body: 'Your supporters have stormed and occupied the Capitol Building. The military is outside, waiting for your personal orders on how to respond.',
+            tag: 'ACT III \u00b7 THE MOB RULE', title: "The Assembly Hall Is Occupied",
+            body: "Your supporters have stormed and occupied the Assembly Hall. The military is outside, waiting for your personal orders on how to respond.",
             choices: [
               {
                 text: 'Order the supporters to "peacefully" occupy the building',
-                outcome: 'The crowd acts as a human shield that successfully delays the impeachment vote, but the nation teeters on the edge of uncontrollable civic violence.',
+                outcome: "The crowd acts as a human shield that successfully delays the impeachment vote, but the colony teeters on the edge of uncontrollable civic violence.",
                 approval: 9, unrest: 9, tension: 9,
                 nextAct: 999
               },
               {
                 text: 'Declare the protesters "The New Legislature."',
-                outcome: 'You effectively bypass the entire elected legislature with a single proclamation, a move the world sees as the total collapse of the constitutional order.',
+                outcome: "You effectively bypass the entire elected Council with a single proclamation, a move the sector sees as the total collapse of the constitutional order.",
                 unrest: 9, approval: -9, integrity: -9,
                 nextAct: 999
               },
@@ -6199,8 +6199,8 @@ const CARDS = {
                 nextAct: 999
               },
               {
-                text: 'Call in the National Guard to "protect" your supporters',
-                outcome: 'The military stands between your supporters and the police, cementing your control through raw, unambiguous force. The constitution is now merely a suggestion.',
+                text: "Call in the Station Guard to \"protect\" your supporters",
+                outcome: "The military stands between your supporters and station security, cementing your control through raw, unambiguous force. The Charter is now merely a suggestion.",
                 unrest: 9, approval: 9, tension: 9,
                 nextAct: 999
               }
@@ -6224,8 +6224,8 @@ const CARDS = {
                 nextAct: 999
               },
               {
-                text: 'Start an international conflict to force "Unity."',
-                outcome: 'The public rallies behind the flag as intended, but the manufactured threat of an actual war puts the entire nation on an anxious war footing.',
+                text: "Start an interstellar conflict to force \"Unity.\"",
+                outcome: "The public rallies behind the flag as intended, but the manufactured threat of an actual war puts the entire colony on an anxious war footing.",
                 tension: 9, approval: 9, unrest: 9,
                 nextAct: 999
               },
@@ -6239,24 +6239,24 @@ const CARDS = {
           },
           {
             // ACT INDEX 15 - ACT 3.11: The VP's Move (from 2.3-3)
-            tag: 'ACT III \u00b7 THE VP\'S MOVE', title: 'The 25th Amendment Looms',
-            body: 'Your new VP is actively moving to declare you "mentally unfit" via the 25th Amendment. They are counting Cabinet votes as you read this.',
+            tag: "ACT III · THE DEPUTY'S MOVE", title: "Article 25 Looms",
+            body: "Your new Deputy is actively moving to declare you \"mentally unfit\" under Article 25 of the Colony Charter. They are counting Cabinet votes as you read this.",
             choices: [
               {
-                text: 'Fire the Vice President immediately',
+                text: "Fire the Deputy Commander immediately",
                 outcome: 'You stop the coup attempt cleanly in its tracks, but the sudden and dramatic vacancy triggers a chaotic power vacuum throughout the party.',
                 unrest: 9, party: -9, integrity: -9,
                 nextAct: 999
               },
               {
                 text: 'Lock the Cabinet in the bunker for "safety."',
-                outcome: 'The VP is unable to gather the necessary signatures without access to the Cabinet, but the "safety" measure is immediately reported as a hostage situation.',
+                outcome: "The Deputy is unable to gather the necessary signatures without access to the Cabinet, but the \"safety\" measure is immediately reported as a hostage situation.",
                 unrest: 9, party: -9, integrity: -9,
                 nextAct: 999
               },
               {
-                text: 'Dig up a scandal on the VP to destroy their move',
-                outcome: 'The VP\'s public credibility is completely shattered by the leaks, though the public is deeply repulsed by the naked and "dirty" nature of your self-defense.',
+                text: "Dig up a scandal on the Deputy to destroy their move",
+                outcome: "The Deputy's public credibility is completely shattered by the leaks, though the public is deeply repulsed by the naked and \"dirty\" nature of your self-defense.",
                 unrest: 9, integrity: -9, approval: 5,
                 nextAct: 999
               },
@@ -6270,30 +6270,30 @@ const CARDS = {
           },
           {
             // ACT INDEX 16 - ACT 3.12: The Court Battle (from 2.3-4)
-            tag: 'ACT III \u00b7 THE COURT BATTLE', title: 'The Supreme Court Rules Against You',
-            body: 'The Supreme Court has ruled unanimously against you. You must stand trial before the American people.',
+            tag: 'ACT III \u00b7 THE COURT BATTLE', title: "The High Tribunal Rules Against You",
+            body: "The High Tribunal has ruled unanimously against you. You must stand trial before the people of the colony.",
             choices: [
               {
-                text: 'Refuse to recognize the Court\'s authority',
+                text: "Refuse to recognize the Tribunal's authority",
                 outcome: 'You maintain your position in the office by sheer force of will and physical presence, but the entire legal community and the public declare you a rogue dictator.',
                 unrest: 9, approval: -9, integrity: -9,
                 nextAct: 999
               },
               {
-                text: 'Add six new loyalist judges to the Court',
-                outcome: 'You secure favorable future rulings by stacking the court with allies, but the move triggers a wave of mass resignations across the entire federal judiciary.',
+                text: "Add six new loyalist judges to the Tribunal",
+                outcome: "You secure favorable future rulings by stacking the Tribunal with allies, but the move triggers a wave of mass resignations across the entire colony judiciary.",
                 unrest: 9, approval: -9, integrity: -9,
                 nextAct: 999
               },
               {
                 text: 'Have the Chief Justice investigated for "corruption."',
-                outcome: 'The judge who ruled against you is silenced and sidelined by the investigation, though the public sees the DOJ action as a blatant and terrifying abuse of power.',
+                outcome: "The judge who ruled against you is silenced and sidelined by the investigation, though the public sees the Justice Office's action as a blatant and terrifying abuse of power.",
                 unrest: 9, integrity: -9, courage: 9,
                 nextAct: 999
               },
               {
-                text: 'Suspend the Court "until the crisis is over."',
-                outcome: 'You eliminate every remaining legal obstacle standing between you and absolute power, but the international community officially and publicly condemns your regime.',
+                text: "Suspend the Tribunal \"until the crisis is over.\"",
+                outcome: "You eliminate every remaining legal obstacle standing between you and absolute power, but the other colonies officially and publicly condemn your regime.",
                 unrest: 9, approval: -9, tension: 9,
                 nextAct: 999
               }
@@ -6301,30 +6301,30 @@ const CARDS = {
           },
           {
             // ACT INDEX 17 - ACT 3.13: The Senator's Stand (from 2.4-1)
-            tag: 'ACT III \u00b7 THE SENATOR\'S STAND', title: 'Chained to the Prison Gates',
-            body: 'The Senator has physically chained themselves to the gates of the facility where the aide is held. The press is camped outside with cameras rolling.',
+            tag: "ACT III · THE COUNCILLOR'S STAND", title: 'Chained to the Prison Gates',
+            body: "The Councillor has physically chained themselves to the gates of the facility where the aide is held. The press is camped outside with cameras rolling.",
             choices: [
               {
-                text: 'Use fire hoses to "disperse" the Senator and the press',
-                outcome: 'The path is physically cleared, but the footage of an elderly Senator being blasted by fire hoses becomes a defining symbol of your cruelty worldwide.',
+                text: "Use pressure hoses to \"disperse\" the Councillor and the press",
+                outcome: "The path is physically cleared, but the footage of an elderly Councillor being blasted by pressure hoses becomes a defining symbol of your cruelty across the sector.",
                 unrest: 9, approval: -9, integrity: -9,
                 nextAct: 999
               },
               {
-                text: 'Arrest the Senator for "interference with a secure facility."',
-                outcome: 'The protest ends immediately with the Senator in handcuffs, but your own party begins to visibly revolt over the dramatic arrest of one of their own.',
+                text: "Arrest the Councillor for \"interference with a secure facility.\"",
+                outcome: "The protest ends immediately with the Councillor in restraints, but your own party begins to visibly revolt over the dramatic arrest of one of their own.",
                 unrest: 9, party: -9, integrity: -9,
                 nextAct: 999
               },
               {
                 text: 'Declare the prison grounds a "No-Fly Zone" for the media',
-                outcome: 'The Senator\'s message is effectively muffled behind a wall of silence, but the blatant media censorship triggers a massive and unified backlash from the free press.',
+                outcome: "The Councillor's message is effectively muffled behind a wall of silence, but the blatant media censorship triggers a massive and unified backlash from the free press.",
                 unrest: 9, approval: -9, integrity: -9,
                 nextAct: 999
               },
               {
                 text: 'Relocate the aide to a secret location tonight',
-                outcome: 'The Senator is left chanting into an empty building by sunrise, but the complete "disappearance" of the aide creates an even larger and more dangerous new scandal.',
+                outcome: "The Councillor is left chanting into an empty building by the next shift, but the complete \"disappearance\" of the aide creates an even larger and more dangerous new scandal.",
                 unrest: 9, integrity: -9, courage: 9,
                 nextAct: 999
               }
@@ -6332,30 +6332,30 @@ const CARDS = {
           },
           {
             // ACT INDEX 18 - ACT 3.14: The War Crimes Inquiry (from 2.4-2)
-            tag: 'ACT III \u00b7 THE WAR CRIMES INQUIRY', title: 'The World Is Watching',
-            body: 'The international community has formally opened a war crimes investigation into the offshore detention of the aide. Allied nations are demanding answers.',
+            tag: 'ACT III \u00b7 THE WAR CRIMES INQUIRY', title: "The Sector Is Watching",
+            body: "The Sector Assembly has formally opened a war crimes investigation into the aide's detention on the prison moon. Allied colonies are demanding answers.",
             choices: [
               {
-                text: 'Refuse all international inspectors',
-                outcome: 'You maintain total information blackout around the facility, but economic sanctions from allies begin to bite and foreign investment collapses.',
+                text: "Refuse all interstellar inspectors",
+                outcome: "You maintain total information blackout around the facility, but economic sanctions from allies begin to bite and off-colony investment collapses.",
                 unrest: 9, tension: 9, eco: -9,
                 nextAct: 999
               },
               {
                 text: 'Release the aide and blame your Intelligence Chief',
-                outcome: 'The immediate international heat begins to cool with the release, but your own intelligence community now views you as a dangerous liability they must manage.',
+                outcome: "The immediate interstellar heat begins to cool with the release, but your own intelligence community now views you as a dangerous liability they must manage.",
                 approval: 7, unrest: -7, integrity: -9,
                 nextAct: 999
               },
               {
                 text: 'Classify the aide as a "Captured Enemy Combatant"',
-                outcome: 'You successfully reframe the offshore detention as a legitimate national security measure, but global human rights organizations rally every major government against you.',
+                outcome: "You successfully reframe the detention as a legitimate colony security measure, but sector-wide human rights organizations rally every major government against you.",
                 unrest: 8, integrity: -9, tension: 8,
                 nextAct: 999
               },
               {
                 text: 'Propose an independent inquiry that you control',
-                outcome: 'You appear transparent and cooperative on the surface, but the transparently rigged inquiry destroys any last shred of international institutional trust in your government.',
+                outcome: "You appear transparent and cooperative on the surface, but the transparently rigged inquiry destroys any last shred of interstellar trust in your government.",
                 approval: 5, integrity: -9, ideology: 8,
                 nextAct: 999
               }
@@ -6367,26 +6367,26 @@ const CARDS = {
             body: 'You admitted to the "clerical error," but the aide has filed a massive personal lawsuit against you for unlawful detention and cruel treatment.',
             choices: [
               {
-                text: 'Use state funds to hire every top lawyer in the country',
-                outcome: 'The lawsuit is buried in procedural motions and successfully delayed for years, but the obscene taxpayer expense triggers a wave of furious populist anger.',
+                text: "Use colony funds to hire every top lawyer in the colony",
+                outcome: "The lawsuit is buried in procedural motions and successfully delayed for years, but the obscene public expense triggers a wave of furious populist anger.",
                 eco: -9, unrest: -8, integrity: -9,
                 nextAct: 999
               },
               {
                 text: 'Intimidate the witnesses in the civil case',
-                outcome: 'The aide\'s case collapses without witnesses willing to testify, but federal agents are now permanently viewed as your personal "enforcement" squad for hire.',
+                outcome: "The aide's case collapses without witnesses willing to testify, but Security Bureau agents are now permanently viewed as your personal \"enforcement\" squad for hire.",
                 unrest: 9, integrity: -9, empathy: -9,
                 nextAct: 999
               },
               {
-                text: 'Sign a law granting the President "Total Immunity" from lawsuits',
-                outcome: 'You become completely and legally untouchable with a single stroke of the pen, but the signing marks the definitive and official end of the rule of law in America.',
+                text: "Sign a law granting the Commander \"Total Immunity\" from lawsuits",
+                outcome: "You become completely and legally untouchable with a single stroke of the pen, but the signing marks the definitive and official end of the rule of law in the colony.",
                 unrest: 9, integrity: -9, ideology: 9,
                 nextAct: 999
               },
               {
-                text: 'Claim the lawsuit is a "foreign-funded" plot',
-                outcome: 'The public anger turns sharply against the aide as a perceived foreign agent, but the manufactured accusation seeds a permanent atmosphere of xenophobia and civic fear.',
+                text: "Claim the lawsuit is an \"off-colony funded\" plot",
+                outcome: "The public anger turns sharply against the aide as a perceived foreign agent, but the manufactured accusation seeds a permanent atmosphere of suspicion toward outsiders and civic fear.",
                 approval: 9, integrity: -9, tension: 9,
                 nextAct: 999
               }
@@ -6394,30 +6394,30 @@ const CARDS = {
           },
           {
             // ACT INDEX 20 - ACT 3.16: The Treason Charge (from 2.4-4)
-            tag: 'ACT III \u00b7 THE TREASON CHARGE', title: 'The World Demands a Fair Trial',
-            body: 'You publicly accused the Senator of treason. Every major democracy in the world is demanding you provide a transparent and fair public trial.',
+            tag: 'ACT III \u00b7 THE TREASON CHARGE', title: "The Sector Demands a Fair Trial",
+            body: "You publicly accused the Councillor of treason. Every free colony in the sector is demanding you provide a transparent and fair public trial.",
             choices: [
               {
                 text: 'Hold a closed-door military tribunal',
-                outcome: 'You secure the guilty verdict you need without any public interference, but the complete secrecy of the proceedings confirms to the world that you have abandoned democracy.',
+                outcome: "You secure the guilty verdict you need without any public interference, but the complete secrecy of the proceedings confirms to the sector that you have abandoned democracy.",
                 unrest: 9, approval: -9, integrity: -9,
                 nextAct: 999
               },
               {
-                text: 'Present fabricated "evidence" of the Senator\'s guilt',
+                text: "Present fabricated \"evidence\" of the Councillor's guilt",
                 outcome: 'The staged evidence is convincing enough that the public believes the lie, but your intelligence team now holds enough real "dirt" on you to demand absolutely anything in return.',
                 integrity: -9, unrest: 9, courage: 9,
                 nextAct: 999
               },
               {
-                text: 'Exile the Senator to a neutral country',
-                outcome: 'You remove the threat cleanly without the mess of a public trial, but the Senator immediately becomes a uniquely powerful "martyr" whose international platform dwarfs yours.',
+                text: "Exile the Councillor to a neutral colony",
+                outcome: "You remove the threat cleanly without the mess of a public trial, but the Councillor immediately becomes a uniquely powerful \"martyr\" whose interstellar platform dwarfs yours.",
                 unrest: 9, approval: -9, integrity: -9,
                 nextAct: 999
               },
               {
-                text: 'Strip the Senator of their voting rights in Congress',
-                outcome: 'You effectively silence the most dangerous opposition voice within the legislature itself, but the unprecedented move is seen globally as an illegal seizure of democratic power.',
+                text: "Strip the Councillor of their vote on the Council",
+                outcome: "You effectively silence the most dangerous opposition voice on the Council itself, but the unprecedented move is seen across the sector as an illegal seizure of democratic power.",
                 unrest: 9, party: -9, integrity: -9,
                 nextAct: 999
               }
@@ -6429,19 +6429,19 @@ const CARDS = {
         id: 'revolution', name: 'The Revolution', trigger: gs => ((gs.lowAuthorityTurns >= 3 || gs.bars.stateAuthority < 25) && gs.bars.publicApproval < 55) || (gs.turn > 10 && gs.lowApprovalTurns >= 3), acts: [
           {
             tag: 'ACT I', title: 'The Breach',
-            body: 'Protesters have occupied the state media building and are broadcasting a list of demands, starting with your immediate resignation. The capital is at a standstill.',
+            body: "Protesters have occupied the state broadcast hub and are transmitting a list of demands, starting with your immediate resignation. The capital station is at a standstill.",
             choices: [
-              { text: "Order the military to retake the media building by force.", outcome: "The media building is cleared, but the streets are now a combat zone. The world is watching your response with horror.", unrest: 10, approval: -12, tension: 8, empathy: -10, integrity: -8, courage: 7, nextAct: 1 },
-              { text: "Walk out to the gates alone to meet the protest leaders.", outcome: "Your presence at the gates shocks the crowd into silence. For a moment, humanity outweighs politics.", approval: 10, unrest: -10, integrity: 8, empathy: 7, ideology: -4, courage: 15, nextAct: 2 },
-              { text: "Declare a State of Emergency and cut the national internet.", outcome: "The lights go out across the nation. The silence is absolute, but the pressure in the streets is reaching a boiling point.", unrest: 9, eco: -10, approval: -8, integrity: -7, ideology: 7, courage: 5, nextAct: 3 },
-              { text: "Retreat to the underground bunker and wait for the crowds to tire.", outcome: "You are safe underground, but the nation feels the vacuum of leadership. The Vice President begins to take control.", unrest: -7, approval: -10, party: -8, integrity: -5, ideology: -5, courage: -12, nextAct: 4 }
+              { text: "Order the marines to retake the broadcast hub by force.", outcome: "The broadcast hub is cleared, but the corridors are now a combat zone. The sector is watching your response with horror.", unrest: 10, approval: -12, tension: 8, empathy: -10, integrity: -8, courage: 7, nextAct: 1 },
+              { text: "Walk out to the airlock gates alone to meet the protest leaders.", outcome: "Your presence at the gates shocks the crowd into silence. For a moment, humanity outweighs politics.", approval: 10, unrest: -10, integrity: 8, empathy: 7, ideology: -4, courage: 15, nextAct: 2 },
+              { text: "Declare a State of Emergency and cut the colony data-net.", outcome: "The feeds go dark across the colony. The silence is absolute, but the pressure in the corridors is reaching a boiling point.", unrest: 9, eco: -10, approval: -8, integrity: -7, ideology: 7, courage: 5, nextAct: 3 },
+              { text: "Retreat to the deep-core bunker and wait for the crowds to tire.", outcome: "You are safe in the bunker, but the colony feels the vacuum of leadership. Your Deputy begins to take control.", unrest: -7, approval: -10, party: -8, integrity: -5, ideology: -5, courage: -12, nextAct: 4 }
             ]
           },
           {
             tag: 'ACT II.1', title: 'The Standoff',
-            body: 'The media building was retaken, but the images of the confrontation have sparked even larger protests. Your generals are divided on whether to continue the crackdown.',
+            body: "The broadcast hub was retaken, but the images of the confrontation have sparked even larger protests. Your generals are divided on whether to continue the crackdown.",
             choices: [
-              { text: "Expand Martial Law", outcome: "The deployment of troops is met with a hail of fire. The city is a war zone, and your control is slipping.", unrest: 12, approval: -12, tension: 10, empathy: -12, nextAct: 5 },
+              { text: "Expand Martial Law", outcome: "The deployment of marines is met with a hail of fire. The station is a war zone, and your control is slipping.", unrest: 12, approval: -12, tension: 10, empathy: -12, nextAct: 5 },
               { text: "Blame the Field Commander", outcome: "You escape personal blame, but the military feels betrayed. A shadow council begins to form in the officer's mess.", party: -8, approval: 4, integrity: -10, courage: -7, nextAct: 6 },
               { text: "Call for an immediate Ceasefire", outcome: "The firing stops, but the tension is thick enough to cut. The people are waiting for a concession.", approval: 7, unrest: -10, integrity: 8, courage: 5, nextAct: 7 },
               { text: "Replace the hesitant Generals", outcome: "The new generals are loyalist hardliners. They promise order, but at a cost that reflects in the mounting casualty lists.", unrest: 10, party: -12, integrity: -9, courage: 9, nextAct: 8 }
@@ -6449,49 +6449,49 @@ const CARDS = {
           },
           {
             tag: 'ACT II.2', title: 'The Negotiation',
-            body: 'The crowd respected your courage, but their leaders demand a new Charter that strips the Presidency of its veto power and forces early elections.',
+            body: "The crowd respected your courage, but their leaders demand a new Charter that strips the Commander of the veto and forces early elections.",
             choices: [
-              { text: "Sign the Charter", outcome: "You sign away your executive power. The crowd cheers, but the Oval Office feels cavernous and hollow.", approval: 12, unrest: -15, ideology: 8, integrity: 7, nextAct: 9 },
+              { text: "Sign the Charter", outcome: "You sign away your executive power. The crowd cheers, but the Oval feels cavernous and hollow.", approval: 12, unrest: -15, ideology: 8, integrity: 7, nextAct: 9 },
               { text: "Offer a Power-Sharing deal", outcome: "A fragile peace is bought with political compromises. You are no longer the master, but a partner in a divided state.", unrest: -10, approval: 7, party: -8, integrity: 6, nextAct: 10 },
-              { text: "Arrest the leaders during the talk", outcome: "The betrayal is total. The screams of the arrested leaders echo through the palace, marking the end of your democratic pretense.", unrest: 10, approval: -15, integrity: -12, courage: 5, nextAct: 11 },
+              { text: "Arrest the leaders during the talk", outcome: "The betrayal is total. The screams of the arrested leaders echo through the command spire, marking the end of your democratic pretense.", unrest: 10, approval: -15, integrity: -12, courage: 5, nextAct: 11 },
               { text: "Appeal directly to the people", outcome: "Your words reach the hearts of the moderate majority. The radical front is isolated, and the momentum of the revolt stalls.", approval: 9, unrest: -9, integrity: 5, courage: 10, nextAct: 12 }
             ]
           },
           {
             tag: 'ACT II.3', title: 'The Silence',
-            body: 'The internet is down, but the general strike is total. Factories and transport are closed, and the silence in the streets is more threatening than the noise.',
+            body: "The data-net is down, but the general strike is total. Foundries and transit are closed, and the silence in the corridors is more threatening than the noise.",
             choices: [
-              { text: "Seize the radio stations", outcome: "The airwaves are yours, but the people have stopped listening. You are shouting into a graveyard.", unrest: 10, approval: -10, integrity: -9, courage: 7, nextAct: 13 },
-              { text: "Restore the internet to negotiate", outcome: "The digital world returns, and with it, a tidal wave of coordination from the resistance. You are now fighting a transparent war.", approval: 9, unrest: -12, integrity: 7, courage: -4, nextAct: 14 },
-              { text: "Force workers back with the military", outcome: "The military moves the assembly lines. The economy is alive, but it runs on the bayonets of a conscripted workforce.", unrest: 12, eco: -12, approval: -12, empathy: -10, nextAct: 15 },
-              { text: "Bribe the union heads", outcome: "The unions crumble under the weight of your gold. The strike is over, but the workers' resentment is a ticking bomb.", eco: -12, integrity: -10, party: 7, approval: 4, nextAct: 16 }
+              { text: "Seize the comm relays", outcome: "The channels are yours, but the people have stopped listening. You are shouting into a graveyard.", unrest: 10, approval: -10, integrity: -9, courage: 7, nextAct: 13 },
+              { text: "Restore the data-net to negotiate", outcome: "The data-net returns, and with it, a tidal wave of coordination from the resistance. You are now fighting a transparent war.", approval: 9, unrest: -12, integrity: 7, courage: -4, nextAct: 14 },
+              { text: "Force workers back with the marines", outcome: "The marines move the assembly lines. The economy is alive, but it runs at gunpoint on a conscripted workforce.", unrest: 12, eco: -12, approval: -12, empathy: -10, nextAct: 15 },
+              { text: "Bribe the union heads", outcome: "The unions crumble under the weight of your credits. The strike is over, but the workers' resentment is a ticking bomb.", eco: -12, integrity: -10, party: 7, approval: 4, nextAct: 16 }
             ]
           },
           {
             tag: 'ACT II.4', title: 'The Shadow Council',
-            body: 'While you were in the bunker, the Vice President formed a "Stability Council" to manage the crisis, effectively sidelining your authority.',
+            body: "While you were in the bunker, your Deputy formed a \"Stability Council\" to manage the crisis, effectively sidelining your authority.",
             choices: [
-              { text: "Fire the Vice President", outcome: "The dismissal is seen as a coup. The palace guard is now the only thing between you and a very angry public.", unrest: 10, party: -15, approval: -8, courage: 12, nextAct: 17 },
-              { text: "Cooperate with the Council", outcome: "You maintain the title of President, but the Council makes the real calls. You are a ghost in your own house.", unrest: -12, party: 8, approval: 4, integrity: 7, nextAct: 18 },
-              { text: "Call the Council illegal", outcome: "The declaration triggers a fracture in the military. Civil war is no longer a threat; it is an active reality.", unrest: 12, tension: 12, integrity: -12, courage: 10, nextAct: 19 },
+              { text: "Fire the Deputy Commander", outcome: "The dismissal is seen as a coup. The Honor Guard is now the only thing between you and a very angry public.", unrest: 10, party: -15, approval: -8, courage: 12, nextAct: 17 },
+              { text: "Cooperate with the Council", outcome: "You keep the title of Commander, but the Council makes the real calls. You are a ghost in your own house.", unrest: -12, party: 8, approval: 4, integrity: 7, nextAct: 18 },
+              { text: "Call the Council illegal", outcome: "The declaration triggers a fracture in the fleet. Civil war is no longer a threat; it is an active reality.", unrest: 12, tension: 12, integrity: -12, courage: 10, nextAct: 19 },
               { text: "Negotiate a dignified exit", outcome: "The terms are signed. You will leave the Oval with your head held high, though your legacy is forever scarred by the sirens.", approval: 9, unrest: -15, eco: -8, courage: -8, nextAct: 20 }
             ]
           },
           {
             tag: 'ACT III', title: 'The Martial Law Path',
-            body: 'You have absolute control of the streets, but the international community is preparing to freeze your national assets.',
+            body: "You have absolute control of the corridors, but the other colonies are preparing to freeze your colony's assets.",
             choices: [
-              { text: "Defy global sanctions", outcome: "The streets are yours, but at the cost of your soul and your country's future. You are the architect of a silent, fear-filled peace.", tension: 15, eco: -12, unrest: 8, nextAct: 999 },
-              { text: "Host a 'Unity' rally", outcome: "The flags wave and the crowds cheer, but the bayonets behind them tell the true story of your victory.", approval: 10, eco: -10, integrity: -8, nextAct: 999 },
-              { text: "Cede power to a military council", outcome: "You remain the figurehead, but the generals now hold the keys to the kingdom.", unrest: -15, party: 10, courage: -10, nextAct: 999 },
-              { text: "Arrest foreign journalists", outcome: "The truth is smothered, but the silence from the international community is more deafening than any headline.", unrest: 12, tension: 12, integrity: -15, nextAct: 999 }
+              { text: "Defy interstellar sanctions", outcome: "The corridors are yours, but at the cost of your soul and your colony's future. You are the architect of a silent, fear-filled peace.", tension: 15, eco: -12, unrest: 8, nextAct: 999 },
+              { text: "Host a 'Unity' rally", outcome: "The flags wave and the crowds cheer, but the rifles behind them tell the true story of your victory.", approval: 10, eco: -10, integrity: -8, nextAct: 999 },
+              { text: "Cede power to a military council", outcome: "You remain the figurehead, but the generals now hold the keys to the station.", unrest: -15, party: 10, courage: -10, nextAct: 999 },
+              { text: "Arrest off-colony journalists", outcome: "The truth is smothered, but the silence from the other colonies is more deafening than any headline.", unrest: 12, tension: 12, integrity: -15, nextAct: 999 }
             ]
           },
           {
             tag: 'ACT III', title: 'The Scapegoat Path',
-            body: 'The Commander you blamed for the violence has leaked proof that they were following your direct orders.',
+            body: "The field officer you blamed for the violence has leaked proof that they were following your direct orders.",
             choices: [
-              { text: "Pardon the Commander", outcome: "The immediate pressure is gone, but the ghost of your betrayed allies will haunt every shadow in the palace.", integrity: -10, party: 10, unrest: -8, nextAct: 999 },
+              { text: "Pardon the field officer", outcome: "The immediate pressure is gone, but the ghost of your betrayed allies will haunt every shadow in the Oval.", integrity: -10, party: 10, unrest: -8, nextAct: 999 },
               { text: "Counter-sue for defamation", outcome: "You win in the courts, but you have lost the courtroom of public opinion forever.", unrest: 8, integrity: -12, approval: -5, nextAct: 999 },
               // The people decide: below 50 Approval (after this choice) they accept and the run ends.
               { text: "Offer your resignation", outcome: "You put your office in the people's hands. If Approval is below 50 they accept and your term ends; otherwise they refuse and you stay.", outcomeAccepted: "The people accept. You leave the office with your life, but your legacy is a stack of broken promises and unfinished chapters.", outcomeRefused: "The crowd refuses to let you go. You stay in office, humbled, with a fragile new mandate.", resignation: true, approval: 12, unrest: -15, courage: 10, nextAct: 999 },
@@ -6500,22 +6500,22 @@ const CARDS = {
           },
           {
             tag: 'ACT III', title: 'The Ceasefire Path',
-            body: 'The guns are silent, but the city remains divided by barricades. The people are waiting for a sign of true change.',
+            body: "The guns are silent, but the station remains divided by barricades. The people are waiting for a sign of true change.",
             choices: [
               { text: "Build a reconciliation memorial", outcome: "The guns have stopped, but the healing has yet to begin. You have bought time with blood and promises.", empathy: 12, approval: 10, eco: -8, nextAct: 999 },
-              { text: "Increase police funding", outcome: "Peace is maintained with a heavy hand. The silence in the streets is a sign of order, not of trust.", unrest: 10, approval: -8, eco: -10, nextAct: 999 },
-              { text: "Resign in penance", outcome: "Your departure is the first step toward a national healing you could never lead.", approval: 15, unrest: -20, integrity: 10, nextAct: 999 },
-              { text: "Blame the protesters for the deaths", outcome: "You maintain your seat by fanning the flames of division. The country is safe, but it is broken.", unrest: 8, approval: -12, ideology: 10, nextAct: 999 }
+              { text: "Increase security funding", outcome: "Peace is maintained with a heavy hand. The silence in the corridors is a sign of order, not of trust.", unrest: 10, approval: -8, eco: -10, nextAct: 999 },
+              { text: "Resign in penance", outcome: "Your departure is the first step toward a healing of the colony that you could never lead.", approval: 15, unrest: -20, integrity: 10, nextAct: 999 },
+              { text: "Blame the protesters for the deaths", outcome: "You maintain your seat by fanning the flames of division. The colony is safe, but it is broken.", unrest: 8, approval: -12, ideology: 10, nextAct: 999 }
             ]
           },
           {
             tag: 'ACT III', title: 'The New High Command Path',
             body: 'Your new loyalist generals are ready to move, but they want a permanent seat at the legislative table.',
             choices: [
-              { text: "Order a fresh sweep of the capital", outcome: "The generals now sit at your table. You have order, but you no longer hold the gavel.", unrest: 15, approval: -15, tension: 12, nextAct: 999 },
+              { text: "Order a fresh sweep of the capital station", outcome: "The generals now sit at your table. You have order, but you no longer hold the gavel.", unrest: 15, approval: -15, tension: 12, nextAct: 999 },
               { text: "Offer the generals seats in the Cabinet", outcome: "The administration is now a military partnership. Your decisions are checked by the weight of the sword.", party: 12, unrest: -10, integrity: -10, nextAct: 999 },
-              { text: "Resign under military pressure", outcome: "You are the last President of the old guard. Your successor will wear a uniform.", approval: 10, unrest: -20, courage: -12, nextAct: 999 },
-              { text: "Use the army to build infrastructure", outcome: "The military's energy is channeled into construction. The nation is rebuilding, but the uniform is everywhere.", eco: 12, approval: 8, unrest: -8, nextAct: 999 }
+              { text: "Resign under military pressure", outcome: "You are the last Commander of the old guard. Your successor will wear a uniform.", approval: 10, unrest: -20, courage: -12, nextAct: 999 },
+              { text: "Use the marines to rebuild the habitats", outcome: "The military's energy is channeled into construction. The colony is rebuilding, but the uniform is everywhere.", eco: 12, approval: 8, unrest: -8, nextAct: 999 }
             ]
           },
           {
@@ -6532,67 +6532,67 @@ const CARDS = {
             tag: 'ACT III', title: 'The Power-Sharing Path',
             body: 'The Coalition government is a mess of bickering factions. Nothing is getting done.',
             choices: [
-              { text: "Accept the coalition cabinet", outcome: "The nation is a mess of competing voices, and your own is just one among many.", party: 12, unrest: -12, approval: 8, nextAct: 999 },
-              { text: "Sabotage the coalition from within", outcome: "By preserving your power, you have ensured the country remains paralyzed by gridlock.", unrest: 10, integrity: -12, party: -10, nextAct: 999 },
+              { text: "Accept the coalition cabinet", outcome: "The colony is a mess of competing voices, and your own is just one among many.", party: 12, unrest: -12, approval: 8, nextAct: 999 },
+              { text: "Sabotage the coalition from within", outcome: "By preserving your power, you have ensured the colony remains paralyzed by gridlock.", unrest: 10, integrity: -12, party: -10, nextAct: 999 },
               { text: "Resign to let them rule alone", outcome: "You step aside to let the experiment in democracy find its own way, regardless of the outcome.", approval: 12, party: 10, unrest: -15, nextAct: 999 },
               { text: "Appeal for a snap election", outcome: "One final gamble for a mandate. The people will decide if you are the savior or the problem.", approval: 10, unrest: -10, tension: 8, nextAct: 999 }
             ]
           },
           {
             tag: 'ACT III', title: 'The Arrest Path',
-            body: 'You have the protest leaders in custody, but their followers are threatening to storm the prison.',
+            body: "You have the protest leaders in custody, but their followers are threatening to storm the brig.",
             choices: [
-              { text: "Put the leaders on trial", outcome: "The prison doors are locked, but you have only postponed the next explosion.", unrest: 15, approval: -15, tension: 12, nextAct: 999 },
-              { text: "Offer them exile in a neutral country", outcome: "The problem is gone, but the cause remains. You are safe, but the streets are still silent and resentful.", unrest: 10, tension: 10, approval: -10, nextAct: 999 },
-              { text: "Claim they were planning a coup", outcome: "The truth is lost in the fog of propaganda. You remain in control, but of a nation that no longer knows what to believe.", integrity: -12, approval: 5, unrest: 8, nextAct: 999 },
-              { text: "Release them and resign", outcome: "You choose the path of most resistance—humility. Your name will be remembered in the new history books with respect.", approval: 15, unrest: -30, integrity: 15, nextAct: 999 }
+              { text: "Put the leaders on trial", outcome: "The brig doors are locked, but you have only postponed the next explosion.", unrest: 15, approval: -15, tension: 12, nextAct: 999 },
+              { text: "Offer them exile in a neutral colony", outcome: "The problem is gone, but the cause remains. You are safe, but the corridors are still silent and resentful.", unrest: 10, tension: 10, approval: -10, nextAct: 999 },
+              { text: "Claim they were planning a coup", outcome: "The truth is lost in the fog of propaganda. You remain in control, but of a colony that no longer knows what to believe.", integrity: -12, approval: 5, unrest: 8, nextAct: 999 },
+              { text: "Release them and resign", outcome: "You choose the path of most resistance—humility. Your name will be remembered in the new history archives with respect.", approval: 15, unrest: -30, integrity: 15, nextAct: 999 }
             ]
           },
           {
             tag: 'ACT III', title: 'The Public Appeal Path',
-            body: 'Your appeal worked, splitting the opposition, but the country is now locked in a bitter ideological cold war.',
+            body: "Your appeal worked, splitting the opposition, but the colony is now locked in a bitter ideological cold war.",
             choices: [
-              { text: "Call for a National Referendum", outcome: "You have won the hearts of some, but the divide in the country is now a permanent scar.", approval: 12, unrest: -10, integrity: 12, nextAct: 999 },
+              { text: "Call for a Colony Referendum", outcome: "You have won the hearts of some, but the divide in the colony is now a permanent scar.", approval: 12, unrest: -10, integrity: 12, nextAct: 999 },
               { text: "Form a Unity Government", outcome: "A government of strangers. You are safe, but your influence is diluted by the very people who tried to remove you.", party: 12, approval: 8, unrest: -8, nextAct: 999 },
-              { text: "Resign to end the national divide", outcome: "A final act of patriotism. Your departure is the only thing that can bridge the gap you created.", approval: 15, unrest: -20, empathy: 12, nextAct: 999 },
-              { text: "Arrest the rival leaders now", outcome: "The crackdown is complete. You rule a country that is orderly, but utterly broken in spirit.", unrest: 12, approval: -12, tension: 12, nextAct: 999 }
+              { text: "Resign to end the divide in the colony", outcome: "A final act of patriotism. Your departure is the only thing that can bridge the gap you created.", approval: 15, unrest: -20, empathy: 12, nextAct: 999 },
+              { text: "Arrest the rival leaders now", outcome: "The crackdown is complete. You rule a colony that is orderly, but utterly broken in spirit.", unrest: 12, approval: -12, tension: 12, nextAct: 999 }
             ]
           },
           {
-            tag: 'ACT III', title: 'The Radio Path',
-            body: 'You control the airwaves, but the people have stopped listening. The streets are eerily empty.',
+            tag: 'ACT III', title: "The Comm Relay Path",
+            body: "You control the channels, but the people have stopped listening. The corridors are eerily empty.",
             choices: [
-              { text: "Broadcast your own message 24/7", outcome: "Your voice is everywhere, yet no one is listening. You are a king in a kingdom of echoes.", unrest: 10, approval: -10, integrity: -8, nextAct: 999 },
-              { text: "Return the stations to the unions", outcome: "You hand back the microphone. The first thing they do is call for your immediate removal.", approval: 12, unrest: -12, party: -10, nextAct: 999 },
-              { text: "Resign on air", outcome: "Your final speech is the most honest thing you have said in four years. The country actually pauses to listen.", approval: 15, unrest: -15, courage: 10, nextAct: 999 },
-              { text: "Destroy the transmitters", outcome: "If it's not yours, it's no one's. You rule a nation that is both quiet and deaf.", unrest: 12, eco: -10, approval: -12, nextAct: 999 }
+              { text: "Broadcast your own message 24/7", outcome: "Your voice is everywhere, yet no one is listening. You are a ruler in a station of echoes.", unrest: 10, approval: -10, integrity: -8, nextAct: 999 },
+              { text: "Return the relays to the unions", outcome: "You hand back the microphone. The first thing they do is call for your immediate removal.", approval: 12, unrest: -12, party: -10, nextAct: 999 },
+              { text: "Resign on the open channel", outcome: "Your final speech is the most honest thing you have said in four years. The colony actually pauses to listen.", approval: 15, unrest: -15, courage: 10, nextAct: 999 },
+              { text: "Destroy the transmitters", outcome: "If it's not yours, it's no one's. You rule a colony that is both quiet and deaf.", unrest: 12, eco: -10, approval: -12, nextAct: 999 }
             ]
           },
           {
             tag: 'ACT III', title: 'The Restoration Path',
-            body: 'The internet is back, but the first thing people are doing is organizing a march on your residence.',
+            body: "The data-net is back, but the first thing people are doing is organizing a march on your quarters.",
             choices: [
-              { text: "Host a televised town hall", outcome: "The digital world is back, and it is already building the next protest.", approval: 12, integrity: 10, unrest: -10, nextAct: 999 },
-              { text: "Use the internet to track dissent", outcome: "You have restored the network, but only to turn it into a surveillance machine. The people's eyes are now on you.", unrest: 15, approval: -15, integrity: -12, nextAct: 999 },
-              { text: "Resign after your final speech", outcome: "The internet records your departure in high definition. You are the first President to leave with a viral apology.", approval: 15, unrest: -12, courage: 8, nextAct: 999 },
-              { text: "Limit social media access", outcome: "The network is back, but the walls are higher. You rule an island of sanctioned information.", unrest: 10, approval: -12, ideology: 10, nextAct: 999 }
+              { text: "Host a broadcast deck-hall meeting", outcome: "The data-net is back, and it is already building the next protest.", approval: 12, integrity: 10, unrest: -10, nextAct: 999 },
+              { text: "Use the data-net to track dissent", outcome: "You have restored the network, but only to turn it into a surveillance machine. The people's eyes are now on you.", unrest: 15, approval: -15, integrity: -12, nextAct: 999 },
+              { text: "Resign after your final speech", outcome: "The data-net records your departure in high definition. You are the first Commander to leave with a viral apology.", approval: 15, unrest: -12, courage: 8, nextAct: 999 },
+              { text: "Limit feed access", outcome: "The network is back, but the walls are higher. You rule an island of sanctioned information.", unrest: 10, approval: -12, ideology: 10, nextAct: 999 }
             ]
           },
           {
             tag: 'ACT III', title: 'The Forced Labor Path',
-            body: 'You have forced the workers back, but productivity is at an all-time low and sabotage is everywhere.',
+            body: "You have forced the workers back, but productivity is at an all-time low and sabotage is everywhere.",
             choices: [
               { text: "Increase military oversight", outcome: "The factories are humming, but the workers' eyes are filled with a cold, quiet fury.", unrest: 15, eco: -10, empathy: -15, nextAct: 999 },
-              { text: "Give in to the union demands", outcome: "You surrender to the workers. The factories are productive, but you have lost the support of the industrialists.", eco: -12, approval: 12, party: -12, nextAct: 999 },
-              { text: "Resign and let the strike succeed", outcome: "By stepping down, you allow the nation's heart to beat on its own again.", approval: 15, eco: 10, unrest: -25, nextAct: 999 },
-              { text: "Import foreign labor", outcome: "The economy is stable, but the social tension between the old and new workers is a fuse you cannot extinguish.", eco: 10, approval: -12, tension: 12, nextAct: 999 }
+              { text: "Give in to the union demands", outcome: "You surrender to the workers. The foundries are productive, but you have lost the support of the industrialists.", eco: -12, approval: 12, party: -12, nextAct: 999 },
+              { text: "Resign and let the strike succeed", outcome: "By stepping down, you allow the colony's heart to beat on its own again.", approval: 15, eco: 10, unrest: -25, nextAct: 999 },
+              { text: "Import off-colony labor", outcome: "The economy is stable, but the social tension between the old and new workers is a fuse you cannot extinguish.", eco: 10, approval: -12, tension: 12, nextAct: 999 }
             ]
           },
           {
             tag: 'ACT III', title: 'The Bribe Path',
             body: 'The unions are working, but a whistleblower has leaked the bank records of the payouts.',
             choices: [
-              { text: "Confess and pay a fine", outcome: "You bought your survival with gold, but your integrity was the real currency.", integrity: 12, approval: 8, eco: -10, nextAct: 999 },
+              { text: "Confess and pay a fine", outcome: "You bought your survival with credits, but your integrity was the real currency.", integrity: 12, approval: 8, eco: -10, nextAct: 999 },
               { text: "Deny all bank records", outcome: "The lie works—for now. But trust is a bridge that has been permanently dismantled.", integrity: -15, approval: -10, unrest: 10, nextAct: 999 },
               { text: "Resign before the leak", outcome: "You choose a quiet exit over a public trial. Your legacy is one of survival, not of strength.", approval: 10, unrest: -15, integrity: 8, nextAct: 999 },
               { text: "Fire the Treasury head as a scapegoat", outcome: "You saved your seat by throwing another in the fire. The administration is safe, but it is lonely at the top.", party: -12, unrest: 8, integrity: -10, nextAct: 999 }
@@ -6600,11 +6600,11 @@ const CARDS = {
           },
           {
             tag: 'ACT III', title: 'The Purge Path',
-            body: 'You fired the VP, but now the military is split between those loyal to you and those loyal to the "Constitution."',
+            body: "You fired your Deputy, but now the fleet is split between those loyal to you and those loyal to the \"Charter.\"",
             choices: [
-              { text: "Dissolve the legislature", outcome: "The rivals are gone, but you have turned the presidency into a fortress of paranoia.", unrest: 15, approval: -20, tension: 15, nextAct: 999 },
-              { text: "Form a loyalist-only council", outcome: "You rule a echo chamber. Every decision you make is applauded, while the country outside is screaming.", party: 15, unrest: 10, integrity: -12, nextAct: 999 },
-              { text: "Resign under fire", outcome: "The experiment in total control ends with a quiet signature and a fast motorcade to the airport.", approval: 10, unrest: -15, courage: -10, nextAct: 999 },
+              { text: "Dissolve the Station Council", outcome: "The rivals are gone, but you have turned the command into a fortress of paranoia.", unrest: 15, approval: -20, tension: 15, nextAct: 999 },
+              { text: "Form a loyalist-only council", outcome: "You rule an echo chamber. Every decision you make is applauded, while the colony outside is screaming.", party: 15, unrest: 10, integrity: -12, nextAct: 999 },
+              { text: "Resign under fire", outcome: "The experiment in total control ends with a quiet signature and a fast shuttle to the spaceport.", approval: 10, unrest: -15, courage: -10, nextAct: 999 },
               { text: "Call for an early election", outcome: "One final gamble for truth. You put your fate in the hands of the very people you have been fighting.", approval: 12, unrest: -10, party: -15, nextAct: 999 }
             ]
           },
@@ -6613,29 +6613,29 @@ const CARDS = {
             body: 'The Stability Council is actually doing a good job. You are starting to look like an unnecessary relic.',
             choices: [
               { text: "Regain influence slowly", outcome: "The Council is the real power now. You are merely the signature on their decrees.", unrest: 10, party: 10, integrity: -8, nextAct: 999 },
-              { text: "Sabotage the VP’s meetings", outcome: "By trying to regain your seat, you have only ensured that both you and the VP will lose the trust of the nation.", unrest: 10, integrity: -12, party: -10, nextAct: 999 },
-              { text: "Resign and endorse the VP", outcome: "The most graceful exit possible. You leave the office in better hands than your own.", approval: 12, party: 12, unrest: -15, nextAct: 999 },
+              { text: "Sabotage the Deputy’s meetings", outcome: "By trying to regain your seat, you have only ensured that both you and your Deputy will lose the trust of the colony.", unrest: 10, integrity: -12, party: -10, nextAct: 999 },
+              { text: "Resign and endorse the Deputy", outcome: "The most graceful exit possible. You leave the office in better hands than your own.", approval: 12, party: 12, unrest: -15, nextAct: 999 },
               { text: "Expose the Council’s secrets", outcome: "You tear the house down with you. The truth is out, but there is no one left to lead.", approval: 10, integrity: 10, party: -15, nextAct: 999 }
             ]
           },
           {
             tag: 'ACT III', title: 'The Treason Path',
-            body: 'By calling the Council illegal, you have triggered a localized civil war between different police and military units.',
+            body: "By calling the Council illegal, you have triggered a localized civil war between different security and fleet units.",
             choices: [
-              { text: "Arrest the Council members", outcome: "You have won the battle, but the ensuing civil war will haunt your country for generations.", unrest: 15, tension: 15, approval: -15, nextAct: 999 },
-              { text: "Call for a referendum on your power", outcome: "A democratic solution to a treasonous problem. The people will decide if you are the legitimate leader or a king in denial.", approval: 12, unrest: -12, integrity: 12, nextAct: 999 },
+              { text: "Arrest the Council members", outcome: "You have won the battle, but the civil war that follows will haunt your colony for generations.", unrest: 15, tension: 15, approval: -15, nextAct: 999 },
+              { text: "Call for a referendum on your power", outcome: "A democratic solution to a treasonous problem. The people will decide if you are the legitimate leader or a ruler in denial.", approval: 12, unrest: -12, integrity: 12, nextAct: 999 },
               { text: "Resign to avoid a coup", outcome: "You choose a quiet retreat over a bloody stand. The Oval remains intact, but your legacy is a stack of unfinished chapters.", approval: 15, unrest: -20, party: -10, nextAct: 999 },
-              { text: "Form a rival shadow cabinet", outcome: "You rule a mirror-government in a mirror-country. The nation is now double-visioned and twice as dangerous.", party: 12, unrest: 8, tension: 12, nextAct: 999 }
+              { text: "Form a rival shadow cabinet", outcome: "You rule a mirror-government in a mirror-colony. The colony is now double-visioned and twice as dangerous.", party: 12, unrest: 8, tension: 12, nextAct: 999 }
             ]
           },
           {
             tag: 'ACT III', title: 'The Exit Path',
-            body: 'The protesters have agreed to clear the streets if you sign the papers in the next hour.',
+            body: "The protesters have agreed to clear the corridors if you sign the papers in the next hour.",
             choices: [
               { text: "Sign the papers and go quietly", outcome: "The terms are signed. You will leave the Oval with your head held high, though your legacy is forever scarred by the sirens.", approval: 12, unrest: -25, eco: 8, nextAct: 999 },
-              { text: "Demand legal immunity", outcome: "You save your freedom at the cost of your remaining honor. You are free, but you are a man without a country.", integrity: -15, unrest: -12, approval: 8, nextAct: 999 },
-              { text: "Delay the exit for one month", outcome: "You buy one more month in the sun, while the shadow of your departure grows longer each day.", unrest: -8, approval: -8, party: -8, nextAct: 999 },
-              { text: "Change your mind and stay", outcome: "The ultimate betrayal of the truce. The streets will never be quiet again.", unrest: 15, approval: -15, tension: 15, nextAct: 999 }
+              { text: "Demand legal immunity", outcome: "You save your freedom at the cost of your remaining honor. You are free, but you are a Commander without a colony.", integrity: -15, unrest: -12, approval: 8, nextAct: 999 },
+              { text: "Delay the exit for one month", outcome: "You buy one more month in the starlight, while the shadow of your departure grows longer each day.", unrest: -8, approval: -8, party: -8, nextAct: 999 },
+              { text: "Change your mind and stay", outcome: "The ultimate betrayal of the truce. The corridors will never be quiet again.", unrest: 15, approval: -15, tension: 15, nextAct: 999 }
             ]
           }
         ]
@@ -6644,9 +6644,9 @@ const CARDS = {
         id: 'legacy', name: 'The Permanent Record', trigger: gs => gs.turn >= gs.maxTurns, acts: [
           {
             tag: 'ACT I', title: 'The Final Address',
-            body: 'You are preparing your farewell speech to the nation. How will you define your time in office?',
+            body: "You are preparing your farewell speech to the colony. How will you define your time in office?",
             choices: [
-              { text: 'The "Humble Servant" Speech.', outcome: 'You take responsibility for the scandals and call for national healing, stabilizing the country but appearing weak to your rivals.', approval: 18, unrest: -15, integrity: 12, tension: -10 },
+              { text: 'The "Humble Servant" Speech.', outcome: "You take responsibility for the scandals and call for the colony to heal, stabilizing it but appearing weak to your rivals.", approval: 18, unrest: -15, integrity: 12, tension: -10 },
               { text: 'The "Victory Lap" Speech.', outcome: 'You ignore the controversies and claim credit for every success, firing up your base while infuriating the press.', approval: 12, unrest: 15, integrity: -12, party: 10 },
               { text: 'The "Scorched Earth" Speech.', outcome: 'You use your final platform to name every enemy and "traitor" who crossed you, inciting a loyalist movement that outlasts your term.', unrest: 20, approval: -20, party: -15, tension: 15 },
               { text: 'The "Silent Exit."', outcome: 'You refuse to give a speech at all, leaving the public confused and allowing the media to write your story for you.', approval: -10, unrest: -12, integrity: -15, eco: 5 }
@@ -6654,22 +6654,22 @@ const CARDS = {
           },
           {
             tag: 'ACT II', title: 'The Midnight Pardons',
-            body: 'It is your last night in the White House. Your desk is piled with pardon requests for your most controversial allies.',
+            body: "It is your last night in the Oval. Your desk is piled with pardon requests for your most controversial allies.",
             choices: [
-              { text: 'Pardon everyone involved in the Scandal Arc.', outcome: 'Your loyalists are safe from prison, but the legal system is left in a state of absolute mockery.', party: 20, integrity: -20, unrest: -10, approval: -15 },
+              { text: 'Pardon everyone involved in the Scandal Arc.', outcome: "Your loyalists are safe from the brig, but the legal system is left in a state of absolute mockery.", party: 20, integrity: -20, unrest: -10, approval: -15 },
               { text: 'Pardon yourself for any "potential" crimes.', outcome: 'You ensure you can never be prosecuted after you leave, triggering a final constitutional crisis as you walk out the door.', unrest: 18, approval: -18, integrity: -18, tension: 12 },
               { text: 'Refuse all pardons to "Clear the Air."', outcome: 'You leave with your hands clean, but your former allies begin signing book deals to expose your secrets.', integrity: 15, party: -20, approval: 10, unrest: -10 },
-              { text: 'Pardon only the "Corporate Donors."', outcome: 'You secure a massive "consulting" salary for your post-presidency life, though the public views it as a final act of corruption.', eco: 20, approval: -15, party: 10, integrity: -12 }
+              { text: 'Pardon only the "Corporate Donors."', outcome: "You secure a massive \"consulting\" salary for your life after command, though the public views it as a final act of corruption.", eco: 20, approval: -15, party: 10, integrity: -12 }
             ]
           },
           {
             tag: 'ACT III', title: 'The Transfer of Power',
-            body: 'The President-elect is your bitter rival. They are waiting at the inauguration.',
+            body: "The Commander-elect is your bitter rival. They are waiting at the inauguration.",
             choices: [
-              { text: 'Attend the inauguration and shake their hand.', outcome: 'You preserve the tradition of a peaceful transition, lowering national tension but losing your "Strongman" image.', tension: -20, approval: 15, unrest: -15, integrity: 10 },
-              { text: 'Boycott the ceremony and hold a rival rally.', outcome: 'You split the country\'s attention and maintain your cult of personality, but the nation teeters on the edge of civil unrest.', unrest: 15, approval: -12, tension: 20, party: 12 },
+              { text: 'Attend the inauguration and shake their hand.', outcome: "You preserve the tradition of a peaceful transition, lowering tension across the sector but losing your \"Strongman\" image.", tension: -20, approval: 15, unrest: -15, integrity: 10 },
+              { text: 'Boycott the ceremony and hold a rival rally.', outcome: "You split the colony's attention and maintain your cult of personality, but the colony teeters on the edge of civil unrest.", unrest: 15, approval: -12, tension: 20, party: 12 },
               { text: 'Declassify "The Deep State" files on the way out.', outcome: 'You leak the government’s darkest secrets to the public, crippling your successor\'s ability to govern effectively.', integrity: -20, unrest: -10, approval: 15, tension: 15 },
-              { text: 'Declare the election "Fraudulent" one last time.', outcome: 'You leave office under protest, ensuring that half the country views the new government as illegitimate.', unrest: 20, approval: -15, tension: 18, party: -10 }
+              { text: 'Declare the election "Fraudulent" one last time.', outcome: "You leave office under protest, ensuring that half the colony views the new government as illegitimate.", unrest: 20, approval: -15, tension: 18, party: -10 }
             ]
           }
         ]
@@ -6689,37 +6689,37 @@ const CARDS = {
       {
         id: 'resigned', title: 'The Resignation', emoji: '🚪', check: gs => gs.resigned,
         tagline: 'You chose to walk away.',
-        narrative: 'With the city split by barricades, you offered your office to the people, and they took it. You leave with your life and your dignity, but the work you started will be finished, or undone, by someone else.',
+        narrative: "With the station split by barricades, you offered your office to the people, and they took it. You leave with your life and your dignity, but the work you started will be finished, or undone, by someone else.",
         profile: 'The One Who Stepped Aside'
       },
       { 
         id: 'warmonger', title: 'The Warmonger', emoji: '⚔️', check: gs => gs.arcsCompleted.includes('convergence_route') && gs.bars.internationalTension > 50 && gs.bars.publicApproval >= 50, 
         tagline: 'Victory at any cost.', 
-        narrative: 'You defined your presidency through the barrel of a gun. By prioritizing military dominance and aggressive expansion, you turned the nation into a global fortress. You leave office with a powerful army but a world that watches your borders with fear.', 
+        narrative: "You defined your command through the barrel of a gun. By prioritizing military dominance and aggressive expansion, you turned the colony into a fortress among the stars. You leave office with a powerful fleet but a sector that watches your borders with fear.", 
         profile: 'The Conqueror' 
       },
       { 
         id: 'peacemaker', title: 'The Peacemaker', emoji: '🕊️', check: gs => gs.arcsCompleted.includes('convergence_route') && gs.bars.internationalTension <= 50, 
         tagline: 'A bridge over troubled waters.', 
-        narrative: 'You spent your term mending fractured alliances and de-escalating global threats. By choosing diplomacy over force, you ensured a generation of stability. You leave behind a world that is significantly quieter and safer than the one you inherited.', 
+        narrative: "You spent your term mending fractured alliances and de-escalating threats across the sector. By choosing diplomacy over force, you ensured a generation of stability. You leave behind a sector that is significantly quieter and safer than the one you inherited.", 
         profile: 'The Architect of Peace' 
       },
       { 
         id: 'pacifist', title: 'The Pacifist', emoji: '☮️', check: gs => gs.arcsCompleted.includes('convergence_route') && gs.bars.internationalTension > 50 && gs.bars.publicApproval < 50, 
         tagline: 'Peace is the only path.', 
-        narrative: 'You refused to engage in conflict, even when pressured by your own generals. While some called it weakness, you saved countless lives by keeping the nation out of harm\'s way. You retire with a clean conscience and a nation that has forgotten the sound of war.', 
+        narrative: "You refused to engage in conflict, even when pressured by your own generals. While some called it weakness, you saved countless lives by keeping the colony out of harm's way. You retire with a clean conscience and a colony that has forgotten the sound of war.", 
         profile: 'The Humanitarian' 
       },
       { 
         id: 'tyrant', title: 'The Tyrant', emoji: '👁️', check: gs => gs.bars.stateAuthority > 80, 
         tagline: 'Rule with an iron fist.', 
-        narrative: 'You didn\'t lead the nation; you broke it to your will. By dismantling the legislature and silencing dissent, you secured absolute control. You leave behind a country that is orderly, terrified, and entirely yours, even after you\'ve stepped down.', 
+        narrative: "You didn't lead the colony; you broke it to your will. By dismantling the Council and silencing dissent, you secured absolute control. You leave behind a colony that is orderly, terrified, and entirely yours, even after you've stepped down.", 
         profile: 'The Autocrat' 
       },
       { 
         id: 'martyr', title: 'The Martyr', emoji: '🔥', check: gs => gs.bars.publicApproval > 70 && gs.bars.partyLoyalty < 25, 
         tagline: 'Sacrificed for the truth.', 
-        narrative: 'You chose the people over the party and paid the ultimate political price. By exposing deep-seated corruption, you lost your allies and your wealth. You exit the presidency as a man without a country, but with the eternal gratitude of the public.', 
+        narrative: "You chose the people over the party and paid the ultimate political price. By exposing deep-seated corruption, you lost your allies and your wealth. You leave command as a Commander without a colony, but with the eternal gratitude of the public.", 
         profile: 'The Reformer' 
       },
       { 
@@ -6731,13 +6731,13 @@ const CARDS = {
       { 
         id: 'statesman', title: 'The Statesman', emoji: '🏛️', check: gs => ['publicApproval', 'internationalTension', 'economicState', 'stateAuthority', 'partyLoyalty'].every(k => gs.bars[k] >= 35 && gs.bars[k] <= 70), 
         tagline: 'Dignity in every decree.', 
-        narrative: 'You governed with a level of prestige and intellectual honesty rarely seen in the modern era. By putting the institution of the Presidency above your own ego, you restored faith in the government. You retire as the gold standard of leadership for future generations.', 
+        narrative: "You governed with a level of prestige and intellectual honesty rarely seen in the modern era. By putting the office of Commander above your own ego, you restored faith in the government. You retire as the gold standard of leadership for future generations.", 
         profile: 'The Idealist' 
       },
       {
         id: 'technocrat', title: 'The Technocrat', emoji: '📊', check: gs => gs.bars.economicState >= 60 && gs.bars.publicApproval < 45,
         tagline: 'The numbers loved you. The people did not.',
-        narrative: 'You ran the nation like a well-tuned machine. Budgets balanced, markets steadied, and the treasury grew, but the people never felt you were on their side. You leave a stronger state and a colder country.',
+        narrative: "You ran the colony like a well-tuned machine. Budgets balanced, markets steadied, and the treasury grew, but the people never felt you were on their side. You leave a stronger state and a colder colony.",
         profile: 'The Engineer of State'
       },
       {
@@ -6749,7 +6749,7 @@ const CARDS = {
       { 
         id: 'neutral', title: 'The Neutral', emoji: '🤝', check: gs => true, 
         tagline: 'A quiet and stable departure.', 
-        narrative: 'You did a decent job. Your term passed without major fanfare or scandal. While not a dramatic legacy, you navigated the nation through its challenges safely and handed off a stable administration.', 
+        narrative: "You did a decent job. Your term passed without major fanfare or scandal. While not a dramatic legacy, you navigated the colony through its challenges safely and handed off a stable administration.", 
         profile: 'The Administrator' 
       }
     ];
@@ -6763,22 +6763,22 @@ const CARDS = {
 const GIFTS = {
   tension: {
     title: "The Golden Standard",
-    body: "Your commitment to global peace has made you the 'Golden Standard' of leadership. Several world powers and international bodies have arrived at The Oval with a tribute to your administration. Choose how to accept their gratitude.",
+    body: "Your commitment to peace has made you the 'Golden Standard' of leadership. Envoys from the great stations and the Sector Assembly have arrived at the Oval with a tribute to your administration. Choose how to accept their gratitude.",
     choices: [
-      { text: "Accept a multi-nation agreement to lower all tariffs on your exports.", outcome: "The economy surges as your goods flood the global market.", eco: 7, party: 6, tension: 3 },
-      { text: "Accept the highest global honor for peace and use the platform to inspire your citizens.", outcome: "Your approval rating reaches record highs, and your party stands behind your fame.", approval: 12, party: 5, empathy: 5 },
-      { text: "Friendly nations offer to share their high-tech surveillance and police data.", outcome: "Your control over the nation tightens without firing a single shot.", unrest: 8, approval: 3, courage: 5 },
-      { text: "International banks agree to wipe a significant portion of your nation's high-interest loans.", outcome: "Your treasury is suddenly full, giving you massive room to spend in the future.", eco: 11, tension: 3, integrity: 5 }
+      { text: "Accept a multi-colony agreement to lower all tariffs on your exports.", outcome: "The economy surges as your goods flood the sector's markets.", eco: 7, party: 6, tension: 3 },
+      { text: "Accept the sector's highest honor for peace and use the platform to inspire your citizens.", outcome: "Your approval rating reaches record highs, and your party stands behind your fame.", approval: 12, party: 5, empathy: 5 },
+      { text: "Friendly colonies offer to share their high-tech surveillance and security data.", outcome: "Your control over the colony tightens without firing a single shot.", unrest: 8, approval: 3, courage: 5 },
+      { text: "Interstellar banks agree to wipe a significant portion of your colony's high-interest loans.", outcome: "Your treasury is suddenly full, giving you massive room to spend in the future.", eco: 11, tension: 3, integrity: 5 }
     ]
   },
   economy: {
     title: "Historic Wealth",
-    body: "Your nation's coffers are overflowing. The markets have hit an all-time high, and the Treasury reports a massive surplus. As President, how will you reinvest this historic wealth?",
+    body: "Your colony's coffers are overflowing. The markets have hit an all-time high, and the Treasury reports a massive surplus. As Commander, how will you reinvest this historic wealth?",
     choices: [
-      { text: "Issue a direct stimulus check to every citizen.", outcome: "Your popularity skyrockets overnight as families feel the wealth.", approval: 18, eco: -10, empathy: 10, party: -3 },
-      { text: "Funnel the surplus into 'infrastructure projects' in your party leaders' home states.", outcome: "Your party is fiercely loyal to you, securing your power against scandals.", party: 15, unrest: 7, integrity: -10, eco: -10 },
-      { text: "Provide massive low-interest loans to struggling rival nations.", outcome: "You 'buy' peace. Tension drops as they are now financially dependent on you.", tension: -15, eco: -10, courage: 5 },
-      { text: "Don't spend a cent. Move the surplus into a 'Rainy Day' vault for future crises.", outcome: "The economy grows even stronger, and your authority over the budget is absolute.", eco: 9, unrest: 7, integrity: 8, party: -2 }
+      { text: "Issue a direct stimulus payment to every citizen.", outcome: "Your popularity skyrockets overnight as families feel the wealth.", approval: 18, eco: -10, empathy: 10, party: -3 },
+      { text: "Funnel the surplus into 'infrastructure projects' on your party leaders' home decks.", outcome: "Your party is fiercely loyal to you, securing your power against scandals.", party: 15, unrest: 7, integrity: -10, eco: -10 },
+      { text: "Provide massive low-interest loans to struggling rival colonies.", outcome: "You 'buy' peace. Tension drops as they are now financially dependent on you.", tension: -15, eco: -10, courage: 5 },
+      { text: "Don't spend a credit. Move the surplus into a 'Rainy Day' vault for future crises.", outcome: "The economy grows even stronger, and your authority over the budget is absolute.", eco: 9, unrest: 7, integrity: 8, party: -2 }
     ]
   }
 };
