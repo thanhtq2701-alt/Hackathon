@@ -10,7 +10,7 @@ Cập nhật lần cuối: 15/11/2026. Tài liệu cũ (tháng 10/2026) nằm tr
 - **Tên game:** The Oval (giữ tên này).
 - **Ý tưởng gốc:** người chơi đóng vai nhà du hành vũ trụ, ra quyết định cho sự sinh tồn của quốc gia mình. Mỗi lựa chọn phản ánh tính cách người chơi; cuối ván người chơi nhận một "biệt danh" (ending/profile) như Người bảo vệ, Nhà đầu tư tài ba… Họ muốn chơi vì được toàn quyền định đoạt vận mệnh quốc gia.
 - **Hai chế độ:**
-  - **The Oval** (`/`) — chơi đơn, 40 lượt, thẻ quyết định + tuyến truyện + 12 màn kết thúc.
+  - **Solo story** (`/`) — chơi đơn 20, 30 hoặc 40 lượt (mặc định 40), thẻ quyết định + tuyến truyện + 12 màn kết thúc; có mục "How to play" trên màn hình chính.
   - **Fleet Council** (`/world.html`) — chơi nhóm online: mỗi team là một world (1–4 người, 2–4 world), bỏ phiếu 3–4 lá, xây hành tinh, thu hoạch, thẻ đặc biệt, raid, viện trợ, xếp hạng.
 - **Người chơi mục tiêu:** bạn bè là học sinh Việt Nam, chưa biết gì về game → cần lời giới thiệu ban đầu. Phổ biến song song tiếng Việt và tiếng Anh (giao diện hiện là tiếng Anh).
 - **Nền tảng:** máy tính và điện thoại, qua trình duyệt web.
@@ -39,15 +39,17 @@ Cập nhật lần cuối: 15/11/2026. Tài liệu cũ (tháng 10/2026) nằm tr
 - **Live:** https://fleet-council.onrender.com — `/` The Oval, `/world.html` Fleet Council (online + luyện tập với bot). Free tier: ngủ sau 15 phút không ai vào (lần mở đầu chờ 30–60 giây).
 - **Lưu trữ:** Upstash Redis (Singapore) — phòng chơi lưu mỗi 15 giây và khi server tắt; tài khoản và bảng xếp hạng lưu vĩnh viễn; số đếm ẩn danh (`stats`) và góp ý (`feedback`) ghi cùng lượt lưu phòng, chỉ khi có thay đổi.
 - **Góp ý & thống kê:** trang `/feedback.html` (link từ cả hai chế độ) — gửi góp ý ẩn danh + mục "What this game stores". Số đếm xem ở `/api/stats`; góp ý đọc trong Upstash (key `fc:feedback`) hoặc `var/feedback.json` khi chạy local. The Oval đếm số ván bắt đầu/kết thúc, màn kết thúc, lượt kết thúc, thời lượng; Fleet Council đếm trận bắt đầu/kết thúc, số world, số lượt, số người thật, thời lượng (chỉ trận online). Trận bỏ dở = bắt đầu − kết thúc.
-- **Kiểm thử:** 32 test (`tools\run-checks.cmd`): 7 cho The Oval, 25 cho Fleet Council và server.
+- **Kiểm thử:** 44 test (`tools\run-checks.cmd`): 19 cho chế độ chơi đơn, 25 cho Fleet Council và server.
+- **Cấu trúc code chế độ chơi đơn:** luật của một ván (áp lựa chọn, sang lượt, khủng hoảng, tuyến truyện, màn kết thúc) nằm trong `app/game-core.js` dưới dạng hàm nhận trạng thái ván; `app/client.js` chỉ hiển thị — giống cách Fleet Council tách `world-core.js` khỏi `world-client.js`.
 - **Công cụ mô phỏng** (`tools/sim/`, chạy lại sau mỗi lần đổi số cân bằng; có seed nên cùng lệnh cho cùng kết quả):
   - `node tools/sim/fleet.js` — Fleet Council bot đấu bot bằng chính bot và luật của phòng thật; kịch bản `4v1`, `2v2`, `3w` (`--scenario`, `--matches`, `--turns`, `--seed`).
-  - `node tools/sim/oval.js` — chạy chính mã The Oval trong Node (DOM giả, Math.random có seed), bấm chọn thẻ như người chơi; chiến thuật `random`, `balanced`, `approval` (`--strategy`, `--games`, `--seed`).
+  - `node tools/sim/oval.js` — chạy chính mã The Oval trong Node (DOM giả, Math.random có seed), bấm chọn thẻ như người chơi; chiến thuật `random`, `balanced`, `approval` (`--strategy`, `--games`, `--seed`, `--turns 20|30|40`).
   - `tools\run-checks.cmd` chạy thử nhanh cả hai để công cụ không bị hỏng khi mã game đổi.
 - **Cân bằng đã đo** (đo lại bằng `tools/sim/` ngày 15/11/2026, seed 1):
   - Fleet Council (10 lượt): đội 4 vs 1 = 51,0% (3.000 trận, đổi bên luân phiên); 2v2 (1.000 trận) 1,8 raid/trận, 86,5% trận có raid, bên tấn công thắng 62%, vị trí world 50,7 / 49,3%; Command Core cuối trận trung bình Lv2,2 (Lv2 ~81%, Lv3 ~18%); 35% poll là khủng hoảng; không vòng vote nào phải chờ hết giờ. 3 world 1 người (2.500 trận): 32,9 / 35,5 / 31,6% — Nova Kepler cao hơn ~2 điểm, cần theo dõi.
   - The Oval: chơi ngẫu nhiên (1.000 ván) đủ 12/12 màn kết thúc (thêm The Lazarus Protocol 0,3% khi Energy cạn), cao nhất The Tyrant 25,6% / The Neutral 25,3%; The Resignation hiếm (0,1%); Revolution 19%, Convergence 9%; 33,5% ván kết thúc trước lượt 40. Chơi cân bằng (100 ván) → The Statesman 97%. Spam Approval (100 ván) → bị đảng phế truất 83%.
-- **Thời gian chơi ước tính:** The Oval 14–21 phút/ván đủ 40 lượt; Fleet Council 5–10 phút/trận 10 lượt.
+  - Chơi đơn ván ngắn (1.000 ván ngẫu nhiên): **30 lượt** còn 11 màn kết thúc, Revolution 11%, Scandal 16%, Convergence 3%; **20 lượt** chỉ 9 màn kết thúc và hầu như không gặp tuyến truyện (Revolution 4%, Scandal 5%, Convergence 0,2%) vì các tuyến cần nhiều lượt chỉ số xấu liên tiếp. Chưa chỉnh điều kiện tuyến truyện theo độ dài — để dành cho một đợt cân bằng (`balance_N`) nếu chủ dự án muốn.
+- **Thời gian chơi ước tính:** chơi đơn 14–21 phút/ván 40 lượt (suy theo tỉ lệ: ~7–11 phút/20 lượt, ~11–16 phút/30 lượt); Fleet Council 5–10 phút/trận 10 lượt.
 
 ## 4. Lịch sử thay đổi (Pull Request)
 
@@ -105,14 +107,14 @@ Mười lỗi trong `old/THE-OVAL-LOI-HE-THONG-VA-CHU-TRINH-KHAC-PHUC.txt` và `
 
 **Giai đoạn 1 — Playtest & người mới (2–3 tuần)**
 - 3–5 nhóm bạn chơi thử: đo thời gian thật, chỗ khó hiểu, có muốn chơi lại không, trận 1v4 có thấy công bằng không.
-- Hướng dẫn trận đầu tiên (bỏ phiếu, harvest, đề xuất xây, raid).
+- Hướng dẫn trận đầu tiên (bỏ phiếu, harvest, đề xuất xây, raid). Đã có phần tóm tắt luật cho cả hai chế độ ("How a turn works" ở Fleet Council, "How to play" ở chơi đơn); còn thiếu hướng dẫn từng bước trong trận đầu.
 - Giao diện tiếng Việt.
 - Tóm tắt sau trận: quyết định bước ngoặt, trận raid lớn, ai đóng góp gì; thẻ chia sẻ.
 - Cân bằng lại theo dữ liệu thật (branch `balance_1`).
 
 **Giai đoạn 2 — Chiều sâu nội dung (1–2 tháng)**
 - Fleet Council: vai trò cho từng pilot (không thêm phiếu); thêm tình huống/khủng hoảng (hiện 31); công trình Lv4–5; ngoại giao có cấu trúc (trao đổi, liên minh).
-- The Oval: đồng bộ bối cảnh vũ trụ (nhiều thẻ vẫn là chính trị Trái Đất); cơ chế kế nhiệm (nếu chốt); chọn độ dài ván 20/30/40.
+- The Oval: đồng bộ bối cảnh vũ trụ (nhiều thẻ vẫn là chính trị Trái Đất); cơ chế kế nhiệm (nếu chốt); ~~chọn độ dài ván 20/30/40~~ (đã làm; cân nhắc chỉnh điều kiện tuyến truyện cho ván 20 lượt).
 - Kết nối hai chế độ: kết quả The Oval mở khóa danh hiệu/giao diện trong hồ sơ pilot.
 
 **Giai đoạn 3 — Cộng đồng (khi có người chơi đều)**
