@@ -407,6 +407,7 @@ const TheOvalCore = window.TheOvalCore;
             <div class="choice-answer-content">
               <div class="choice-label" style="padding:1.2rem; text-wrap: balance; line-height:1.4;">${c.text}</div>
               <div class="choice-confirm-hint">Confirm Selection</div>
+              <div class="choice-tap-hint">Tap again to confirm</div>
             </div>
           </div>
           

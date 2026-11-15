@@ -59,6 +59,7 @@
     '⚡ STORY ARC': '⚡ TUYẾN TRUYỆN',
     'Tap to reveal': 'Chạm để lật',
     'Confirm Selection': 'Xác nhận lựa chọn',
+    'Tap again to confirm': 'Chạm lần nữa để xác nhận',
     'Outcome:': 'Kết quả:',
     'No immediate stat movement.': 'Các chỉ số chưa thay đổi ngay.',
     'The policy stabilizes supply quickly, but environmental and community costs spark new backlash.': 'Chính sách ổn định nguồn cung nhanh chóng, nhưng cái giá về môi trường và cộng đồng gây ra làn sóng phản đối mới.',

@@ -392,7 +392,14 @@ input:disabled { opacity: .45; cursor: not-allowed; }
   main { padding: 1rem 1rem 4rem; }
   .hero, .home-grid, .end-grid { grid-template-columns: 1fr; }
   .hero-art { order: -1; max-width: 420px; margin: 0 auto; }
-  .game-grid { grid-template-columns: minmax(0, 1fr); grid-template-areas: "council" "world" "side"; }
+  /* One column: the poll, then the crew plans to vote on, then the planet, then the tabs. */
+  .game-grid { grid-template-columns: minmax(0, 1fr); grid-template-areas: none; }
+  .col-world, .col-council, .col-side { grid-area: auto; }
+  .col-side { display: contents; }
+  .col-council { order: 1; }
+  .col-side > :not(.side-panel) { order: 2; }
+  .col-world { order: 3; }
+  .side-panel { order: 4; }
   .options, .options.count-4 { grid-template-columns: 1fr; }
   .room-code strong { font-size: 2.2rem; }
   .status-actions { margin-left: 0; }
@@ -401,6 +408,9 @@ input:disabled { opacity: .45; cursor: not-allowed; }
   .buildings { grid-template-columns: 1fr; }
   .resources { grid-template-columns: repeat(2, 1fr); }
   .tally-row { grid-template-columns: minmax(0, 1fr) 60px 20px; }
+  /* The 7-column pilot ranking must fit a 360px phone. */
+  .rank-table th { letter-spacing: 0; }
+  .rank-table th, .rank-table td { padding: .35rem .2rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
