@@ -38,9 +38,13 @@ Cập nhật lần cuối: 15/11/2026. Tài liệu cũ (tháng 10/2026) nằm tr
 - **Live:** https://fleet-council.onrender.com — `/` The Oval, `/world.html` Fleet Council (online + luyện tập với bot). Free tier: ngủ sau 15 phút không ai vào (lần mở đầu chờ 30–60 giây).
 - **Lưu trữ:** Upstash Redis (Singapore) — phòng chơi lưu mỗi 15 giây và khi server tắt; tài khoản và bảng xếp hạng lưu vĩnh viễn.
 - **Kiểm thử:** 31 test (`tools\run-checks.cmd`): 7 cho The Oval, 24 cho Fleet Council.
-- **Cân bằng đã đo** (bot/máy tự chơi):
-  - Fleet Council: đội 4 vs 1 = 51%; 2v2 trung bình 1,7 raid/trận; Command Core cuối trận Lv2–3; ~35% poll là khủng hoảng; công bằng theo vị trí world 32,9 / 33,4 / 33,7%.
-  - The Oval (chơi ngẫu nhiên): 12/12 màn kết thúc xuất hiện, không màn nào > 26%; Revolution 25%, Convergence 10%; 29% ván kết thúc trước lượt 40; chơi cân bằng → The Statesman ~90%; spam Approval → bị đảng phế truất.
+- **Công cụ mô phỏng** (`tools/sim/`, chạy lại sau mỗi lần đổi số cân bằng; có seed nên cùng lệnh cho cùng kết quả):
+  - `node tools/sim/fleet.js` — Fleet Council bot đấu bot bằng chính bot và luật của phòng thật; kịch bản `4v1`, `2v2`, `3w` (`--scenario`, `--matches`, `--turns`, `--seed`).
+  - `node tools/sim/oval.js` — chạy chính mã The Oval trong Node (DOM giả, Math.random có seed), bấm chọn thẻ như người chơi; chiến thuật `random`, `balanced`, `approval` (`--strategy`, `--games`, `--seed`).
+  - `tools\run-checks.cmd` chạy thử nhanh cả hai để công cụ không bị hỏng khi mã game đổi.
+- **Cân bằng đã đo** (đo lại bằng `tools/sim/` ngày 15/11/2026, seed 1):
+  - Fleet Council (10 lượt): đội 4 vs 1 = 51,0% (3.000 trận, đổi bên luân phiên); 2v2 (1.000 trận) 1,8 raid/trận, 86,5% trận có raid, bên tấn công thắng 62%, vị trí world 50,7 / 49,3%; Command Core cuối trận trung bình Lv2,2 (Lv2 ~81%, Lv3 ~18%); 35% poll là khủng hoảng; không vòng vote nào phải chờ hết giờ. 3 world 1 người (2.500 trận): 32,9 / 35,5 / 31,6% — Nova Kepler cao hơn ~2 điểm, cần theo dõi.
+  - The Oval: chơi ngẫu nhiên (1.000 ván) đủ 12/12 màn kết thúc (thêm The Lazarus Protocol 0,3% khi Energy cạn), cao nhất The Tyrant 25,6% / The Neutral 25,3%; The Resignation hiếm (0,1%); Revolution 19%, Convergence 9%; 33,5% ván kết thúc trước lượt 40. Chơi cân bằng (100 ván) → The Statesman 97%. Spam Approval (100 ván) → bị đảng phế truất 83%.
 - **Thời gian chơi ước tính:** The Oval 14–21 phút/ván đủ 40 lượt; Fleet Council 5–10 phút/trận 10 lượt.
 
 ## 4. Lịch sử thay đổi (Pull Request)
@@ -56,6 +60,8 @@ Cập nhật lần cuối: 15/11/2026. Tài liệu cũ (tháng 10/2026) nằm tr
 | #7 | Sửa 3 lỗi tuyến truyện The Oval (từ chức, phế truất trong cách mạng, câu "Lease to Allies") |
 | #8 | Đặt tàu và viện trợ cần cả đội bỏ phiếu |
 | #9 | Đợt cân bằng lớn cho Fleet Council và The Oval |
+| #10 | Gom tài liệu vào `docs/PROJECT.md`, lưu trữ tài liệu cũ vào `old/` |
+| #11 | Công cụ mô phỏng cân bằng có seed cho cả hai game (`tools/sim/`); đo lại số cân bằng |
 
 ## 5. Lỗi trong tài liệu cũ — đối chiếu
 
@@ -90,7 +96,7 @@ Mười lỗi trong `old/THE-OVAL-LOI-HE-THONG-VA-CHU-TRINH-KHAC-PHUC.txt` và `
 **Nguyên tắc:** đến nay mọi cân bằng dựa trên bot/mô phỏng — ưu tiên số 1 là kiểm chứng với người thật trước khi thêm tính năng.
 
 **Giai đoạn 0 — Nền móng (~1 tuần)**
-- Đưa công cụ mô phỏng bot vào repo (`tools/sim/`) — hiện chỉ nằm ở thư mục tạm.
+- ~~Đưa công cụ mô phỏng bot vào repo (`tools/sim/`)~~ — đã làm (xem mục 3).
 - GitHub Actions tự chạy test khi mở PR.
 - Nút "Góp ý" trong game + thống kê ẩn danh (thời lượng trận, màn kết thúc, chỗ bỏ cuộc) lưu dạng số đếm trong Upstash.
 - Theo dõi giới hạn Upstash và Render free.

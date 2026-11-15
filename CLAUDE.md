@@ -20,7 +20,8 @@ Browser scripts are classic scripts that attach to `window` (`TheOval*`, `FleetC
 
 - Run everything: `npm start` → `http://localhost:8080/` (Node 18+).
 - Static only (solo + Fleet Council practice): `.\tools\start-local.cmd` → port 8000.
-- Checks: `.\tools\run-checks.cmd` (syntax checks + `tests/game-core.test.js` + `tests/world-core.test.js`). Run before every commit.
+- Checks: `.\tools\run-checks.cmd` (syntax checks + `tests/game-core.test.js` + `tests/world-core.test.js` + a quick smoke run of the simulators). Run before every commit.
+- Balance simulations: `node tools/sim/fleet.js` (Fleet Council bot vs bot) and `node tools/sim/oval.js` (The Oval auto-play through the real `client.js`). Seeded; options are listed at the top of each file.
 
 ## Deployment (Render, auto-deploy from `main`)
 
