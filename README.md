@@ -17,14 +17,18 @@ Every decision you make ripples through the station's systems, leading to multip
 ## 🎮 Core Features
 
 ### 🛠️ The Decision Engine (Cards & Arcs)
-Navigate through unique scenarios. Each choice impacts four critical pillars:
-* 📢 **Public Approval:** Your standing with the citizens.
-* 💰 **Economic State:** The financial health of your station.
-* ⚡ **Station Energy:** Your most precious resource for survival.
-* ⚖️ **Integrity:** The moral compass of your administration.
+A run lasts 40 decisions. Each choice moves five visible bars and your Energy Core:
+* 📢 **Public Approval:** your standing with the citizens.
+* 🌐 **International Tension:** how close the world is to conflict.
+* 💰 **Economic State:** the financial health of your station.
+* 🛡️ **State Control:** your authority over the state.
+* 🤝 **Party Loyalty:** how firmly your own party stands behind you.
+* ⚡ **Energy Core:** spent or restored by choices, +1 every turn, flashes red below 25.
+
+Hidden traits (Empathy, Integrity, Courage, Ideology) build your Moral Profile. Four story arcs (Convergence Route, The Scandal, The Revolution, The Permanent Record) can take over the run, and it ends in one of 12 endings.
 
 ### ⚠️ The Lazarus Protocol
-When your energy hits zero, the **Lazarus Protocol** activates—a last-ditch survival mechanism that forces players into high-risk, high-reward scenarios to bring the station back from the brink of collapse.
+If your Energy Core hits zero, the station collapses and the run ends at once with **The Lazarus Protocol** ending. Keep an eye on Energy as well as the five bars.
 
 ### 🛰️ Fleet Council — team multiplayer (new)
 A second mode where **every team is a world** (1–4 pilots per world, 2–4 worlds per room):
