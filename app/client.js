@@ -190,7 +190,7 @@ const TheOvalCore = window.TheOvalCore;
     // ═══════════════════════════════════════════════════════════
     // RESULT CHIPS
     // ═══════════════════════════════════════════════════════════
-    const BAR_LABELS = { approval: 'Public Approval', tension: 'Intl Tension', eco: 'Economic State', unrest: 'State Control', party: 'Party Loyalty', energy: 'Energy Core' };
+    const BAR_LABELS = { approval: 'Public Approval', tension: 'Interstellar Tension', eco: 'Economic State', unrest: 'State Control', party: 'Party Loyalty', energy: 'Energy Core' };
     const HIDDEN_LABELS = { empathy: 'Empathy', integrity: 'Integrity', courage: 'Courage', ideology: 'Ideology' };
     function showResultFlash(choice) {
       const rf = document.getElementById('result-flash');
@@ -841,7 +841,7 @@ const TheOvalCore = window.TheOvalCore;
                 <div class="gallery-card-title">${a.name}</div>
                 <div class="gallery-card-tag">${a.acts.length}-act arc</div>
                 <div class="gallery-card-desc" style="font-size: 0.8rem; margin: 8px 0;">
-                  <strong>Trigger Condition:</strong> ${a.id === 'convergence_route' ? 'From turn 6: International Tension above 80% for 3 turns (or 98%)' : a.id === 'the_scandal' ? 'Party Loyalty < 30%' : a.id === 'revolution' ? 'State Authority below 30% for 3 turns (or below 25%) while Approval is under 55%, or after turn 10, Approval below 10% for 3 turns' : a.id === 'legacy' ? 'The last turn of the run (20, 30 or 40)' : '—'}
+                  <strong>Trigger Condition:</strong> ${a.id === 'convergence_route' ? 'From turn 6: Interstellar Tension above 80% for 3 turns (or 98%)' : a.id === 'the_scandal' ? 'Party Loyalty < 30%' : a.id === 'revolution' ? 'State Authority below 30% for 3 turns (or below 25%) while Approval is under 55%, or after turn 10, Approval below 10% for 3 turns' : a.id === 'legacy' ? 'The last turn of the run (20, 30 or 40)' : '—'}
                 </div>
                 <div style="font-size: 0.75rem; color: var(--text-mid); display: flex; flex-direction: column; gap: 12px;">
                   ${a.acts.map(raw => TheOvalCore.resolveAct(raw, gs)).map((act, i) => `
