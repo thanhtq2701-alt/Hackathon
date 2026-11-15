@@ -143,7 +143,9 @@ function playRun(strategy, seed, turns) {
   vm.runInContext('Math', game.context).random = mulberry32(seed ^ 0x5bd1e995);
   game.context.startGame('normal', turns);
   game.flush();
+  const arcTurns = {}; // arc id -> turn it started
   for (let n = 0; !game.ending; n++) {
+    game.state().arcsTriggered.forEach(id => { if (!(id in arcTurns)) arcTurns[id] = game.state().turn; });
     const options = game.options();
     if (n > MAX_CHOICES || !options.length) throw new Error('Run stalled (seed ' + seed + ', turn ' + game.state().turn + ')');
     const choice = STRATEGIES[strategy](game, options.map(o => o.choice), rng);
@@ -155,7 +157,7 @@ function playRun(strategy, seed, turns) {
   }
   const gs = game.state();
   return {
-    ending: game.ending, turn: gs.turn, arcs: gs.arcsTriggered.slice(), partyRevolt: gs.lowLoyaltyTurns >= 4,
+    ending: game.ending, turn: gs.turn, arcs: gs.arcsTriggered.slice(), arcTurns, partyRevolt: gs.lowLoyaltyTurns >= 4,
     bars: Object.assign({}, gs.bars, { energy: gs.energy })
   };
 }
@@ -167,13 +169,17 @@ function pct(part, whole) {
 function runStrategy(strategy, games, seed, turns) {
   const endings = {};
   const arcs = {};
+  const arcTurnSum = {};
   let early = 0;
   let turnSum = 0;
   let revolts = 0;
   for (let i = 0; i < games; i++) {
     const run = playRun(strategy, seed + i, turns);
     endings[run.ending] = (endings[run.ending] || 0) + 1;
-    run.arcs.forEach(id => { arcs[id] = (arcs[id] || 0) + 1; });
+    run.arcs.forEach(id => {
+      arcs[id] = (arcs[id] || 0) + 1;
+      arcTurnSum[id] = (arcTurnSum[id] || 0) + (run.arcTurns[id] || run.turn);
+    });
     if (run.turn < turns) early++;
     if (run.partyRevolt) revolts++;
     turnSum += run.turn;
@@ -182,7 +188,7 @@ function runStrategy(strategy, games, seed, turns) {
   console.log(`  Endings seen: ${Object.keys(endings).length}`);
   Object.entries(endings).sort((a, b) => b[1] - a[1])
     .forEach(([title, count]) => console.log(`    ${title.padEnd(24)} ${pct(count, games).padStart(6)}`));
-  console.log(`  Arcs triggered: ${Object.entries(arcs).sort((a, b) => b[1] - a[1]).map(([id, c]) => id + ' ' + pct(c, games)).join(', ') || 'none'}`);
+  console.log(`  Arcs triggered: ${Object.entries(arcs).sort((a, b) => b[1] - a[1]).map(([id, c]) => `${id} ${pct(c, games)} (turn ~${Math.round(arcTurnSum[id] / c)})`).join(', ') || 'none'}`);
   console.log(`  Ended before turn ${turns}: ${pct(early, games)} (average last turn ${(turnSum / games).toFixed(1)})`);
   console.log(`  Removed by a party revolt: ${pct(revolts, games)}`);
 }
