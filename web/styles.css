@@ -2190,6 +2190,36 @@
       letter-spacing: .08em;
     }
 
+    /* Turning points: the turn, then what actually changed. */
+    .defining-turn {
+      display: block;
+      color: var(--gold);
+      font-size: .65rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .defining-changes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .3rem .6rem;
+      margin-top: .3rem;
+    }
+
+    .defining-changes .good { color: var(--green, #4caf7d); }
+    .defining-changes .bad { color: var(--red, #e05252); }
+
+    .arc-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .45rem;
+    }
+
+    .arc-list .defining-item em {
+      font-style: normal;
+      opacity: .7;
+    }
+
     .end-btns {
       display: flex;
       gap: .7rem;

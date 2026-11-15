@@ -47,6 +47,7 @@
       impeached: false,
       resigned: false,
       definingChoices: [],
+      turningPoints: [],
       cardHistory: { environment: [], war: [], economy: [], civilrights: [], scandal: [] },
       topicQueue: buildTopicQueue(random)
     };
@@ -149,7 +150,27 @@
     if (!isArc) state.arcTriggerCounts[topic]++;
     state.definingChoices.push({ topic: topicLabel(topic), card: cardTitle, choice: choice.text });
     if (state.definingChoices.length > 8) state.definingChoices.shift();
+    trackTurningPoint(state, { turn: state.turn, topic: topicLabel(topic), card: cardTitle, choice: choice.text, applied });
     return { effective, applied };
+  }
+
+  // The three choices whose applied change was largest (bars and Energy; the earlier one on a tie),
+  // kept in turn order for the end screen.
+  function trackTurningPoint(state, entry) {
+    const size = Object.values(entry.applied).reduce((sum, d) => sum + Math.abs(d), 0);
+    if (!size) return;
+    const list = (state.turningPoints || []).concat(Object.assign(entry, { size }));
+    list.sort((a, b) => b.size - a.size || a.turn - b.turn);
+    state.turningPoints = list.slice(0, 3).sort((a, b) => a.turn - b.turn);
+  }
+
+  // End-screen summary: the turning points and every story arc this run met (and whether it finished).
+  function runSummary(state) {
+    return {
+      turningPoints: state.turningPoints || [],
+      arcs: state.arcsTriggered.map(id => ARCS.find(a => a.id === id)).filter(Boolean)
+        .map(arc => ({ id: arc.id, name: arc.name, completed: state.arcsCompleted.includes(arc.id) }))
+    };
   }
 
   // Warnings and penalties between turns. Pushes messages to `notices`; returns true if the run ended.
@@ -425,6 +446,7 @@
     pickEnding,
     resolveAct,
     resolveEnding,
+    runSummary,
     scaleChoice,
     scaleDelta,
     topicLabel,
