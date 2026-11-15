@@ -58,21 +58,27 @@
       multiplier = 2.5;
     }
 
+    // Shorter runs: every normal card weighs more (RUN_PACE), so the bars still reach the story arcs.
+    // Arc acts and Energy are not paced.
+    const pace = state.activeArc ? 1 : (RUN_PACE[state.maxTurns] || 1);
+    const paced = value => (pace === 1 ? value : Math.round(value * pace));
+
     Object.keys(statKeys).forEach(key => {
       if (choice[key]) {
-        let value = choice[key] * multiplier;
+        let value = paced(choice[key] * multiplier);
         if (!(state.activeArc && state.activeArc.id === 'convergence_route')) {
-          value = clamp(value, -9, 9);
+          const cap = Math.round(9 * pace); // 9, or 11 and 15 in shorter runs: bars stay whole numbers
+          value = clamp(value, -cap, cap);
         }
         const stateKey = statKeys[key];
         state.bars[stateKey] = clamp(state.bars[stateKey] + value, 0, 100);
       }
     });
 
-    if (choice.empathy) state.empathy += clamp(choice.empathy * multiplier, -100, 100);
-    if (choice.integrity) state.integrity += clamp(choice.integrity * multiplier, -100, 100);
-    if (choice.courage) state.courage += clamp(choice.courage * multiplier, -100, 100);
-    if (choice.ideology) state.ideologyScore += clamp(choice.ideology * multiplier, -100, 100);
+    if (choice.empathy) state.empathy += clamp(paced(choice.empathy * multiplier), -100, 100);
+    if (choice.integrity) state.integrity += clamp(paced(choice.integrity * multiplier), -100, 100);
+    if (choice.courage) state.courage += clamp(paced(choice.courage * multiplier), -100, 100);
+    if (choice.ideology) state.ideologyScore += clamp(paced(choice.ideology * multiplier), -100, 100);
 
     if (choice.energy) {
       state.energy += choice.energy * multiplier;
@@ -112,6 +118,9 @@
 
   const RUN_TURNS = 40;
   const RUN_LENGTHS = [20, 30, 40];
+  // How much more each normal card moves the bars in a shorter run (balance_solo_1, tools/sim/oval.js):
+  // with these, 20- and 30-turn runs see the story arcs and early endings about as often as 40 turns.
+  const RUN_PACE = { 20: 1.7, 30: 1.25, 40: 1 };
   const LAZARUS = {
     text: 'CRITICAL FAILURE',
     outcome: 'ENDING: The Lazarus Protocol. Energy core depleted. The space station has collapsed. Preparing to extract Legacy Data...'

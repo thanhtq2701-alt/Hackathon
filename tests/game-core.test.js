@@ -208,6 +208,29 @@ test('a run ends after turn 40 unless a story arc is still running', function ()
   assert.equal(inArc.turn, 41);
 });
 
+test('in shorter runs normal cards weigh more; arc acts and Energy do not', function () {
+  const card = { approval: 6, energy: -4 };
+  const full = core.createInitialState(() => 0.5, 40);
+  const short = core.createInitialState(() => 0.5, 20);
+  const medium = core.createInitialState(() => 0.5, 30);
+  core.applyDeltas(full, card);
+  core.applyDeltas(short, card);
+  core.applyDeltas(medium, card);
+  assert.equal(full.bars.publicApproval, 56);
+  assert.equal(short.bars.publicApproval, 60);   // 6 x 1.7 = 10.2, rounded
+  assert.equal(medium.bars.publicApproval, 58);  // 6 x 1.25 = 7.5, rounded
+  assert.equal(short.energy, 96);
+
+  const capped = core.createInitialState(() => 0.5, 20);
+  core.applyDeltas(capped, { approval: 12 });
+  assert.equal(capped.bars.publicApproval, 65); // the +-9 cap grows too: 9 x 1.7, rounded to 15
+
+  const inArc = core.createInitialState(() => 0.5, 20);
+  inArc.activeArc = arcById('legacy');
+  core.applyDeltas(inArc, { approval: 6 });
+  assert.equal(inArc.bars.publicApproval, 56);
+});
+
 test('a run can last 20, 30 or 40 turns and the Legacy arc opens on its last turn', function () {
   assert.equal(core.createInitialState(() => 0.5).maxTurns, 40);
   assert.equal(core.createInitialState(() => 0.5, 25).maxTurns, 40);
