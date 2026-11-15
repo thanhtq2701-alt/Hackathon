@@ -18,7 +18,7 @@
       'Cả đội cùng bỏ phiếu cho từng khủng hoảng. Giữa các lần bỏ phiếu, bạn xây dựng hành tinh, thu hoạch sản phẩm và chọn giao thương hay đột kích các thế giới đối thủ.',
     'Pilot name': 'Tên phi công',
     'Your name': 'Tên của bạn',
-    'Optional': 'Không bắt buộc',
+    'Optional': 'Tùy chọn',
     'A PIN (4–8 digits) reserves your pilot name and keeps your EXP in the all-time ranking. Without one you play as a guest. The first PIN you use for a name becomes its PIN.':
       'Mã PIN (4–8 chữ số) giữ tên phi công cho riêng bạn và lưu EXP vào bảng xếp hạng mọi thời đại. Không có PIN thì bạn chơi với tư cách khách. PIN đầu tiên dùng cho một tên sẽ trở thành PIN của tên đó.',
     'Create online room': 'Tạo phòng online',

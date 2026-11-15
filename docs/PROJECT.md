@@ -12,7 +12,7 @@ Cập nhật lần cuối: 15/11/2026. Tài liệu cũ (tháng 10/2026) nằm tr
 - **Hai chế độ:**
   - **Solo story** (`/`) — chơi đơn 20, 30 hoặc 40 lượt (mặc định 40), thẻ quyết định + tuyến truyện + 12 màn kết thúc; có mục "How to play" trên màn hình chính.
   - **Fleet Council** (`/world.html`) — chơi nhóm online: mỗi team là một world (1–4 người, 2–4 world), bỏ phiếu 3–4 lá, xây hành tinh, thu hoạch, thẻ đặc biệt, raid, viện trợ, xếp hạng.
-- **Người chơi mục tiêu:** bạn bè là học sinh Việt Nam, chưa biết gì về game → cần lời giới thiệu ban đầu. Phổ biến song song tiếng Việt và tiếng Anh (giao diện hiện là tiếng Anh).
+- **Người chơi mục tiêu:** bạn bè là học sinh Việt Nam, chưa biết gì về game → cần lời giới thiệu ban đầu. Phổ biến song song tiếng Việt và tiếng Anh (mặc định tiếng Việt, có nút English).
 - **Nền tảng:** máy tính và điện thoại, qua trình duyệt web.
 - **Mục tiêu bản đầu:** prototype chơi đơn hoàn chỉnh + chơi online theo team; mọi tính năng trong bản phác thảo đều chạy được.
 - **Bối cảnh dùng cho hồ sơ:** dự án có thể dùng trong portfolio (du học) — mô tả phải trung thực: tính năng nào là thật, cái nào là demo (ví/NFT Sui là demo, đã gắn nhãn).
@@ -32,13 +32,14 @@ Cập nhật lần cuối: 15/11/2026. Tài liệu cũ (tháng 10/2026) nằm tr
 | Bối cảnh (chốt 15/11/2026) | Cả hai chế độ ở cùng một bối cảnh vũ trụ. Chơi đơn: người chơi là **Commander** của một thuộc địa/trạm vũ trụ, điều hành từ **the Oval** (khoang chỉ huy); quốc gia → colony/station, nước đối thủ → rival colonies, cường quốc → the great stations, Quốc hội → Station Council, Tòa tối cao → High Tribunal, LHQ → Sector Assembly, dầu → fuel, hạt nhân → antimatter, đô la → credits; thanh "International Tension" → "Interstellar Tension". Giữ nguyên thế khó xử của từng tình huống và mọi con số |
 | Nội dung = cả hai chế độ | Khi chủ dự án nói "chỉnh nội dung", hiểu là chỉnh cả chơi đơn (`data/content.js`) và Fleet Council (`data/world-content.js`) |
 | Tài khoản | PIN 4–8 số (tùy chọn) giữ tên; chỉ pilot có PIN được xếp hạng mọi thời đại |
-| Dữ liệu người chơi (chốt 15/11/2026) | Chỉ lưu tối thiểu: tên + PIN đã băm + xếp hạng (pilot có PIN), phòng đang chơi, **số đếm ẩn danh** (không tên/ID/IP) và **góp ý ẩn danh** (giữ 200 tin mới nhất). Trang `feedback.html#privacy` liệt kê mọi thứ được lưu; xóa dữ liệu khi có yêu cầu (chủ dự án xóa tay). Để sau: lịch sử trận/hồ sơ gắn tài khoản chỉ cho pilot có PIN, kèm nút xóa. Không làm: lưu email/số điện thoại/Zalo, công cụ phân tích bên thứ ba (Google Analytics…). Khôi phục PIN bằng **mã khôi phục một lần** hiện khi đăng ký (không cần dữ liệu cá nhân). Ghi hình playtest chỉ khi đã hỏi và được đồng ý. Thêm dữ liệu mới → cập nhật trang `feedback.html#privacy` |
+| Dữ liệu người chơi (chốt 15/11/2026) | Chỉ lưu tối thiểu: tên + PIN đã băm + xếp hạng (pilot có PIN), phòng đang chơi, **số đếm ẩn danh** (không tên/ID/IP) và **góp ý ẩn danh** (giữ 200 tin mới nhất). Trang `feedback.html#privacy` liệt kê mọi thứ được lưu; xóa dữ liệu khi có yêu cầu (chủ dự án xóa tay). Để sau: lịch sử trận/hồ sơ gắn tài khoản chỉ cho pilot có PIN, kèm nút xóa. Không làm: lưu email/số điện thoại/Zalo, công cụ phân tích bên thứ ba (Google Analytics…). Khôi phục PIN: **không làm lúc này** (chốt 15/11/2026; nếu làm sau thì dùng mã khôi phục một lần, không cần dữ liệu cá nhân). Ghi hình playtest chỉ khi đã hỏi và được đồng ý. Thêm dữ liệu mới → cập nhật trang `feedback.html#privacy` |
 | Hạ tầng | Miễn phí: Render Web Service (free) + Upstash Redis (free); không mua tên miền |
-| Quy trình | Làm trên branch, commit; **hỏi chủ dự án trước mỗi lần push**; chỉ merge khi chủ dự án xác nhận. Đợt cân bằng dùng branch riêng cho từng chế độ: `balance_solo_1`, `balance_solo_2`… (chơi đơn) và `balance_multi_1`, `balance_multi_2`… (Fleet Council); chỉ push khi chủ dự án nói cân bằng đã ổn. `main` được bảo vệ (cấm xóa, cấm force push) |
+| Quy trình | Làm trên branch, commit; **hỏi chủ dự án trước mỗi lần push**; chỉ merge khi chủ dự án xác nhận. Đợt cân bằng dùng branch riêng cho từng chế độ: `balance_solo_1`, `balance_solo_2`… (chơi đơn) và `balance_multi_1`, `balance_multi_2`… (Fleet Council); chỉ push khi chủ dự án nói cân bằng đã ổn. `main` được bảo vệ (cấm xóa, cấm force push, job CI `checks` phải qua mới merge được) nên mọi thay đổi đi qua PR |
 
 ## 3. Trạng thái hiện tại
 
 - **Live:** https://fleet-council.onrender.com — `/` The Oval, `/world.html` Fleet Council (online + luyện tập với bot). Free tier: ngủ sau 15 phút không ai vào (lần mở đầu chờ 30–60 giây).
+- **Vercel (thừa, chờ gỡ):** repo vẫn nối với dự án Vercel `hackathon` từ thời hackathon (31/03/2026): tự deploy bản tĩnh mỗi lần push, chỉ xem được khi đăng nhập Vercel, không ai dùng. Chủ dự án sẽ gỡ.
 - **Lưu trữ:** Upstash Redis (Singapore) — phòng chơi lưu mỗi 15 giây và khi server tắt; tài khoản và bảng xếp hạng lưu vĩnh viễn; số đếm ẩn danh (`stats`) và góp ý (`feedback`) ghi cùng lượt lưu phòng, chỉ khi có thay đổi.
 - **Ngôn ngữ:** toàn bộ game (giao diện + nội dung cả hai chế độ, trang góp ý) có tiếng Việt và tiếng Anh; mặc định tiếng Việt, nút Tiếng Việt / English ở màn hình chính chơi đơn, trang chủ Fleet Council và trang góp ý; lựa chọn nhớ trên máy. Cách làm: game vẫn viết bằng tiếng Anh, `app/i18n.js` dịch chữ khi hiện lên trang bằng từ điển `data/vi-*.js` (khoảng 2.100 đoạn nội dung + giao diện + mẫu cho câu có số/tên). Test bắt buộc mọi nội dung và mọi thông báo của trận bot có bản tiếng Việt. Thuật ngữ: thế giới, phi công, đội, đột kích, viện trợ, Sức mạnh, Lõi Chỉ huy; chơi đơn: Chỉ huy trưởng, thuộc địa, Dân ủng hộ, Căng thẳng liên sao, Quyền kiểm soát, Lòng trung thành của Đảng, Lõi năng lượng.
 - **Góp ý & thống kê:** trang `/feedback.html` (link từ cả hai chế độ) — gửi góp ý ẩn danh + mục "What this game stores". Số đếm xem ở `/api/stats`; góp ý đọc trong Upstash (key `fc:feedback`) hoặc `var/feedback.json` khi chạy local. The Oval đếm số ván bắt đầu/kết thúc, màn kết thúc, lượt kết thúc, thời lượng; Fleet Council đếm trận bắt đầu/kết thúc, số world, số lượt, số người thật, thời lượng (chỉ trận online). Trận bỏ dở = bắt đầu − kết thúc.
@@ -52,6 +53,7 @@ Cập nhật lần cuối: 15/11/2026. Tài liệu cũ (tháng 10/2026) nằm tr
   - Fleet Council (10 lượt): đội 4 vs 1 = 51,0% (3.000 trận, đổi bên luân phiên); 2v2 (1.000 trận) 1,8 raid/trận, 86,5% trận có raid, bên tấn công thắng 62%, vị trí world 50,7 / 49,3%; Command Core cuối trận trung bình Lv2,2 (Lv2 ~81%, Lv3 ~18%); 35% poll là khủng hoảng; không vòng vote nào phải chờ hết giờ. 3 world 1 người: đo lại 20.000 trận (4 seed) được 33,1 / 33,7 / 33,2% — không lệch theo vị trí (con số 35,5% của Nova Kepler trước đó chỉ là dao động ngẫu nhiên của 2.500 trận).
   - The Oval: chơi ngẫu nhiên (1.000 ván) đủ 12/12 màn kết thúc (thêm The Lazarus Protocol 0,3% khi Energy cạn), cao nhất The Tyrant 25,6% / The Neutral 25,3%; The Resignation hiếm (0,1%); Revolution 19%, Convergence 9%; 33,5% ván kết thúc trước lượt 40. Chơi cân bằng (100 ván) → The Statesman 97%. Spam Approval (100 ván) → bị đảng phế truất 83%.
   - Chơi đơn ván ngắn (`balance_solo_1`): trước đó ván 20 lượt hầu như không gặp tuyến truyện (Revolution 4%, Scandal 5%, Convergence 0,2%; 9 màn kết thúc) vì các tuyến thường bật quanh lượt 27–33. Nay mỗi thẻ thường nặng ký hơn trong ván ngắn (`RUN_PACE` = ×1,7 cho 20 lượt, ×1,25 cho 30 lượt; trần mỗi lựa chọn 15 và 11 thay cho 9; act tuyến truyện và Energy giữ nguyên). Kết quả 1.000 ván ngẫu nhiên: **20 lượt** đủ 12 màn kết thúc, cao nhất 26,9%, Scandal 21% / Revolution 11% / Convergence 8%, 32,5% kết thúc sớm; **30 lượt** đủ 12, cao nhất Tyrant 29,3%, 22% / 14% / 10%, 31,6% kết thúc sớm (ván 40: 25,5% / 19% / 9,4%, 33,5%). Chơi cân bằng → Statesman 90,5% (20) và 96,5% (30); spam Approval → Impeached 50,5% + Martyr 25% (20), Impeached 70,5% (30). Ván 40 lượt không đổi (1.500 ván mô phỏng giống hệt).
+- **Điện thoại** (rà 15/11/2026 bằng Chrome giả lập 320/360/390px, tiếng Việt, cả hai chế độ): không trang nào tràn ngang. Fleet Council trên màn hình ≤860px hiện ô bỏ phiếu kế hoạch đội ngay dưới ô bỏ phiếu tình huống (trước đó nằm sau 7 thẻ công trình).
 - **Thời gian chơi ước tính:** chơi đơn 14–21 phút/ván 40 lượt (suy theo tỉ lệ: ~7–11 phút/20 lượt, ~11–16 phút/30 lượt); Fleet Council 5–10 phút/trận 10 lượt.
 
 ## 4. Lịch sử thay đổi (Pull Request)
@@ -76,6 +78,7 @@ Cập nhật lần cuối: 15/11/2026. Tài liệu cũ (tháng 10/2026) nằm tr
 | #16 | GitHub Actions chạy toàn bộ checks trên mỗi PR; ghi câu trả lời cho các câu hỏi mở; Nova Kepler không lệch |
 | #17 | Tiếng Việt cho toàn bộ game (mặc định, có nút English); gợi ý ván/trận đầu cho cả hai chế độ |
 | #18 | Sửa tài liệu: số test (49), tên branch cân bằng trong lộ trình |
+| #19 | Chuẩn bị playtest: `docs/PLAYTEST.md`; sửa giao diện điện thoại (kế hoạch đội lên gần ô bỏ phiếu, bảng xếp hạng vừa màn 360px, dịch "Tap again to confirm", ô PIN); sửa tài liệu lệch |
 
 ## 5. Lỗi trong tài liệu cũ — đối chiếu
 
@@ -102,10 +105,12 @@ Mười lỗi trong `old/THE-OVAL-LOI-HE-THONG-VA-CHU-TRINH-KHAC-PHUC.txt` và `
 2. **Ngôn ngữ:** tiếng Việt cho toàn bộ giao diện và nội dung cả hai chế độ, mặc định tiếng Việt, có nút chuyển sang tiếng Anh, lựa chọn được nhớ trên máy người chơi.
 3. **Web3 / Sui:** chưa tính đến; giữ phần demo như hiện tại (có nhãn demo).
 4. **Ngân sách:** 0 đồng — giữ Render free + Upstash free (server ngủ sau 15 phút không ai vào).
-5. **Playtest:** nhờ các bạn trong lớp, làm sau.
+5. **Playtest:** ngày 17/11/2026, khoảng 10 bạn trong lớp, vài nhóm, chế độ Fleet Council, khoảng 30 phút, không ghi hình. Cách tổ chức và câu hỏi: `docs/PLAYTEST.md`.
 6. **Thành viên:** nhóm Auraa ban đầu; hiện chỉ còn chủ dự án phát triển tiếp.
 
-Còn mở: lịch và cách tổ chức playtest (số nhóm, có ghi hình không — nếu ghi hình phải hỏi và được đồng ý).
+7. **Khôi phục PIN:** không làm lúc này.
+
+Còn mở: không có.
 
 ## 7. Lộ trình phát triển
 
@@ -118,7 +123,7 @@ Còn mở: lịch và cách tổ chức playtest (số nhóm, có ghi hình khô
 - Theo dõi giới hạn Upstash và Render free.
 
 **Giai đoạn 1 — Playtest & người mới (2–3 tuần)**
-- 3–5 nhóm bạn chơi thử: đo thời gian thật, chỗ khó hiểu, có muốn chơi lại không, trận 1v4 có thấy công bằng không.
+- Nhóm bạn chơi thử (17/11/2026, xem `docs/PLAYTEST.md`): đo thời gian thật, chỗ khó hiểu, có muốn chơi lại không, trận 1v4 có thấy công bằng không. ~~Rà giao diện điện thoại~~ — đã làm (xem mục 3).
 - ~~Hướng dẫn trận đầu tiên~~ — đã làm: phần "Cách chơi" song ngữ ở cả hai chế độ, cộng **gợi ý trong ván/trận đầu** (`app/tips.js`): khung gợi ý ngắn hiện đúng lúc, từng cái một, có "Đã hiểu" / "Tắt gợi ý"; máy nhớ gợi ý đã xem; nút "Xem lại gợi ý" ở màn hình chính chơi đơn và trang chủ Fleet Council. Chơi đơn 5 gợi ý (chỉ số, thẻ đầu, kết quả đầu, cảnh báo khủng hoảng đầu, tuyến truyện đầu); Fleet Council 6 gợi ý (phòng chờ, bỏ phiếu, thu hoạch, kế hoạch đội, báo cáo lượt, đột kích từ lượt 2).
 - ~~Giao diện tiếng Việt~~ — đã làm: cả giao diện lẫn nội dung, hai chế độ (xem mục 3).
 - Tóm tắt sau trận: quyết định bước ngoặt, trận raid lớn, ai đóng góp gì; thẻ chia sẻ.
@@ -132,7 +137,7 @@ Còn mở: lịch và cách tổ chức playtest (số nhóm, có ghi hình khô
 **Giai đoạn 3 — Cộng đồng (khi có người chơi đều)**
 - Mùa xếp hạng; lịch sử trận và hồ sơ pilot (chỉ pilot có PIN, có nút xóa — xem quyết định "Dữ liệu người chơi").
 - Chat tự do chỉ khi có công cụ chặn/báo cáo.
-- Khôi phục PIN bằng mã khôi phục một lần (không lưu email/số điện thoại) và trang quản trị nhỏ.
+- Trang quản trị nhỏ. (Khôi phục PIN: không làm lúc này.)
 - PWA, tối ưu điện thoại.
 
 **Giai đoạn 4 — Mở rộng (khi cần)**

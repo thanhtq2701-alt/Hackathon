@@ -1924,10 +1924,15 @@
       padding-bottom: .5rem;
     }
 
-    /* Confirm button hint after Stage 1 reveal - appears on the answer side */
-    .card.choice-card.revealed .card-back.tarot-front-design .choice-answer-content::after,
-    .card.choice-card.floating:not(.confirmed) .card-back.tarot-front-design .choice-answer-content::after {
-      content: 'Tap again to confirm';
+    /* Confirm button hint after Stage 1 reveal - appears on the answer side.
+       A real element (not ::after content) so app/i18n.js can translate it. */
+    .choice-tap-hint {
+      display: none;
+    }
+
+    .card.choice-card.revealed .card-back.tarot-front-design .choice-tap-hint,
+    .card.choice-card.floating:not(.confirmed) .card-back.tarot-front-design .choice-tap-hint {
+      display: block;
       position: absolute;
       bottom: 1rem;
       left: 50%;
@@ -2692,8 +2697,8 @@
         padding: .6rem !important;
       }
 
-      .card.choice-card.revealed .card-back.tarot-front-design .choice-answer-content::after,
-      .card.choice-card.floating:not(.confirmed) .card-back.tarot-front-design .choice-answer-content::after {
+      .card.choice-card.revealed .card-back.tarot-front-design .choice-tap-hint,
+      .card.choice-card.floating:not(.confirmed) .card-back.tarot-front-design .choice-tap-hint {
         bottom: .4rem;
       }
 
