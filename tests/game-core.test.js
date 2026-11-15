@@ -142,13 +142,14 @@ test('the end-screen summary keeps the three biggest applied changes in turn ord
   ]);
 });
 
-test('offering to resign ends the run only when Approval stays under 50', function () {
+test('offering to resign ends the run only when Approval is under 50 as you offer it', function () {
   const revolution = arcById('revolution');
   const resign = revolution.acts.flatMap(act => act.choices).find(choice => choice.resignation);
 
+  // 45 on screen: "If Approval is below 50 they accept", even though the option itself adds Approval.
   const accepted = core.createInitialState(() => 0.5);
   accepted.activeArc = revolution;
-  accepted.bars.publicApproval = 30;
+  accepted.bars.publicApproval = 45;
   core.applyChoice(accepted, resign, 'arc', true, 'Revolution');
   assert.equal(accepted.resigned, true);
   assert.deepEqual(core.advanceArc(accepted, resign), { end: true });
@@ -156,11 +157,31 @@ test('offering to resign ends the run only when Approval stays under 50', functi
 
   const refused = core.createInitialState(() => 0.5);
   refused.activeArc = revolution;
-  refused.bars.publicApproval = 45;
+  refused.bars.publicApproval = 50;
   core.applyChoice(refused, resign, 'arc', true, 'Revolution');
   assert.equal(refused.resigned, false);
   assert.deepEqual(core.advanceArc(refused, resign), { finished: true });
   assert.equal(refused.activeArc, null);
+});
+
+test('every Revolution option whose story says you leave office ends the run with The Resignation', function () {
+  const revolution = arcById('revolution');
+  const leaving = revolution.acts.flatMap(act => act.choices).filter(choice => choice.leavesOffice);
+  assert.equal(leaving.length, 15);
+  leaving.forEach(choice => {
+    const state = core.createInitialState(() => 0.5);
+    state.activeArc = revolution;
+    state.bars.publicApproval = 90; // no vote: you simply leave
+    core.applyChoice(state, choice, 'arc', true, 'Revolution');
+    assert.deepEqual(core.advanceArc(state, choice), { end: true }, choice.text);
+    assert.equal(core.resolveEnding(state).title, 'The Resignation', choice.text);
+  });
+  // Staying options in the same acts do not end the run.
+  const stay = revolution.acts.flatMap(act => act.choices).find(choice => choice.text === 'Change your mind and stay');
+  const state = core.createInitialState(() => 0.5);
+  state.activeArc = revolution;
+  core.applyChoice(state, stay, 'arc', true, 'Revolution');
+  assert.deepEqual(core.advanceArc(state, stay), { finished: true });
 });
 
 test('during the Revolution a collapse of the Economy removes you', function () {

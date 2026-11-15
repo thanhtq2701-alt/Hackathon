@@ -138,8 +138,11 @@
     const before = Object.assign({}, state.bars, { energy: state.energy });
     if (typeof choice.onSelect === 'function') choice.onSelect(state);
     applyDeltas(state, effective);
-    // Offering to resign: the people accept when Approval (after this choice) is below 50.
-    if (choice.resignation) state.resigned = state.bars.publicApproval < 50;
+    // Offering to resign: the people accept when Approval is below 50 when you offer it, the bar the
+    // player sees while choosing (balance_solo_2; before, the option's own +12 was counted first).
+    if (choice.resignation) state.resigned = before.publicApproval < 50;
+    // Options whose story says you leave office end the run with The Resignation (balance_solo_2).
+    if (choice.leavesOffice) state.resigned = true;
     const applied = {};
     Object.entries(APPLIED_KEYS).forEach(([key, stateKey]) => {
       const now = stateKey === 'energy' ? state.energy : state.bars[stateKey];
