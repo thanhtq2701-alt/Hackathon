@@ -17,7 +17,7 @@ Every decision you make ripples through the station's systems, leading to multip
 ## 🎮 Core Features
 
 ### 🛠️ The Decision Engine (Cards & Arcs)
-A run lasts 40 decisions. Each choice moves five visible bars and your Energy Core:
+A run lasts 20, 30 or 40 decisions (pick the length on the title screen, which also has a short How to play). Each choice moves five visible bars and your Energy Core:
 * 📢 **Public Approval:** your standing with the citizens.
 * 🌐 **International Tension:** how close the world is to conflict.
 * 💰 **Economic State:** the financial health of your station.
@@ -77,7 +77,7 @@ Requires [Node.js](https://nodejs.org/) 18 or newer. There are no packages to in
 1. Clone the repository and open its folder in PowerShell or Command Prompt.
 2. Run `npm start` (or `.\tools\start-online.cmd`).
 3. Open `http://localhost:8080/` in a modern browser.
-4. **Solo story:** choose Normal Mode and make decisions. Wallet and NFT actions are demonstrations, not real Sui transactions.
+4. **Solo story:** choose Normal Mode (click 20, 30 or 40 for the run length) and make decisions. Wallet and NFT actions are demonstrations, not real Sui transactions.
 5. **Fleet Council (team):** choose Fleet Council, enter a name and create a room. Friends join with the 4-letter code or the invite link. The host picks the world count, turns and vote time, adds bots if needed, and launches the match.
 
 Stop the server with `Ctrl+C`. The solo mode and Fleet Council practice also work from any static host (`.\tools\start-local.cmd` serves them on port 8000); online rooms need the Node server.

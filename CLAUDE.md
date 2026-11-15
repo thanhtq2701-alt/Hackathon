@@ -11,7 +11,7 @@
 
 One browser game, **The Oval**, with two modes, plain JavaScript, no build step and no npm dependencies. Call them modes of the same game, not separate games.
 
-- **Solo story** (`index.html`): solo card-based governance story. Rules in `app/game-core.js`, UI in `app/client.js`, content in `data/content.js`, styles in `web/styles.css`.
+- **Solo story** (`index.html`): solo card-based governance story, 20/30/40 turns. Rules in `app/game-core.js` (functions on the run state; content callbacks receive it as `gs`), UI in `app/client.js` (renders only: keep rules out of it), content in `data/content.js`, styles in `web/styles.css`.
 - **Fleet Council** (`world.html`): team multiplayer mode. Rules in `app/world-core.js` (pure, seeded), rooms/phases/bots in `app/world-room.js`, art in `app/world-art.js`, UI in `app/world-client.js`, content in `data/world-content.js`, styles in `web/world.css`, server in `server/server.js`.
 
 Browser scripts are classic scripts that attach to `window` (`TheOval*`, `FleetCouncil*`) and also export with `module.exports`, so the same files run in Node tests and on the server.

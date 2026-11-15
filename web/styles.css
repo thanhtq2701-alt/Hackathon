@@ -736,6 +736,61 @@
       font-family: sans-serif;
     }
 
+    .length-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem;
+      margin-top: .6rem;
+    }
+
+    .length-btn {
+      flex: 1 1 auto;
+      min-height: 34px;
+      padding: .35rem .5rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--gold);
+      font: .75rem sans-serif;
+      letter-spacing: .04em;
+      cursor: pointer;
+    }
+
+    .length-btn:hover,
+    .length-btn:focus-visible {
+      border-color: var(--gold);
+      background: var(--bg4);
+      outline: none;
+    }
+
+    .how-to {
+      width: 100%;
+      max-width: 480px;
+      margin-top: 1rem;
+      text-align: left;
+      font-family: sans-serif;
+      font-size: .8rem;
+      color: var(--text-mid);
+      position: relative;
+      z-index: 10;
+    }
+
+    .how-to summary {
+      cursor: pointer;
+      color: var(--gold);
+      letter-spacing: .08em;
+      padding: .4rem 0;
+    }
+
+    .how-to ol {
+      margin: .4rem 0 0;
+      padding-left: 1.2rem;
+      line-height: 1.55;
+    }
+
+    .how-to li { margin-bottom: .35rem; }
+    .how-to b { color: var(--text); font-weight: 600; }
+
     .cheat-hint {
       font-size: .7rem;
       color: var(--text-dim);

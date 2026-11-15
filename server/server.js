@@ -132,6 +132,7 @@ function createApp(options) {
   function recordOvalEvent(body) {
     if (body.event === 'oval_start') {
       count('oval.started');
+      if ([20, 30, 40].includes(Number(body.turns))) count('oval.length.' + Number(body.turns));
       return;
     }
     if (body.event !== 'oval_end') throw new HttpError(400, 'Unknown event.');
