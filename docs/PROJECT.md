@@ -30,14 +30,16 @@ Cập nhật lần cuối: 15/11/2026. Tài liệu cũ (tháng 10/2026) nằm tr
 | Phế truất trong cách mạng | Approval ≤ 0 hoặc Economy ≤ 10 trong tuyến Revolution → The Impeached |
 | Chấm dứt nhiệm kỳ | Nghĩa là **ván kết thúc** (chưa có cơ chế kế nhiệm) |
 | Tài khoản | PIN 4–8 số (tùy chọn) giữ tên; chỉ pilot có PIN được xếp hạng mọi thời đại |
+| Dữ liệu người chơi (chốt 15/11/2026) | Chỉ lưu tối thiểu: tên + PIN đã băm + xếp hạng (pilot có PIN), phòng đang chơi, **số đếm ẩn danh** (không tên/ID/IP) và **góp ý ẩn danh** (giữ 200 tin mới nhất). Trang `feedback.html#privacy` liệt kê mọi thứ được lưu; xóa dữ liệu khi có yêu cầu (chủ dự án xóa tay). Để sau: lịch sử trận/hồ sơ gắn tài khoản chỉ cho pilot có PIN, kèm nút xóa. Không làm: lưu email/số điện thoại/Zalo, công cụ phân tích bên thứ ba (Google Analytics…). Khôi phục PIN bằng **mã khôi phục một lần** hiện khi đăng ký (không cần dữ liệu cá nhân). Ghi hình playtest chỉ khi đã hỏi và được đồng ý. Thêm dữ liệu mới → cập nhật trang `feedback.html#privacy` |
 | Hạ tầng | Miễn phí: Render Web Service (free) + Upstash Redis (free); không mua tên miền |
 | Quy trình | Làm trên branch, commit; **hỏi chủ dự án trước mỗi lần push**; chỉ merge khi chủ dự án xác nhận. Đợt cân bằng sau dùng branch `balance_1`, `balance_2`… (chỉ khi được yêu cầu). `main` được bảo vệ (cấm xóa, cấm force push) |
 
 ## 3. Trạng thái hiện tại
 
 - **Live:** https://fleet-council.onrender.com — `/` The Oval, `/world.html` Fleet Council (online + luyện tập với bot). Free tier: ngủ sau 15 phút không ai vào (lần mở đầu chờ 30–60 giây).
-- **Lưu trữ:** Upstash Redis (Singapore) — phòng chơi lưu mỗi 15 giây và khi server tắt; tài khoản và bảng xếp hạng lưu vĩnh viễn.
-- **Kiểm thử:** 31 test (`tools\run-checks.cmd`): 7 cho The Oval, 24 cho Fleet Council.
+- **Lưu trữ:** Upstash Redis (Singapore) — phòng chơi lưu mỗi 15 giây và khi server tắt; tài khoản và bảng xếp hạng lưu vĩnh viễn; số đếm ẩn danh (`stats`) và góp ý (`feedback`) ghi cùng lượt lưu phòng, chỉ khi có thay đổi.
+- **Góp ý & thống kê:** trang `/feedback.html` (link từ cả hai game) — gửi góp ý ẩn danh + mục "What this game stores". Số đếm xem ở `/api/stats`; góp ý đọc trong Upstash (key `fc:feedback`) hoặc `var/feedback.json` khi chạy local. The Oval đếm số ván bắt đầu/kết thúc, màn kết thúc, lượt kết thúc, thời lượng; Fleet Council đếm trận bắt đầu/kết thúc, số world, số lượt, số người thật, thời lượng (chỉ trận online). Trận bỏ dở = bắt đầu − kết thúc.
+- **Kiểm thử:** 32 test (`tools\run-checks.cmd`): 7 cho The Oval, 25 cho Fleet Council và server.
 - **Công cụ mô phỏng** (`tools/sim/`, chạy lại sau mỗi lần đổi số cân bằng; có seed nên cùng lệnh cho cùng kết quả):
   - `node tools/sim/fleet.js` — Fleet Council bot đấu bot bằng chính bot và luật của phòng thật; kịch bản `4v1`, `2v2`, `3w` (`--scenario`, `--matches`, `--turns`, `--seed`).
   - `node tools/sim/oval.js` — chạy chính mã The Oval trong Node (DOM giả, Math.random có seed), bấm chọn thẻ như người chơi; chiến thuật `random`, `balanced`, `approval` (`--strategy`, `--games`, `--seed`).
@@ -88,8 +90,7 @@ Mười lỗi trong `old/THE-OVAL-LOI-HE-THONG-VA-CHU-TRINH-KHAC-PHUC.txt` và `
 4. **Web3 / Sui:** giữ demo, bỏ, hay tích hợp thật sau này?
 5. **Ngân sách:** giữ hoàn toàn miễn phí, hay chấp nhận ~7 USD/tháng để server không ngủ khi có người chơi đều?
 6. **Playtest:** ai chơi thử, bao nhiêu nhóm, khi nào; có ghi hình không (cần người chơi đồng ý).
-7. **Dữ liệu người dùng:** người chơi là học sinh (có thể dưới 18 tuổi) — chỉ lưu tên + PIN đã băm; nếu thêm thống kê thì chỉ số đếm ẩn danh.
-8. **Thành viên nhóm Auraa** và đóng góp của từng người (cần nếu dùng cho portfolio).
+7. **Thành viên nhóm Auraa** và đóng góp của từng người (cần nếu dùng cho portfolio).
 
 ## 7. Lộ trình phát triển
 
@@ -98,7 +99,7 @@ Mười lỗi trong `old/THE-OVAL-LOI-HE-THONG-VA-CHU-TRINH-KHAC-PHUC.txt` và `
 **Giai đoạn 0 — Nền móng (~1 tuần)**
 - ~~Đưa công cụ mô phỏng bot vào repo (`tools/sim/`)~~ — đã làm (xem mục 3).
 - GitHub Actions tự chạy test khi mở PR.
-- Nút "Góp ý" trong game + thống kê ẩn danh (thời lượng trận, màn kết thúc, chỗ bỏ cuộc) lưu dạng số đếm trong Upstash.
+- ~~Nút "Góp ý" trong game + thống kê ẩn danh lưu dạng số đếm trong Upstash~~ — đã làm (xem mục 3).
 - Theo dõi giới hạn Upstash và Render free.
 
 **Giai đoạn 1 — Playtest & người mới (2–3 tuần)**
@@ -114,9 +115,9 @@ Mười lỗi trong `old/THE-OVAL-LOI-HE-THONG-VA-CHU-TRINH-KHAC-PHUC.txt` và `
 - Kết nối hai chế độ: kết quả The Oval mở khóa danh hiệu/giao diện trong hồ sơ pilot.
 
 **Giai đoạn 3 — Cộng đồng (khi có người chơi đều)**
-- Mùa xếp hạng; lịch sử trận và hồ sơ pilot.
+- Mùa xếp hạng; lịch sử trận và hồ sơ pilot (chỉ pilot có PIN, có nút xóa — xem quyết định "Dữ liệu người chơi").
 - Chat tự do chỉ khi có công cụ chặn/báo cáo.
-- Khôi phục PIN và trang quản trị nhỏ.
+- Khôi phục PIN bằng mã khôi phục một lần (không lưu email/số điện thoại) và trang quản trị nhỏ.
 - PWA, tối ưu điện thoại.
 
 **Giai đoạn 4 — Mở rộng (khi cần)**

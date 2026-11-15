@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback · The Oval &amp; Fleet Council</title>
+  <meta name="description" content="Send feedback about The Oval and Fleet Council, and see what the game stores about players.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@500;700;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="web/world.css">
+  <style>
+    .feedback-page { max-width: 720px; margin: 0 auto; display: grid; gap: 1rem; }
+    .feedback-page textarea { min-height: 140px; resize: vertical; line-height: 1.5; }
+    .feedback-page ul { margin: .25rem 0 .75rem; padding-left: 1.2rem; color: var(--text-mid); }
+    .feedback-page li { margin-bottom: .35rem; }
+    .feedback-page li b { color: var(--text); }
+    .feedback-form { display: grid; gap: .75rem; }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html">THE OVAL</a>
+    <nav class="topnav">
+      <a href="world.html" class="link-muted">Fleet Council</a>
+    </nav>
+  </header>
+
+  <main class="feedback-page">
+    <article class="panel">
+      <h1>Feedback</h1>
+      <p class="lead">Something confusing, unfair, broken or fun? Tell us. Every message is read.</p>
+      <form id="feedback-form" class="feedback-form">
+        <label class="field">About
+          <select id="game">
+            <option value="oval">The Oval (solo story)</option>
+            <option value="fleet">Fleet Council (team game)</option>
+            <option value="other">Something else</option>
+          </select>
+        </label>
+        <label class="field">Message
+          <textarea id="text" maxlength="500" required placeholder="What happened, and what did you expect?"></textarea>
+        </label>
+        <p class="note">Feedback is anonymous. Please don't write your real name, phone number, email or other personal details.</p>
+        <div class="row">
+          <button type="submit" class="btn primary">Send feedback</button>
+          <span id="count" class="note">0 / 500</span>
+        </div>
+        <p id="status" class="note" role="status" aria-live="polite"></p>
+      </form>
+    </article>
+
+    <article class="panel" id="privacy">
+      <h2>What this game stores</h2>
+      <ul>
+        <li><b>Pilot accounts</b>, only if you choose a PIN in Fleet Council: the pilot name, a scrambled (hashed) form of the PIN (the PIN itself is never stored), when the name was created, and your ranking (EXP, matches, wins, raids won).</li>
+        <li><b>Online rooms</b>: the names in the room and the match in progress. A room is removed after two hours without activity.</li>
+        <li><b>Anonymous play counters</b>: for example how many runs ended with each ending, after how many turns and roughly how long, and the settings of finished matches. They contain no names, no IDs and no IP addresses.</li>
+        <li><b>Feedback messages</b>: the text, which game it is about and the day it was sent. Only the newest 200 are kept.</li>
+        <li><b>On your device only</b>: your browser remembers your last pilot name and your offline practice ranking, and, while the tab is open, the room you are in so you can rejoin it.</li>
+      </ul>
+      <p class="note">Not stored: email, phone number, real name, IP address or location. There are no cookies and no third-party analytics. The Sui wallet and NFT buttons are demos: nothing is sent or recorded. The game runs on Render and keeps its data in Upstash Redis; these hosts may keep short technical logs.</p>
+      <h4>Deleting your data</h4>
+      <p class="note">Want your pilot (name, PIN and ranking) or one of your messages deleted? Send a feedback message with the pilot name and what to delete, and the project owner will remove it by hand.</p>
+    </article>
+  </main>
+
+  <script>
+    (function () {
+      const ONLINE = 'https://fleet-council.onrender.com/feedback.html';
+      const form = document.getElementById('feedback-form');
+      const text = document.getElementById('text');
+      const status = document.getElementById('status');
+      const button = form.querySelector('button');
+      const show = (message, kind) => { status.textContent = message; status.className = 'note' + (kind ? ' ' + kind : ''); };
+      text.addEventListener('input', () => { document.getElementById('count').textContent = text.value.length + ' / 500'; });
+      form.addEventListener('submit', async event => {
+        event.preventDefault();
+        if (!/^https?:$/.test(location.protocol)) {
+          show('Feedback needs the online server. Open ' + ONLINE, 'warn');
+          return;
+        }
+        button.disabled = true;
+        try {
+          const response = await fetch('api/feedback', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ game: document.getElementById('game').value, text: text.value })
+          });
+          const reply = await response.json().catch(() => ({}));
+          if (response.ok) {
+            text.value = '';
+            document.getElementById('count').textContent = '0 / 500';
+            show('Thank you! Your message was sent.', 'ok');
+          } else {
+            show(reply.error || 'Could not send. Feedback needs the online server: ' + ONLINE, 'warn');
+          }
+        } catch (error) {
+          show('Could not send. Feedback needs the online server: ' + ONLINE, 'warn');
+        } finally {
+          button.disabled = false;
+        }
+      });
+    })();
+  </script>
+</body>
+
+</html>
