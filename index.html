@@ -45,15 +45,27 @@
           <p>Explore all the different endings, cards, and classified story files.</p>
         </div>
       </div>
-      <details class="how-to">
-        <summary>How to play</summary>
-        <ol>
+      <details class="how-to guide">
+        <summary>Cách chơi · How to play</summary>
+        <div class="guide-lang" role="group" aria-label="Language">
+          <button type="button" data-guide-lang="vi" aria-pressed="true">Tiếng Việt</button>
+          <button type="button" data-guide-lang="en" aria-pressed="false">English</button>
+        </div>
+        <ol data-guide-text="vi" lang="vi">
+          <li><b>Mỗi lượt một thẻ.</b> Chạm vào một lựa chọn để lật xem, chạm lần nữa để xác nhận. Thẻ sẽ hiện đúng mức thay đổi thực sự.</li>
+          <li><b>Giữ cân bằng năm chỉ số:</b> Public Approval (dân ủng hộ), Interstellar Tension (căng thẳng với các thuộc địa khác, càng thấp càng an toàn), Economic State (kinh tế), State Control (quyền kiểm soát) và Party Loyalty (đảng ủng hộ). Chỉ số nhấp nháy đỏ khi đang nguy hiểm.</li>
+          <li><b>Để ý Energy Core.</b> Lựa chọn có thể tốn hoặc hồi Energy, mỗi lượt tự hồi +1. Về 0 là trạm sụp đổ và ván kết thúc (The Lazarus Protocol).</li>
+          <li><b>Khủng hoảng luôn báo trước.</b> Khi Approval hoặc kinh tế sụp đổ, bạn có một lượt để gỡ trước khi bị phạt. Party Loyalty dưới 10 suốt bốn lượt thì chính đảng của bạn sẽ phế truất bạn.</li>
+          <li><b>Tuyến truyện</b> (chiến tranh, bê bối, cách mạng, bài phát biểu chia tay) tự mở khi đủ điều kiện và dẫn dắt ván chơi một thời gian.</li>
+          <li><b>Chọn 20, 30 hoặc 40 lượt.</b> Cuối ván, các chỉ số và lựa chọn của bạn quyết định một trong 12 màn kết thúc; Moral Profile cho thấy lựa chọn của bạn nói gì về bạn.</li>
+        </ol>
+        <ol data-guide-text="en" lang="en" hidden>
           <li><b>One card per turn.</b> Tap an option to reveal it, tap again to confirm. The card then shows what actually changed.</li>
-          <li><b>Keep five bars in balance:</b> Public Approval, International Tension (lower is safer), Economic State, State Control and Party Loyalty. A bar flashes red when it is in danger.</li>
+          <li><b>Keep five bars in balance:</b> Public Approval, Interstellar Tension (lower is safer), Economic State, State Control and Party Loyalty. A bar flashes red when it is in danger.</li>
           <li><b>Watch the Energy Core.</b> Choices spend or restore it and it recovers +1 each turn. At 0 the station collapses and the run ends (The Lazarus Protocol).</li>
           <li><b>Crises give one warning.</b> If Approval or the Economy collapses you get one turn to recover before the penalty. Party Loyalty under 10 for four turns and your own party removes you.</li>
           <li><b>Story arcs</b> (war, scandal, revolution, the final address) take over when their conditions are met.</li>
-          <li><b>Twelve endings.</b> Your final bars and choices decide the ending, and the Moral Profile shows what your decisions say about you.</li>
+          <li><b>Choose 20, 30 or 40 turns.</b> At the end your bars and choices decide one of twelve endings, and the Moral Profile shows what your decisions say about you.</li>
         </ol>
       </details>
       <div class="cheat-hint">Press <strong style="color:var(--gold-dim)">F</strong> at any time to enter a cheat code
@@ -212,6 +224,7 @@
   <script src="app/audio.js"></script>
   <script src="app/game-core.js"></script>
   <script src="app/client.js"></script>
+  <script src="app/guide.js"></script>
 </body>
 
 </html>

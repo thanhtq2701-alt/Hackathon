@@ -342,15 +342,36 @@
           <div class="hero-art">${Art.planetScene(demo)}</div>
         </div>
         <div class="home-grid">
-          <article class="panel">
-            <h2>How a turn works</h2>
-            <ol class="steps">
-              <li><b>Crisis.</b> Each world draws a situation with 3–4 option cards. Options are balanced: every card has a cost and a gain.</li>
-              <li><b>Vote.</b> Every pilot has one vote. Most votes wins; a tie is settled by a fair draw.</li>
-              <li><b>Build &amp; harvest.</b> Buildings fill their storage each turn. Harvest for gold, ore, EXP and a chance at special cards.</li>
-              <li><b>Raid or aid.</b> Propose a raid on a rival world — it launches only if your crew agrees — or send them supplies.</li>
-            </ol>
-            <p class="note">All worlds start equal: every stat at 50, 50 gold, 50 ore, 3 ships.</p>
+          <article class="panel guide">
+            <div class="guide-head">
+              <h2>Cách chơi · How a turn works</h2>
+              <div class="guide-lang" role="group" aria-label="Language">
+                <button type="button" data-guide-lang="vi" aria-pressed="true">Tiếng Việt</button>
+                <button type="button" data-guide-lang="en" aria-pressed="false">English</button>
+              </div>
+            </div>
+            <div data-guide-text="vi" lang="vi">
+              <ol class="steps">
+                <li><b>Tình huống.</b> Mỗi world nhận một tình huống với 3–4 lá lựa chọn. Lá nào cũng có cái được và cái mất; khoảng một phần ba là khủng hoảng, chọn lá nào cũng thiệt một chút.</li>
+                <li><b>Bỏ phiếu.</b> Mỗi pilot một phiếu, lá nhiều phiếu nhất thắng. Hòa tuyệt đối thì lấy trung bình hiệu ứng các lá hòa; không ai bầu thì dùng lá mặc định.</li>
+                <li><b>Xây và thu hoạch.</b> Công trình tích dần vào kho mỗi lượt. Thu hoạch để lấy vàng, quặng, EXP và cơ hội nhận thẻ đặc biệt. Command Core giới hạn cấp của mọi công trình khác.</li>
+                <li><b>Kế hoạch của đội.</b> Xây, đặt tàu, raid và viện trợ đều tiêu tài nguyên chung nên cả đội bỏ phiếu: thông qua khi Yes nhiều hơn No và ít nhất nửa đội đồng ý; im lặng không chặn.</li>
+                <li><b>Raid hay viện trợ.</b> Raid thắng lấy được nhiều vàng và quặng của đối thủ; bên thua được bảo vệ một lượt và được cộng sức tấn công để phục thù. Viện trợ gửi 20 nhận 30, và bên nhận không được raid bên gửi trong 2 lượt.</li>
+                <li><b>Thắng trận.</b> Hết lượt, world có Power cao nhất thắng (chỉ số, tài nguyên, tàu và công trình). Mỗi pilot còn có EXP riêng trên bảng xếp hạng.</li>
+              </ol>
+              <p class="note">Mọi world bắt đầu như nhau: mọi chỉ số 50, 50 vàng, 50 quặng, 3 tàu.</p>
+            </div>
+            <div data-guide-text="en" lang="en" hidden>
+              <ol class="steps">
+                <li><b>Crisis.</b> Each world draws a situation with 3–4 option cards. Every card has a gain and a cost; about a third are crises where every option loses something.</li>
+                <li><b>Vote.</b> Every pilot has one vote and the most votes wins. An exact tie takes the average of the tied options; if nobody votes, the default option is used.</li>
+                <li><b>Build &amp; harvest.</b> Buildings fill their storage every turn. Harvest for gold, ore, EXP and a chance at a special card. The Command Core caps the level of every other building.</li>
+                <li><b>Crew plans.</b> Building, ordering ships, raids and aid spend the world's shared resources, so the crew votes: a plan passes with more yes than no and at least half the crew saying yes; silence does not block it.</li>
+                <li><b>Raid or aid.</b> A winning raid takes a big share of the rival's gold and ore; the loser is protected for a turn and gets a revenge bonus. Aid sends 20 and arrives as 30, and the receiver cannot raid the giver for 2 turns.</li>
+                <li><b>Winning.</b> After the last turn the world with the highest Power wins (stats, resources, ships and buildings). Every pilot also earns EXP for the ranking.</li>
+              </ol>
+              <p class="note">All worlds start equal: every stat at 50, 50 gold, 50 ore, 3 ships.</p>
+            </div>
           </article>
           <article class="panel">
             <h2>Pilot ranking</h2>

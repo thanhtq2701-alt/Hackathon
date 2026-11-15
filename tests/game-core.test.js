@@ -98,7 +98,7 @@ test('root web entry point references existing organized assets', function () {
     .map(function (reference) { return reference.match(/="([^"]+)"/)[1]; })
     .filter(function (reference) { return /\.(?:js|css)$/.test(reference); });
 
-  assert.equal(localAssets.length, 5);
+  assert.equal(localAssets.length, 6);
   localAssets.forEach(function (asset) {
     assert.ok(fs.existsSync(path.join(repositoryRoot, asset)), 'Missing web asset: ' + asset);
   });

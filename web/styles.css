@@ -789,6 +789,30 @@
     }
 
     .how-to li { margin-bottom: .35rem; }
+    .guide [hidden] { display: none; }
+
+    .guide-lang {
+      display: inline-flex;
+      gap: .3rem;
+      margin: .2rem 0 .3rem;
+    }
+
+    .guide-lang button {
+      min-height: 30px;
+      padding: .25rem .7rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-mid);
+      font: .75rem sans-serif;
+      cursor: pointer;
+    }
+
+    .guide-lang button[aria-pressed="true"] {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: var(--bg4);
+    }
     .how-to b { color: var(--text); font-weight: 600; }
 
     .cheat-hint {
