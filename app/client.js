@@ -768,7 +768,12 @@ const TheOvalCore = window.TheOvalCore;
       const ending = TheOvalCore.resolveEnding(gs, choiceOverride);
       sendStat({ event: 'oval_end', ending: ending.title, turn: gs.turn, minutes: (Date.now() - runStartedAt) / 60000 });
       const axes = TheOvalCore.moralAxes(gs);
-      const top5 = gs.definingChoices.slice(-5);
+      const summary = TheOvalCore.runSummary(gs);
+      // Same good/bad reading as the result flash after each choice.
+      const changeHtml = applied => Object.entries(applied).map(([k, d]) => {
+        const good = (k === 'approval' || k === 'party' || k === 'eco' || k === 'energy') ? d > 0 : d < 0;
+        return `<span class="${good ? 'good' : 'bad'}">${BAR_LABELS[k]} ${d > 0 ? '+' : ''}${d}</span>`;
+      }).join('');
       end.innerHTML = `
     <div class="end-header">
       <span class="end-seal">${ending.emoji}</span>
@@ -779,7 +784,8 @@ const TheOvalCore = window.TheOvalCore;
     <div class="end-profile">${ending.profile}</div>
     <div class="section-label" style="animation:endReveal .6s .22s ease both">Moral Profile</div>
     <div class="axes-grid">${axes.map(a => `<div class="axis-row"><div class="axis-labels"><span>${a.left}</span><span>${a.right}</span></div><div class="axis-track"><div class="axis-marker" id="ax-${a.id}" style="left:50%"></div></div></div>`).join('')}</div>
-    <div class="defining-wrap"><div class="section-label">Defining Decisions</div><div class="defining-list">${top5.map(d => `<div class="defining-item"><strong>${d.topic} · ${d.card}</strong><br>"${d.choice}"</div>`).join('')}</div></div>
+    <div class="defining-wrap"><div class="section-label">Turning Points</div><div class="defining-list">${summary.turningPoints.map(d => `<div class="defining-item"><span class="defining-turn">Turn ${d.turn}</span><strong>${d.topic} · ${d.card}</strong><br>"${d.choice}"<div class="defining-changes">${changeHtml(d.applied)}</div></div>`).join('') || '<div class="defining-item">No choice moved the bars this run.</div>'}</div></div>
+    <div class="defining-wrap"><div class="section-label">Story Arcs Met</div><div class="arc-list">${summary.arcs.map(a => `<div class="defining-item">${a.name}${a.completed ? '' : ' <em>Unfinished</em>'}</div>`).join('') || '<div class="defining-item">No story arc this run.</div>'}</div></div>
     <div class="end-btns">
       <button class="end-btn" onclick="restartGame()">Play Again</button>
       <button class="end-btn" style="border-color: #6fbcf0; color: #6fbcf0;" onclick="mockMintNFT()">💠 Mint Legacy NFT (demo)</button>

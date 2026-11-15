@@ -118,6 +118,30 @@ test('a confirmed choice reports the change actually applied, not the raw card n
   assert.deepEqual(state.definingChoices[0], { topic: 'ECONOMY', card: 'Budget', choice: 'Cut taxes' });
 });
 
+test('the end-screen summary keeps the three biggest applied changes in turn order and every arc met', function () {
+  const state = core.createInitialState(() => 0.5);
+  const play = (turn, choice) => { state.turn = turn; return core.applyChoice(state, choice, 'economy', false, 'Card ' + turn).applied; };
+  play(1, { text: 'Small', approval: 2 });
+  const big = play(2, { text: 'Big', approval: 9, eco: -9 });
+  play(3, { text: 'Nothing', empathy: 5 });              // moves no bar: never a turning point
+  play(4, { text: 'Medium', tension: 6 });
+  state.bars.publicApproval = 99;
+  assert.deepEqual(play(5, { text: 'Capped', approval: 9, party: 4 }), { approval: 1, party: 4 }); // size 5, not 13
+  play(6, { text: 'Large', unrest: -8, party: -8 });
+
+  const summary = core.runSummary(state);
+  assert.deepEqual(summary.turningPoints.map(t => [t.turn, t.choice, t.size]), [[2, 'Big', 18], [4, 'Medium', 6], [6, 'Large', 16]]);
+  assert.deepEqual(summary.turningPoints[0].applied, big);
+  assert.equal(summary.turningPoints[0].topic, 'ECONOMY');
+
+  state.arcsTriggered = ['revolution', 'the_scandal'];
+  state.arcsCompleted = ['the_scandal'];
+  assert.deepEqual(core.runSummary(state).arcs, [
+    { id: 'revolution', name: 'The Revolution', completed: false },
+    { id: 'the_scandal', name: 'The Scandal', completed: true }
+  ]);
+});
+
 test('offering to resign ends the run only when Approval stays under 50', function () {
   const revolution = arcById('revolution');
   const resign = revolution.acts.flatMap(act => act.choices).find(choice => choice.resignation);
@@ -383,6 +407,11 @@ test('the solo rules messages and endings read in Vietnamese', function () {
   const wage = core.resolveAct(war, { bars: { internationalTension: 70, publicApproval: 60 } }).choices[0];
   const ending = core.resolveEnding(core.createInitialState(() => 0.5), wage);
   assert.equal(i18n.t(ending.title), 'Kẻ hiếu chiến');
+  // End-screen summary.
+  ['Turning Points', 'Story Arcs Met', 'Unfinished', 'No choice moved the bars this run.', 'No story arc this run.']
+    .forEach(text => assert.ok(i18n.has(text), text));
+  assert.equal(i18n.t('Turn 12'), 'Lượt 12');
+  assert.equal(i18n.t('ECONOMY · Budget'), i18n.t('ECONOMY') + ' · ' + i18n.t('Budget'));
   assert.ok(i18n.has(ending.narrative.split('</b>')[0].replace('<b>', '')));
   i18n._setLangForTests('en');
   assert.equal(i18n.t('The Tyrant'), 'The Tyrant');

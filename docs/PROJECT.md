@@ -43,7 +43,8 @@ Cập nhật lần cuối: 15/11/2026. Tài liệu cũ (tháng 10/2026) nằm tr
 - **Lưu trữ:** Upstash Redis (Singapore) — phòng chơi lưu mỗi 15 giây và khi server tắt; tài khoản và bảng xếp hạng lưu vĩnh viễn; số đếm ẩn danh (`stats`) và góp ý (`feedback`) ghi cùng lượt lưu phòng, chỉ khi có thay đổi.
 - **Ngôn ngữ:** toàn bộ game (giao diện + nội dung cả hai chế độ, trang góp ý) có tiếng Việt và tiếng Anh; mặc định tiếng Việt, nút Tiếng Việt / English ở màn hình chính chơi đơn, trang chủ Fleet Council và trang góp ý; lựa chọn nhớ trên máy. Cách làm: game vẫn viết bằng tiếng Anh, `app/i18n.js` dịch chữ khi hiện lên trang bằng từ điển `data/vi-*.js` (khoảng 2.100 đoạn nội dung + giao diện + mẫu cho câu có số/tên). Test bắt buộc mọi nội dung và mọi thông báo của trận bot có bản tiếng Việt. Thuật ngữ: thế giới, phi công, đội, đột kích, viện trợ, Sức mạnh, Lõi Chỉ huy; chơi đơn: Chỉ huy trưởng, thuộc địa, Dân ủng hộ, Căng thẳng liên sao, Quyền kiểm soát, Lòng trung thành của Đảng, Lõi năng lượng.
 - **Góp ý & thống kê:** trang `/feedback.html` (link từ cả hai chế độ) — gửi góp ý ẩn danh + mục "What this game stores". Số đếm xem ở `/api/stats`; góp ý đọc trong Upstash (key `fc:feedback`) hoặc `var/feedback.json` khi chạy local. The Oval đếm số ván bắt đầu/kết thúc, màn kết thúc, lượt kết thúc, thời lượng; Fleet Council đếm trận bắt đầu/kết thúc, số world, số lượt, số người thật, thời lượng (chỉ trận online). Trận bỏ dở = bắt đầu − kết thúc.
-- **Kiểm thử:** 50 test (`tools\run-checks.cmd`): 23 cho chế độ chơi đơn, 27 cho Fleet Council và server.
+- **Kiểm thử:** 51 test (`tools\run-checks.cmd`): 24 cho chế độ chơi đơn, 27 cho Fleet Council và server.
+- **Tóm tắt cuối ván (chơi đơn):** màn kết thúc hiện "Bước ngoặt" (3 lựa chọn làm các chỉ số và Lõi năng lượng thay đổi nhiều nhất, tính trên thay đổi đã áp dụng, xếp theo lượt) thay cho 5 lựa chọn cuối cùng như trước, và "Tuyến truyện đã gặp" (ghi "chưa xong" nếu ván kết thúc giữa tuyến). Luật trong `runSummary` (`app/game-core.js`).
 - **Tóm tắt sau trận (Fleet Council):** màn kết thúc có khung "Tóm tắt trận": bước ngoặt của thế giới mình (quyết định hội đồng làm thay đổi nhiều nhất, tính trên thay đổi đã áp dụng), trận đột kích thắng lấy được nhiều vàng + quặng nhất, và đóng góp của từng phi công trong đội (phiếu, kế hoạch được thực hiện, thẻ đã dùng, số lần đột kích tham gia). Nút "Sao chép tóm tắt" chép một đoạn chữ theo ngôn ngữ đang dùng để dán vào nhóm chat. Luật trong `matchSummary` (`app/world-core.js`), lưu ở `results.summary`.
 - **Cấu trúc code chế độ chơi đơn:** luật của một ván (áp lựa chọn, sang lượt, khủng hoảng, tuyến truyện, màn kết thúc) nằm trong `app/game-core.js` dưới dạng hàm nhận trạng thái ván; `app/client.js` chỉ hiển thị — giống cách Fleet Council tách `world-core.js` khỏi `world-client.js`.
 - **Công cụ mô phỏng** (`tools/sim/`, chạy lại sau mỗi lần đổi số cân bằng; có seed nên cùng lệnh cho cùng kết quả):
@@ -81,6 +82,7 @@ Cập nhật lần cuối: 15/11/2026. Tài liệu cũ (tháng 10/2026) nằm tr
 | #18 | Sửa tài liệu: số test (49), tên branch cân bằng trong lộ trình |
 | #19 | Chuẩn bị playtest: `docs/PLAYTEST.md`; sửa giao diện điện thoại (kế hoạch đội lên gần ô bỏ phiếu, bảng xếp hạng vừa màn 360px, dịch "Tap again to confirm", ô PIN); sửa tài liệu lệch |
 | #20 | Fleet Council: tóm tắt sau trận (bước ngoặt, trận đột kích lớn nhất, đóng góp từng phi công) + nút sao chép để chia sẻ; thêm số đếm kế hoạch được thực hiện và số lần đột kích tham gia (+1 test) |
+| #21 | Chơi đơn: màn kết thúc hiện 3 bước ngoặt (theo thay đổi đã áp dụng) và các tuyến truyện đã gặp (+1 test) |
 
 ## 5. Lỗi trong tài liệu cũ — đối chiếu
 
@@ -128,7 +130,7 @@ Còn mở: không có.
 - Nhóm bạn chơi thử (17/11/2026, xem `docs/PLAYTEST.md`): đo thời gian thật, chỗ khó hiểu, có muốn chơi lại không, trận 1v4 có thấy công bằng không. ~~Rà giao diện điện thoại~~ — đã làm (xem mục 3).
 - ~~Hướng dẫn trận đầu tiên~~ — đã làm: phần "Cách chơi" song ngữ ở cả hai chế độ, cộng **gợi ý trong ván/trận đầu** (`app/tips.js`): khung gợi ý ngắn hiện đúng lúc, từng cái một, có "Đã hiểu" / "Tắt gợi ý"; máy nhớ gợi ý đã xem; nút "Xem lại gợi ý" ở màn hình chính chơi đơn và trang chủ Fleet Council. Chơi đơn 5 gợi ý (chỉ số, thẻ đầu, kết quả đầu, cảnh báo khủng hoảng đầu, tuyến truyện đầu); Fleet Council 6 gợi ý (phòng chờ, bỏ phiếu, thu hoạch, kế hoạch đội, báo cáo lượt, đột kích từ lượt 2).
 - ~~Giao diện tiếng Việt~~ — đã làm: cả giao diện lẫn nội dung, hai chế độ (xem mục 3).
-- Tóm tắt sau trận: quyết định bước ngoặt, trận raid lớn, ai đóng góp gì; thẻ chia sẻ. Fleet Council đã làm (xem mục 3); còn chơi đơn: các lựa chọn bước ngoặt và tuyến truyện đã gặp ở màn kết thúc.
+- ~~Tóm tắt sau trận: quyết định bước ngoặt, trận raid lớn, ai đóng góp gì; thẻ chia sẻ~~ — đã làm cho cả hai chế độ (xem mục 3).
 - Cân bằng lại theo dữ liệu thật (branch `balance_solo_N` cho chơi đơn, `balance_multi_N` cho Fleet Council).
 
 **Giai đoạn 2 — Chiều sâu nội dung (1–2 tháng)**
