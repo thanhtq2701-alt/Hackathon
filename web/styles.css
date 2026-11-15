@@ -736,6 +736,33 @@
       font-family: sans-serif;
     }
 
+    .length-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem;
+      margin-top: .6rem;
+    }
+
+    .length-btn {
+      flex: 1 1 auto;
+      min-height: 34px;
+      padding: .35rem .5rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--gold);
+      font: .75rem sans-serif;
+      letter-spacing: .04em;
+      cursor: pointer;
+    }
+
+    .length-btn:hover,
+    .length-btn:focus-visible {
+      border-color: var(--gold);
+      background: var(--bg4);
+      outline: none;
+    }
+
     .cheat-hint {
       font-size: .7rem;
       color: var(--text-dim);

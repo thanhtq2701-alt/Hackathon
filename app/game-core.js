@@ -27,9 +27,11 @@
     return queue;
   }
 
-  function createInitialState(random = Math.random) {
+  // A run lasts 20, 30 or 40 turns (40 is the full story and the default).
+  function createInitialState(random = Math.random, maxTurns = RUN_TURNS) {
     return {
       turn: 1,
+      maxTurns: RUN_LENGTHS.includes(maxTurns) ? maxTurns : RUN_TURNS,
       bars: { publicApproval: 50, internationalTension: 30, economicState: 70, stateAuthority: 50, partyLoyalty: 60 },
       energy: 100,
       lowApprovalTurns: 0, lowEconomyTurns: 0, lowAuthorityTurns: 0, highTensionTurns: 0, lowLoyaltyTurns: 0,
@@ -109,6 +111,7 @@
   // `random` defaults to Math.random, so the page and the seeded simulator draw in the same order.
 
   const RUN_TURNS = 40;
+  const RUN_LENGTHS = [20, 30, 40];
   const LAZARUS = {
     text: 'CRITICAL FAILURE',
     outcome: 'ENDING: The Lazarus Protocol. Energy core depleted. The space station has collapsed. Preparing to extract Legacy Data...'
@@ -229,7 +232,7 @@
       return { end: true, override: LAZARUS, notices };
     }
     state.energy = Math.min(100, state.energy + 1); // passive energy gain each turn, capped at 100
-    if (state.turn >= RUN_TURNS && !state.activeArc) return { end: true, notices };
+    if (state.turn >= state.maxTurns && !state.activeArc) return { end: true, notices };
     if (state.bars.economicState <= 5) return { end: true, notices };
     state.turn++;
     if (checkFailSafes(state, notices)) return { end: true, notices };
@@ -395,6 +398,7 @@
   }
 
   root.TheOvalCore = {
+    RUN_LENGTHS,
     RUN_TURNS,
     advanceArc,
     applyChoice,

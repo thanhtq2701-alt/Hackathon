@@ -6641,7 +6641,7 @@ const CARDS = {
         ]
       },
       {
-        id: 'legacy', name: 'The Permanent Record', trigger: gs => gs.turn >= 40, acts: [
+        id: 'legacy', name: 'The Permanent Record', trigger: gs => gs.turn >= gs.maxTurns, acts: [
           {
             tag: 'ACT I', title: 'The Final Address',
             body: 'You are preparing your farewell speech to the nation. How will you define your time in office?',

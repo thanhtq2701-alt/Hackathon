@@ -208,6 +208,18 @@ test('a run ends after turn 40 unless a story arc is still running', function ()
   assert.equal(inArc.turn, 41);
 });
 
+test('a run can last 20, 30 or 40 turns and the Legacy arc opens on its last turn', function () {
+  assert.equal(core.createInitialState(() => 0.5).maxTurns, 40);
+  assert.equal(core.createInitialState(() => 0.5, 25).maxTurns, 40);
+
+  const short = core.createInitialState(() => 0.5, 20);
+  short.turn = 19;
+  assert.equal(core.nextTurn(short).arcStarted.id, 'legacy');
+  assert.equal(short.turn, 20);
+  short.activeArc = null; // the arc was played out
+  assert.equal(core.nextTurn(short).end, true);
+});
+
 test('story arcs: the Revolution rallies Approval, Convergence waits for turn 6, three arcs at most', function () {
   const revolt = core.createInitialState(() => 0.5);
   revolt.bars.stateAuthority = 20;

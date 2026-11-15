@@ -106,7 +106,7 @@ const TheOvalCore = window.TheOvalCore;
     }
 
     function cheatAddTurn() {
-      gs.turn = clamp(gs.turn + 1, 1, 40);
+      gs.turn = clamp(gs.turn + 1, 1, gs.maxTurns);
       updateHUD(true);
       updateCheatUI();
       showNotif("Executive Order: Time advanced.");
@@ -126,8 +126,8 @@ const TheOvalCore = window.TheOvalCore;
     let awaitingContinue = false;
     let pendingAdvance = null;
 
-    function initState() {
-      gs = TheOvalCore.createInitialState();
+    function initState(turns) {
+      gs = TheOvalCore.createInitialState(Math.random, turns);
       transitioning = false;
       awaitingContinue = false;
       pendingAdvance = null;
@@ -142,7 +142,8 @@ const TheOvalCore = window.TheOvalCore;
       const td = document.getElementById('turn-display');
       td.textContent = gs.turn;
       if (animate) { td.classList.remove('pop'); void td.offsetWidth; td.classList.add('pop'); }
-      document.getElementById('progress-fill').style.width = ((gs.turn - 1) / 40 * 100) + '%';
+      document.getElementById('turn-total').textContent = ' / ' + gs.maxTurns;
+      document.getElementById('progress-fill').style.width = ((gs.turn - 1) / gs.maxTurns * 100) + '%';
 
       const mapKeys = { approval: 'publicApproval', tension: 'internationalTension', eco: 'economicState', unrest: 'stateAuthority', party: 'partyLoyalty' };
       ['approval', 'tension', 'eco', 'unrest', 'party'].forEach(k => {
@@ -840,7 +841,7 @@ const TheOvalCore = window.TheOvalCore;
                 <div class="gallery-card-title">${a.name}</div>
                 <div class="gallery-card-tag">${a.acts.length}-act arc</div>
                 <div class="gallery-card-desc" style="font-size: 0.8rem; margin: 8px 0;">
-                  <strong>Trigger Condition:</strong> ${a.id === 'convergence_route' ? 'From turn 6: International Tension above 80% for 3 turns (or 98%)' : a.id === 'the_scandal' ? 'Party Loyalty < 30%' : a.id === 'revolution' ? 'State Authority below 30% for 3 turns (or below 25%) while Approval is under 55%, or after turn 10, Approval below 10% for 3 turns' : a.id === 'legacy' ? 'Turn 40' : '—'}
+                  <strong>Trigger Condition:</strong> ${a.id === 'convergence_route' ? 'From turn 6: International Tension above 80% for 3 turns (or 98%)' : a.id === 'the_scandal' ? 'Party Loyalty < 30%' : a.id === 'revolution' ? 'State Authority below 30% for 3 turns (or below 25%) while Approval is under 55%, or after turn 10, Approval below 10% for 3 turns' : a.id === 'legacy' ? 'The last turn of the run (20, 30 or 40)' : '—'}
                 </div>
                 <div style="font-size: 0.75rem; color: var(--text-mid); display: flex; flex-direction: column; gap: 12px;">
                   ${a.acts.map(raw => TheOvalCore.resolveAct(raw, gs)).map((act, i) => `
@@ -953,11 +954,12 @@ const TheOvalCore = window.TheOvalCore;
         .catch(() => {});
     }
 
-    function startGame(mode) {
+    // turns: 20, 30 or 40 (the default, the full story).
+    function startGame(mode, turns) {
       if (mode !== 'normal') return;
-      initState();
+      initState(turns);
       runStartedAt = Date.now();
-      sendStat({ event: 'oval_start' });
+      sendStat({ event: 'oval_start', turns: gs.maxTurns });
       document.body.classList.add('in-game');
       document.getElementById('title-screen').style.display = 'none';
       const gs_screen = document.getElementById('game-screen');

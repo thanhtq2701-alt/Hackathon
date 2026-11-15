@@ -622,7 +622,7 @@ test('anonymous counters and feedback are kept without names and survive a resta
   const storage = tempStorage();
   const first = await startApp(storage);
   try {
-    assert.equal((await first.post('/api/stats', { event: 'oval_start' })).status, 200);
+    assert.equal((await first.post('/api/stats', { event: 'oval_start', turns: 20 })).status, 200);
     assert.equal((await first.post('/api/stats', { event: 'oval_end', ending: 'The Tyrant', turn: 40, minutes: 17 })).status, 200);
     assert.equal((await first.post('/api/stats', { event: 'oval_end', ending: '<b>made up</b>', turn: 'x' })).status, 200);
     assert.equal((await first.post('/api/stats', { event: 'anything' })).status, 400);
@@ -644,7 +644,7 @@ test('anonymous counters and feedback are kept without names and survive a resta
   try {
     const { counts } = await (await fetch(second.base + '/api/stats')).json();
     assert.deepEqual(counts, {
-      'oval.started': 1, 'oval.finished': 2, 'oval.ending.The Tyrant': 1, 'oval.ending.Other': 1,
+      'oval.started': 1, 'oval.length.20': 1, 'oval.finished': 2, 'oval.ending.The Tyrant': 1, 'oval.ending.Other': 1,
       'oval.turn.31-40': 1, 'oval.minutes.10-20': 1, 'fleet.started': 1
     });
     const saved = await storage.get('feedback');

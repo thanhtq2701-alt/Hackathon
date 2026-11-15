@@ -4,7 +4,7 @@
 // exactly like a player, and options greyed out by the low-Loyalty Party lock are skipped.
 //
 //   node tools/sim/oval.js                         every strategy, 100 runs each
-//   node tools/sim/oval.js --games 500 --strategy random --seed 7
+//   node tools/sim/oval.js --games 500 --strategy random --seed 7 --turns 20   (run length 20, 30 or 40)
 //
 // Strategies: random (any option), balanced (keep every bar near the middle),
 // approval (always take the biggest Approval gain).
@@ -137,11 +137,11 @@ function best(choices, rng, score) {
   return picks[Math.floor(rng() * picks.length)];
 }
 
-function playRun(strategy, seed) {
+function playRun(strategy, seed, turns) {
   const game = loadGame();
   const rng = mulberry32(seed);
   vm.runInContext('Math', game.context).random = mulberry32(seed ^ 0x5bd1e995);
-  game.context.startGame('normal');
+  game.context.startGame('normal', turns);
   game.flush();
   for (let n = 0; !game.ending; n++) {
     const options = game.options();
@@ -164,26 +164,26 @@ function pct(part, whole) {
   return (100 * part / whole).toFixed(1) + '%';
 }
 
-function runStrategy(strategy, games, seed) {
+function runStrategy(strategy, games, seed, turns) {
   const endings = {};
   const arcs = {};
   let early = 0;
   let turnSum = 0;
   let revolts = 0;
   for (let i = 0; i < games; i++) {
-    const run = playRun(strategy, seed + i);
+    const run = playRun(strategy, seed + i, turns);
     endings[run.ending] = (endings[run.ending] || 0) + 1;
     run.arcs.forEach(id => { arcs[id] = (arcs[id] || 0) + 1; });
-    if (run.turn < 40) early++;
+    if (run.turn < turns) early++;
     if (run.partyRevolt) revolts++;
     turnSum += run.turn;
   }
-  console.log(`\n== ${strategy}: ${games} runs, seed ${seed} ==`);
+  console.log(`\n== ${strategy}: ${games} runs of ${turns} turns, seed ${seed} ==`);
   console.log(`  Endings seen: ${Object.keys(endings).length}`);
   Object.entries(endings).sort((a, b) => b[1] - a[1])
     .forEach(([title, count]) => console.log(`    ${title.padEnd(24)} ${pct(count, games).padStart(6)}`));
   console.log(`  Arcs triggered: ${Object.entries(arcs).sort((a, b) => b[1] - a[1]).map(([id, c]) => id + ' ' + pct(c, games)).join(', ') || 'none'}`);
-  console.log(`  Ended before turn 40: ${pct(early, games)} (average last turn ${(turnSum / games).toFixed(1)})`);
+  console.log(`  Ended before turn ${turns}: ${pct(early, games)} (average last turn ${(turnSum / games).toFixed(1)})`);
   console.log(`  Removed by a party revolt: ${pct(revolts, games)}`);
 }
 
@@ -193,12 +193,13 @@ function main() {
   for (let i = 0; i < argv.length; i++) if (argv[i].startsWith('--')) args[argv[i].slice(2)] = argv[i + 1];
   const games = args.games ? Number(args.games) : 100;
   const seed = args.seed ? Number(args.seed) : 1;
+  const turns = args.turns ? Number(args.turns) : 40;
   const names = args.strategy ? [args.strategy] : Object.keys(STRATEGIES);
   names.forEach(name => {
     if (!STRATEGIES[name]) throw new Error('Unknown strategy ' + name + ' (use ' + Object.keys(STRATEGIES).join(', ') + ')');
   });
   const started = Date.now();
-  names.forEach(name => runStrategy(name, games, seed));
+  names.forEach(name => runStrategy(name, games, seed, turns));
   console.log(`\nDone in ${((Date.now() - started) / 1000).toFixed(1)} s.`);
 }
 

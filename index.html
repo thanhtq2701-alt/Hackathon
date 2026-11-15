@@ -29,7 +29,12 @@
       <div class="mode-cards">
         <div class="mode-card" onclick="startGame('normal')">
           <h3>Normal Mode</h3>
-          <p>40 decisions. Pure moral choices. Discover what your decisions say about you.</p>
+          <p>Pure moral choices. Discover what your decisions say about you. Pick a length:</p>
+          <div class="length-row">
+            <button class="length-btn" onclick="event.stopPropagation(); startGame('normal', 20)">20 turns</button>
+            <button class="length-btn" onclick="event.stopPropagation(); startGame('normal', 30)">30 turns</button>
+            <button class="length-btn" onclick="event.stopPropagation(); startGame('normal', 40)">40 turns</button>
+          </div>
         </div>
         <div class="mode-card" onclick="location.href='world.html'">
           <h3>Fleet Council</h3>
@@ -51,7 +56,7 @@
         <div class="hud-top">
           <div class="hud-left">
             <div class="turn-info">TURN <span class="turn-num" id="turn-display">1</span><span
-                style="color:var(--text-dim)"> / 40</span></div>
+                id="turn-total" style="color:var(--text-dim)"> / 40</span></div>
             <span id="arc-label-hud" class="arc-label" style="display:none;">ARC ACTIVE</span>
           </div>
           <div class="hud-right">
