@@ -26,6 +26,10 @@
           🔗 CONNECT SUI WALLET · DEMO
         </button>
       </div>
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" data-set-lang="vi">Tiếng Việt</button>
+        <button type="button" data-set-lang="en">English</button>
+      </div>
       <div class="mode-cards">
         <div class="mode-card" onclick="startGame('normal')">
           <h3>Normal Mode</h3>
@@ -46,20 +50,16 @@
         </div>
       </div>
       <details class="how-to guide">
-        <summary>Cách chơi · How to play</summary>
-        <div class="guide-lang" role="group" aria-label="Language">
-          <button type="button" data-guide-lang="vi" aria-pressed="true">Tiếng Việt</button>
-          <button type="button" data-guide-lang="en" aria-pressed="false">English</button>
-        </div>
+        <summary><span data-guide-text="vi">Cách chơi</span><span data-guide-text="en">How to play</span></summary>
         <ol data-guide-text="vi" lang="vi">
           <li><b>Mỗi lượt một thẻ.</b> Chạm vào một lựa chọn để lật xem, chạm lần nữa để xác nhận. Thẻ sẽ hiện đúng mức thay đổi thực sự.</li>
-          <li><b>Giữ cân bằng năm chỉ số:</b> Public Approval (dân ủng hộ), Interstellar Tension (căng thẳng với các thuộc địa khác, càng thấp càng an toàn), Economic State (kinh tế), State Control (quyền kiểm soát) và Party Loyalty (đảng ủng hộ). Chỉ số nhấp nháy đỏ khi đang nguy hiểm.</li>
-          <li><b>Để ý Energy Core.</b> Lựa chọn có thể tốn hoặc hồi Energy, mỗi lượt tự hồi +1. Về 0 là trạm sụp đổ và ván kết thúc (The Lazarus Protocol).</li>
-          <li><b>Khủng hoảng luôn báo trước.</b> Khi Approval hoặc kinh tế sụp đổ, bạn có một lượt để gỡ trước khi bị phạt. Party Loyalty dưới 10 suốt bốn lượt thì chính đảng của bạn sẽ phế truất bạn.</li>
+          <li><b>Giữ cân bằng năm chỉ số:</b> Dân ủng hộ, Căng thẳng liên sao (càng thấp càng an toàn), Kinh tế, Quyền kiểm soát và Lòng trung thành của Đảng. Chỉ số nhấp nháy đỏ khi đang nguy hiểm.</li>
+          <li><b>Để ý Lõi năng lượng.</b> Lựa chọn có thể tốn hoặc hồi năng lượng, mỗi lượt tự hồi +1. Về 0 là trạm sụp đổ và ván kết thúc (Giao thức Lazarus).</li>
+          <li><b>Khủng hoảng luôn báo trước.</b> Khi Dân ủng hộ hoặc Kinh tế sụp đổ, bạn có một lượt để gỡ trước khi bị phạt. Lòng trung thành của Đảng dưới 10 suốt bốn lượt thì chính Đảng sẽ phế truất bạn.</li>
           <li><b>Tuyến truyện</b> (chiến tranh, bê bối, cách mạng, bài phát biểu chia tay) tự mở khi đủ điều kiện và dẫn dắt ván chơi một thời gian.</li>
-          <li><b>Chọn 20, 30 hoặc 40 lượt.</b> Cuối ván, các chỉ số và lựa chọn của bạn quyết định một trong 12 màn kết thúc; Moral Profile cho thấy lựa chọn của bạn nói gì về bạn.</li>
+          <li><b>Chọn 20, 30 hoặc 40 lượt.</b> Cuối ván, các chỉ số và lựa chọn của bạn quyết định một trong 12 màn kết thúc; Hồ sơ đạo đức cho thấy lựa chọn của bạn nói gì về bạn.</li>
         </ol>
-        <ol data-guide-text="en" lang="en" hidden>
+        <ol data-guide-text="en" lang="en">
           <li><b>One card per turn.</b> Tap an option to reveal it, tap again to confirm. The card then shows what actually changed.</li>
           <li><b>Keep five bars in balance:</b> Public Approval, Interstellar Tension (lower is safer), Economic State, State Control and Party Loyalty. A bar flashes red when it is in danger.</li>
           <li><b>Watch the Energy Core.</b> Choices spend or restore it and it recovers +1 each turn. At 0 the station collapses and the run ends (The Lazarus Protocol).</li>
@@ -220,11 +220,14 @@
   <div id="notif"></div>
   <input id="cheat-input" placeholder="Enter cheat code…" onkeydown="handleCheat(event)" />
 
+  <script src="app/i18n.js"></script>
+  <script src="data/vi-common.js"></script>
+  <script src="data/vi-solo-ui.js"></script>
+  <script src="data/vi-solo-content.js"></script>
   <script src="data/content.js"></script>
   <script src="app/audio.js"></script>
   <script src="app/game-core.js"></script>
   <script src="app/client.js"></script>
-  <script src="app/guide.js"></script>
 </body>
 
 </html>

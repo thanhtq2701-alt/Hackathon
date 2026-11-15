@@ -98,7 +98,7 @@ test('root web entry point references existing organized assets', function () {
     .map(function (reference) { return reference.match(/="([^"]+)"/)[1]; })
     .filter(function (reference) { return /\.(?:js|css)$/.test(reference); });
 
-  assert.equal(localAssets.length, 6);
+  assert.equal(localAssets.length, 9);
   localAssets.forEach(function (asset) {
     assert.ok(fs.existsSync(path.join(repositoryRoot, asset)), 'Missing web asset: ' + asset);
   });
@@ -325,4 +325,59 @@ test('the last Convergence act depends on Tension and picks the matching ending'
   core.applyChoice(war, wage, 'arc', true, 'Ultimatum');
   assert.equal(war.impeached, true);
   assert.equal(core.resolveEnding(war, core.advanceArc(war, wage).override).title, 'The Impeached');
+});
+
+// ── Vietnamese (app/i18n.js + data/vi-*.js) ─────────────────────────────────
+
+const i18n = require('../app/i18n.js');
+require('../data/vi-common.js');
+require('../data/vi-solo-ui.js');
+require('../data/vi-solo-content.js');
+
+test('every solo story text has a Vietnamese translation', function () {
+  i18n._setLangForTests('vi');
+  const missing = [];
+  const check = text => { if (typeof text === 'string' && text.trim() && !i18n.has(text)) missing.push(text); };
+  const fields = ['text', 'outcome', 'outcomeAccepted', 'outcomeRefused'];
+  Object.values(content.CARDS).flat().forEach(card => {
+    check(card.title); check(card.body);
+    card.choices.forEach(c => fields.forEach(f => check(c[f])));
+  });
+  const states = [40, 70].flatMap(tension => [40, 60].map(approval => ({ bars: { internationalTension: tension, publicApproval: approval } })));
+  content.ARCS.forEach(arc => {
+    check(arc.name);
+    check(arc.name.toUpperCase());
+    arc.acts.forEach(raw => states.forEach(state => {
+      const act = core.resolveAct(raw, state);
+      check(act.tag); check(act.title); check(act.body);
+      act.choices.forEach(c => fields.forEach(f => check(c[f])));
+    }));
+  });
+  content.ENDINGS.forEach(e => ['title', 'tagline', 'narrative', 'profile'].forEach(f => check(e[f])));
+  Object.values(content.GIFTS).forEach(g => { check(g.title); check(g.body); g.choices.forEach(c => fields.forEach(f => check(c[f]))); });
+  assert.deepEqual([...new Set(missing)].slice(0, 5), []);
+});
+
+test('the solo rules messages and endings read in Vietnamese', function () {
+  i18n._setLangForTests('vi');
+  const state = core.createInitialState(() => 0.5);
+  state.bars.partyLoyalty = 5;
+  state.bars.economicState = 10;
+  const notices = [];
+  core.checkFailSafes(state, notices);
+  core.checkFailSafes(state, notices);
+  notices.push('⚡ Arc triggered: The Revolution');
+  notices.forEach(n => assert.notEqual(i18n.t(n), n, n));
+  assert.equal(i18n.t('⚡ Arc triggered: The Revolution'), '⚡ Tuyến truyện bắt đầu: Cuộc cách mạng');
+  assert.equal(i18n.t('Short-term gains for Public Approval, Party Loyalty come with pressure on Economic State.'),
+    'Lợi ích trước mắt cho Dân ủng hộ, Lòng trung thành của Đảng đi kèm áp lực lên Kinh tế.');
+  // The Convergence ending shows the scenario sentence on its own.
+  const war = content.ARCS.find(a => a.id === 'convergence_route').acts.slice(-1)[0];
+  const wage = core.resolveAct(war, { bars: { internationalTension: 70, publicApproval: 60 } }).choices[0];
+  const ending = core.resolveEnding(core.createInitialState(() => 0.5), wage);
+  assert.equal(i18n.t(ending.title), 'Kẻ hiếu chiến');
+  assert.ok(i18n.has(ending.narrative.split('</b>')[0].replace('<b>', '')));
+  i18n._setLangForTests('en');
+  assert.equal(i18n.t('The Tyrant'), 'The Tyrant');
+  i18n._setLangForTests('vi');
 });

@@ -344,24 +344,24 @@
         <div class="home-grid">
           <article class="panel guide">
             <div class="guide-head">
-              <h2>Cách chơi · How a turn works</h2>
-              <div class="guide-lang" role="group" aria-label="Language">
-                <button type="button" data-guide-lang="vi" aria-pressed="true">Tiếng Việt</button>
-                <button type="button" data-guide-lang="en" aria-pressed="false">English</button>
+              <h2><span data-guide-text="vi">Cách chơi một lượt</span><span data-guide-text="en">How a turn works</span></h2>
+              <div class="lang-switch" role="group" aria-label="Language">
+                <button type="button" data-set-lang="vi">Tiếng Việt</button>
+                <button type="button" data-set-lang="en">English</button>
               </div>
             </div>
             <div data-guide-text="vi" lang="vi">
               <ol class="steps">
-                <li><b>Tình huống.</b> Mỗi world nhận một tình huống với 3–4 lá lựa chọn. Lá nào cũng có cái được và cái mất; khoảng một phần ba là khủng hoảng, chọn lá nào cũng thiệt một chút.</li>
-                <li><b>Bỏ phiếu.</b> Mỗi pilot một phiếu, lá nhiều phiếu nhất thắng. Hòa tuyệt đối thì lấy trung bình hiệu ứng các lá hòa; không ai bầu thì dùng lá mặc định.</li>
-                <li><b>Xây và thu hoạch.</b> Công trình tích dần vào kho mỗi lượt. Thu hoạch để lấy vàng, quặng, EXP và cơ hội nhận thẻ đặc biệt. Command Core giới hạn cấp của mọi công trình khác.</li>
-                <li><b>Kế hoạch của đội.</b> Xây, đặt tàu, raid và viện trợ đều tiêu tài nguyên chung nên cả đội bỏ phiếu: thông qua khi Yes nhiều hơn No và ít nhất nửa đội đồng ý; im lặng không chặn.</li>
-                <li><b>Raid hay viện trợ.</b> Raid thắng lấy được nhiều vàng và quặng của đối thủ; bên thua được bảo vệ một lượt và được cộng sức tấn công để phục thù. Viện trợ gửi 20 nhận 30, và bên nhận không được raid bên gửi trong 2 lượt.</li>
-                <li><b>Thắng trận.</b> Hết lượt, world có Power cao nhất thắng (chỉ số, tài nguyên, tàu và công trình). Mỗi pilot còn có EXP riêng trên bảng xếp hạng.</li>
+                <li><b>Tình huống.</b> Mỗi thế giới nhận một tình huống với 3–4 lá lựa chọn. Lá nào cũng có cái được và cái mất; khoảng một phần ba là khủng hoảng, chọn lá nào cũng thiệt một chút.</li>
+                <li><b>Bỏ phiếu.</b> Mỗi phi công một phiếu, lá nhiều phiếu nhất thắng. Hòa tuyệt đối thì lấy trung bình hiệu ứng các lá hòa; không ai bầu thì dùng lá mặc định.</li>
+                <li><b>Xây và thu hoạch.</b> Công trình tích dần vào kho mỗi lượt. Thu hoạch để lấy vàng, quặng, EXP và cơ hội nhận thẻ đặc biệt. Lõi Chỉ huy giới hạn cấp của mọi công trình khác.</li>
+                <li><b>Kế hoạch của đội.</b> Xây, đóng tàu, đột kích và viện trợ đều tiêu tài nguyên chung nên cả đội bỏ phiếu: thông qua khi số Đồng ý nhiều hơn Không và ít nhất nửa đội đồng ý; im lặng không chặn.</li>
+                <li><b>Đột kích hay viện trợ.</b> Đột kích thắng lấy được nhiều vàng và quặng của đối thủ; bên thua được bảo vệ một lượt và được cộng sức tấn công để phục thù. Viện trợ gửi 20 nhận 30, và bên nhận không được đột kích bên gửi trong 2 lượt.</li>
+                <li><b>Thắng trận.</b> Hết lượt, thế giới có Sức mạnh cao nhất thắng (chỉ số, tài nguyên, tàu và công trình). Mỗi phi công còn có EXP riêng trên bảng xếp hạng.</li>
               </ol>
-              <p class="note">Mọi world bắt đầu như nhau: mọi chỉ số 50, 50 vàng, 50 quặng, 3 tàu.</p>
+              <p class="note">Mọi thế giới bắt đầu như nhau: mọi chỉ số 50, 50 vàng, 50 quặng, 3 tàu.</p>
             </div>
-            <div data-guide-text="en" lang="en" hidden>
+            <div data-guide-text="en" lang="en">
               <ol class="steps">
                 <li><b>Crisis.</b> Each world draws a situation with 3–4 option cards. Every card has a gain and a cost; about a third are crises where every option loses something.</li>
                 <li><b>Vote.</b> Every pilot has one vote and the most votes wins. An exact tie takes the average of the tied options; if nobody votes, the default option is used.</li>

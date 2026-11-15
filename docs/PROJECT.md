@@ -40,6 +40,7 @@ Cập nhật lần cuối: 15/11/2026. Tài liệu cũ (tháng 10/2026) nằm tr
 
 - **Live:** https://fleet-council.onrender.com — `/` The Oval, `/world.html` Fleet Council (online + luyện tập với bot). Free tier: ngủ sau 15 phút không ai vào (lần mở đầu chờ 30–60 giây).
 - **Lưu trữ:** Upstash Redis (Singapore) — phòng chơi lưu mỗi 15 giây và khi server tắt; tài khoản và bảng xếp hạng lưu vĩnh viễn; số đếm ẩn danh (`stats`) và góp ý (`feedback`) ghi cùng lượt lưu phòng, chỉ khi có thay đổi.
+- **Ngôn ngữ:** toàn bộ game (giao diện + nội dung cả hai chế độ, trang góp ý) có tiếng Việt và tiếng Anh; mặc định tiếng Việt, nút Tiếng Việt / English ở màn hình chính chơi đơn, trang chủ Fleet Council và trang góp ý; lựa chọn nhớ trên máy. Cách làm: game vẫn viết bằng tiếng Anh, `app/i18n.js` dịch chữ khi hiện lên trang bằng từ điển `data/vi-*.js` (khoảng 2.100 đoạn nội dung + giao diện + mẫu cho câu có số/tên). Test bắt buộc mọi nội dung và mọi thông báo của trận bot có bản tiếng Việt. Thuật ngữ: thế giới, phi công, đội, đột kích, viện trợ, Sức mạnh, Lõi Chỉ huy; chơi đơn: Chỉ huy trưởng, thuộc địa, Dân ủng hộ, Căng thẳng liên sao, Quyền kiểm soát, Lòng trung thành của Đảng, Lõi năng lượng.
 - **Góp ý & thống kê:** trang `/feedback.html` (link từ cả hai chế độ) — gửi góp ý ẩn danh + mục "What this game stores". Số đếm xem ở `/api/stats`; góp ý đọc trong Upstash (key `fc:feedback`) hoặc `var/feedback.json` khi chạy local. The Oval đếm số ván bắt đầu/kết thúc, màn kết thúc, lượt kết thúc, thời lượng; Fleet Council đếm trận bắt đầu/kết thúc, số world, số lượt, số người thật, thời lượng (chỉ trận online). Trận bỏ dở = bắt đầu − kết thúc.
 - **Kiểm thử:** 44 test (`tools\run-checks.cmd`): 19 cho chế độ chơi đơn, 25 cho Fleet Council và server.
 - **Cấu trúc code chế độ chơi đơn:** luật của một ván (áp lựa chọn, sang lượt, khủng hoảng, tuyến truyện, màn kết thúc) nằm trong `app/game-core.js` dưới dạng hàm nhận trạng thái ván; `app/client.js` chỉ hiển thị — giống cách Fleet Council tách `world-core.js` khỏi `world-client.js`.
@@ -112,7 +113,7 @@ Mười lỗi trong `old/THE-OVAL-LOI-HE-THONG-VA-CHU-TRINH-KHAC-PHUC.txt` và `
 **Giai đoạn 1 — Playtest & người mới (2–3 tuần)**
 - 3–5 nhóm bạn chơi thử: đo thời gian thật, chỗ khó hiểu, có muốn chơi lại không, trận 1v4 có thấy công bằng không.
 - Hướng dẫn trận đầu tiên (bỏ phiếu, harvest, đề xuất xây, raid). Đã có phần tóm tắt luật song ngữ Việt/Anh cho cả hai chế độ ("Cách chơi · How a turn works" ở Fleet Council, "Cách chơi · How to play" ở chơi đơn; `app/guide.js` chuyển ngôn ngữ, không lưu gì); còn thiếu hướng dẫn từng bước trong trận đầu.
-- Giao diện tiếng Việt.
+- ~~Giao diện tiếng Việt~~ — đã làm: cả giao diện lẫn nội dung, hai chế độ (xem mục 3).
 - Tóm tắt sau trận: quyết định bước ngoặt, trận raid lớn, ai đóng góp gì; thẻ chia sẻ.
 - Cân bằng lại theo dữ liệu thật (branch `balance_1`).
 
