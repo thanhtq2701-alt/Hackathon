@@ -34,6 +34,7 @@ Cập nhật lần cuối: 15/11/2026. Tài liệu cũ (tháng 10/2026) nằm tr
 | Tài khoản | PIN 4–8 số (tùy chọn) giữ tên; chỉ pilot có PIN được xếp hạng mọi thời đại |
 | Dữ liệu người chơi (chốt 15/11/2026) | Chỉ lưu tối thiểu: tên + PIN đã băm + xếp hạng (pilot có PIN), phòng đang chơi, **số đếm ẩn danh** (không tên/ID/IP) và **góp ý ẩn danh** (giữ 200 tin mới nhất). Trang `feedback.html#privacy` liệt kê mọi thứ được lưu; xóa dữ liệu khi có yêu cầu (chủ dự án xóa tay). Để sau: lịch sử trận/hồ sơ gắn tài khoản chỉ cho pilot có PIN, kèm nút xóa. Không làm: lưu email/số điện thoại/Zalo, công cụ phân tích bên thứ ba (Google Analytics…). Khôi phục PIN: **không làm lúc này** (chốt 15/11/2026; nếu làm sau thì dùng mã khôi phục một lần, không cần dữ liệu cá nhân). Ghi hình playtest chỉ khi đã hỏi và được đồng ý. Thêm dữ liệu mới → cập nhật trang `feedback.html#privacy` |
 | Hạ tầng | Miễn phí: Render Web Service (free) + Upstash Redis (free); không mua tên miền |
+| Tên repo (chốt 17/11/2026) | Repo GitHub đổi từ `Hackathon` thành **`the-oval`** (tên game; Fleet Council là một chế độ). Địa chỉ chơi giữ nguyên `fleet-council.onrender.com` (đổi phải tạo service Render mới). Câu chia sẻ của demo ví dùng hashtag `#TheOval` |
 | Quy trình | Làm trên branch, commit; **hỏi chủ dự án trước mỗi lần push**; chỉ merge khi chủ dự án xác nhận. Đợt cân bằng dùng branch riêng cho từng chế độ: `balance_solo_1`, `balance_solo_2`… (chơi đơn) và `balance_multi_1`, `balance_multi_2`… (Fleet Council); chỉ push khi chủ dự án nói cân bằng đã ổn. `main` được bảo vệ (cấm xóa, cấm force push, job CI `checks` phải qua mới merge được) nên mọi thay đổi đi qua PR |
 
 ## 3. Trạng thái hiện tại
@@ -87,6 +88,7 @@ Cập nhật lần cuối: 15/11/2026. Tài liệu cũ (tháng 10/2026) nằm tr
 | #21 | Chơi đơn: màn kết thúc hiện 3 bước ngoặt (theo thay đổi đã áp dụng) và các tuyến truyện đã gặp (+1 test) |
 | #22 | `balance_multi_1`: ước tính đột kích tính cả 10 Năng lượng của chuyến đột kích (khớp trận thật); bot hạ ngưỡng đột kích để giữ tần suất cũ |
 | #23 | `balance_solo_2`: 15 lựa chọn "rời ghế" trong tuyến Revolution kết thúc ván bằng The Resignation; "Offer your resignation" xét Approval lúc đề nghị (+1 test) |
+| #24 | Đổi tên repo `Hackathon` → `the-oval`: README, hashtag chia sẻ `#TheOval`, ghi quyết định |
 
 ## 5. Lỗi trong tài liệu cũ — đối chiếu
 

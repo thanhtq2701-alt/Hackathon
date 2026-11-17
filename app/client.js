@@ -1037,7 +1037,7 @@ const TheOvalCore = window.TheOvalCore;
     function shareToX() {
       const approval = gs.bars.publicApproval;
       const economy = gs.bars.economicState;
-      const text = `I just ruled The Oval space station with an Approval Rating of ${approval}% and an Economy score of ${economy}%. Do you have what it takes to survive the @EveFrontier universe? Try my dApp now! #SuiHackathon #SUI`;
+      const text = `I just ruled The Oval space station with an Approval Rating of ${approval}% and an Economy score of ${economy}%. Do you have what it takes to survive the @EveFrontier universe? Try my dApp now! #TheOval #SUI`;
       const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
       window.open(url, '_blank');
     }
