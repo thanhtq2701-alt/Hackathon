@@ -1,5 +1,5 @@
 # 🚀 THE OVAL: A Space Governance Simulator
-**An Interactive Survival dApp built for the EVE Frontier SUI Hackathon.**
+**An Interactive Survival dApp, originally built for the EVE Frontier SUI Hackathon.**
 
 ![Network](https://img.shields.io/badge/Network-SUI%20Testnet-blueviolet?style=for-the-badge&logo=sui)
 ![Category](https://img.shields.io/badge/Category-Game%20%26%20Utility-cyan?style=for-the-badge)
@@ -91,7 +91,7 @@ Stop the server with `Ctrl+C`. The solo mode and Fleet Council practice also wor
 ## 🧩 Project Structure
 
 ```text
-Hackathon/
+the-oval/
 ├── app/                 # Browser UI, game rules, and audio (both modes)
 ├── data/                # Cards, story arcs, endings, Fleet Council content
 ├── server/              # Fleet Council online server (Node, no dependencies)

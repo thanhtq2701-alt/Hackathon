@@ -34,12 +34,13 @@ Cập nhật lần cuối: 15/11/2026. Tài liệu cũ (tháng 10/2026) nằm tr
 | Tài khoản | PIN 4–8 số (tùy chọn) giữ tên; chỉ pilot có PIN được xếp hạng mọi thời đại |
 | Dữ liệu người chơi (chốt 15/11/2026) | Chỉ lưu tối thiểu: tên + PIN đã băm + xếp hạng (pilot có PIN), phòng đang chơi, **số đếm ẩn danh** (không tên/ID/IP) và **góp ý ẩn danh** (giữ 200 tin mới nhất). Trang `feedback.html#privacy` liệt kê mọi thứ được lưu; xóa dữ liệu khi có yêu cầu (chủ dự án xóa tay). Để sau: lịch sử trận/hồ sơ gắn tài khoản chỉ cho pilot có PIN, kèm nút xóa. Không làm: lưu email/số điện thoại/Zalo, công cụ phân tích bên thứ ba (Google Analytics…). Khôi phục PIN: **không làm lúc này** (chốt 15/11/2026; nếu làm sau thì dùng mã khôi phục một lần, không cần dữ liệu cá nhân). Ghi hình playtest chỉ khi đã hỏi và được đồng ý. Thêm dữ liệu mới → cập nhật trang `feedback.html#privacy` |
 | Hạ tầng | Miễn phí: Render Web Service (free) + Upstash Redis (free); không mua tên miền |
+| Tên repo (chốt 17/11/2026) | Repo GitHub đổi từ `Hackathon` thành **`the-oval`** (tên game; Fleet Council là một chế độ). Địa chỉ chơi giữ nguyên `fleet-council.onrender.com` (đổi phải tạo service Render mới). Câu chia sẻ của demo ví dùng hashtag `#TheOval` |
 | Quy trình | Làm trên branch, commit; **hỏi chủ dự án trước mỗi lần push**; chỉ merge khi chủ dự án xác nhận. Đợt cân bằng dùng branch riêng cho từng chế độ: `balance_solo_1`, `balance_solo_2`… (chơi đơn) và `balance_multi_1`, `balance_multi_2`… (Fleet Council); chỉ push khi chủ dự án nói cân bằng đã ổn. `main` được bảo vệ (cấm xóa, cấm force push, job CI `checks` phải qua mới merge được) nên mọi thay đổi đi qua PR |
 
 ## 3. Trạng thái hiện tại
 
 - **Live:** https://fleet-council.onrender.com — `/` The Oval, `/world.html` Fleet Council (online + luyện tập với bot). Free tier: ngủ sau 15 phút không ai vào (lần mở đầu chờ 30–60 giây).
-- **Vercel (thừa, chờ gỡ):** repo vẫn nối với dự án Vercel `hackathon` từ thời hackathon (31/03/2026): tự deploy bản tĩnh mỗi lần push, chỉ xem được khi đăng nhập Vercel, không ai dùng. Chủ dự án sẽ gỡ.
+- **Vercel:** đã gỡ (17/11/2026) dự án Vercel `hackathon` từ thời hackathon và quyền truy cập repo của Vercel; Render là deployment duy nhất.
 - **Lưu trữ:** Upstash Redis (Singapore) — phòng chơi lưu mỗi 15 giây và khi server tắt; tài khoản và bảng xếp hạng lưu vĩnh viễn; số đếm ẩn danh (`stats`) và góp ý (`feedback`) ghi cùng lượt lưu phòng, chỉ khi có thay đổi.
 - **Ngôn ngữ:** toàn bộ game (giao diện + nội dung cả hai chế độ, trang góp ý) có tiếng Việt và tiếng Anh; mặc định tiếng Việt, nút Tiếng Việt / English ở màn hình chính chơi đơn, trang chủ Fleet Council và trang góp ý; lựa chọn nhớ trên máy. Cách làm: game vẫn viết bằng tiếng Anh, `app/i18n.js` dịch chữ khi hiện lên trang bằng từ điển `data/vi-*.js` (khoảng 2.100 đoạn nội dung + giao diện + mẫu cho câu có số/tên). Test bắt buộc mọi nội dung và mọi thông báo của trận bot có bản tiếng Việt. Thuật ngữ: thế giới, phi công, đội, đột kích, viện trợ, Sức mạnh, Lõi Chỉ huy; chơi đơn: Chỉ huy trưởng, thuộc địa, Dân ủng hộ, Căng thẳng liên sao, Quyền kiểm soát, Lòng trung thành của Đảng, Lõi năng lượng.
 - **Góp ý & thống kê:** trang `/feedback.html` (link từ cả hai chế độ) — gửi góp ý ẩn danh + mục "What this game stores". Số đếm xem ở `/api/stats`; góp ý đọc trong Upstash (key `fc:feedback`) hoặc `var/feedback.json` khi chạy local. The Oval đếm số ván bắt đầu/kết thúc, màn kết thúc, lượt kết thúc, thời lượng; Fleet Council đếm trận bắt đầu/kết thúc, số world, số lượt, số người thật, thời lượng (chỉ trận online). Trận bỏ dở = bắt đầu − kết thúc.
@@ -87,6 +88,7 @@ Cập nhật lần cuối: 15/11/2026. Tài liệu cũ (tháng 10/2026) nằm tr
 | #21 | Chơi đơn: màn kết thúc hiện 3 bước ngoặt (theo thay đổi đã áp dụng) và các tuyến truyện đã gặp (+1 test) |
 | #22 | `balance_multi_1`: ước tính đột kích tính cả 10 Năng lượng của chuyến đột kích (khớp trận thật); bot hạ ngưỡng đột kích để giữ tần suất cũ |
 | #23 | `balance_solo_2`: 15 lựa chọn "rời ghế" trong tuyến Revolution kết thúc ván bằng The Resignation; "Offer your resignation" xét Approval lúc đề nghị (+1 test) |
+| #24 | Đổi tên repo `Hackathon` → `the-oval`: README, hashtag chia sẻ `#TheOval`, ghi quyết định; ghi nhận đã gỡ Vercel |
 
 ## 5. Lỗi trong tài liệu cũ — đối chiếu
 
